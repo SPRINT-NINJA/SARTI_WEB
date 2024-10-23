@@ -1,6 +1,9 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Login_view from '@/views/login_view/Login_view.vue';
+import login_view_password from '@/views/login_view/login_view_password.vue';
+import create_account from '@/views/create_account/Create_account_select_rol.vue';
+import home_view from '@/views/home/home_view.vue';
 
 Vue.use(VueRouter)
 
@@ -8,19 +11,30 @@ const router = new VueRouter({
   mode: 'history',
   base: import.meta.env.BASE_URL,
   routes: [
+
+    {
+      path: '/login',
+      name: 'login',
+      component: Login_view
+    },
+
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'home-view',
+      component: home_view
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
+      path: '/login-password',
+      name: 'login-password',
+      component: login_view_password
+    },
+    {
+      path: '/create-account',
+      name: 'create-account',
+      component: create_account
+    },
+
+
   ]
 })
 

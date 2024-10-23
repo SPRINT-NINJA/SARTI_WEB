@@ -1,0 +1,106 @@
+<template>
+    <div>
+        <!-- Navbar -->
+        <div>
+            <b-navbar toggleable="lg" type="dark" style="background-color: #F6A249;">
+                <b-navbar-brand to="/">
+                    <img src="./../../assets/logo/ICON-SARTI.png" alt="SARTI">
+                </b-navbar-brand>
+
+                <b-collapse id="nav-collapse" is-nav>
+                    <b-navbar-nav class="ml-auto">
+                        <b-button variant="hide" class="mb-2">
+                            <b-icon variant="white" icon="cart3" font-scale="2"></b-icon>
+                        </b-button>
+                    </b-navbar-nav>
+                </b-collapse>
+            </b-navbar>
+        </div>
+
+        <!-- Main content -->
+        <b-row class="login-message">
+            <b-col cols="1">
+
+            </b-col>
+            <b-col cols="3">
+                <h1>
+                    ¡Crea tu cuenta y forma parte de algo grande!
+                </h1>
+                <br>
+                <h5>
+                    Selecciona el rol con el que quieres unirte
+                </h5>
+            </b-col>
+            <b-col cosl="1">
+
+            </b-col>
+
+            <b-col cols="6">
+                <div>
+                    <b-card class="card-login-email">
+                        <div class="card-login-email-div">
+                            <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
+                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                    <b>Repartidor <b-icon icon="bicycle" aria-hidden="true"></b-icon></b>
+                                </b-button>
+                            </div>
+
+                            <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
+                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                    <b>Emprendedor <b-icon icon="building" aria-hidden="true"></b-icon></b>
+                                </b-button>
+                            </div>
+
+                            <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
+                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                    <b>Comprador <b-icon icon="person-fill" aria-hidden="true"></b-icon></b>
+                                </b-button>
+                            </div>
+                        </div>
+                    </b-card>
+                </div>
+            </b-col>
+
+            <b-col cosl="1">
+
+            </b-col>
+        </b-row>
+    </div>
+</template>
+
+<script lang="ts">
+
+export default {
+    name: 'CraeteAccount',
+    data() {
+        return {
+        }
+    },
+}
+</script>
+
+<style>
+img {
+    width: 40px;
+    height: 50px;
+}
+
+.login-message {
+    margin-top: 100px;
+}
+
+.card-login-email {
+    min-height: 300px;
+}
+
+.card-login-email-div {
+    margin-top: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+}
+
+.button-continue {
+    width: 100%;
+}
+</style>
