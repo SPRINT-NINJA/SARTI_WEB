@@ -2,7 +2,7 @@
     <div>
         <!-- Navbar -->
         <div>
-            <b-navbar toggleable="lg" type="dark" style="background-color: #F6A249;">
+            <b-navbar toggleable="lg" type="dark" id="orange-primary">
                 <b-navbar-brand to="/">
                     <img src="./../../assets/logo/LOGO-blanco.png" alt="SARTI">
                 </b-navbar-brand>

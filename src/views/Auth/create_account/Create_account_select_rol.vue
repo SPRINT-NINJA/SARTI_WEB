@@ -24,19 +24,19 @@
                     <b-card class="card-login-email">
                         <div class="card-login-email-div">
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                <b-button class="button-continue mb-2" id="orange-primary">
                                     <b>Repartidor <b-icon icon="bicycle" aria-hidden="true"></b-icon></b>
                                 </b-button>
                             </div>
 
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                <b-button class="button-continue mb-2" id="orange-primary">
                                     <b>Emprendedor <b-icon icon="building" aria-hidden="true"></b-icon></b>
                                 </b-button>
                             </div>
 
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                <b-button class="button-continue mb-2" style="background-color: #F6A249;">
+                                <b-button class="button-continue mb-2" id="orange-primary">
                                     <b>Comprador <b-icon icon="person-fill" aria-hidden="true"></b-icon></b>
                                 </b-button>
                             </div>

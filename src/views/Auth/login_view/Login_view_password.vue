@@ -14,7 +14,7 @@
 
                 <div style="margin-top: 25px;">
                     <b-list-group style="max-width: 300px;">
-                        <b-list-group-item class="d-flex align-items-center" style="background-color: #F6A249;">
+                        <b-list-group-item class="d-flex align-items-center" id="orange-primary">
                             <b-avatar class="mr-3" :src="usuario.avatar"></b-avatar>
                             <span class="mr-auto" style="color: white; "><b>{{ usuario.name }}</b></span>
                         </b-list-group-item>
@@ -40,7 +40,7 @@
                                     </b-form-input>
 
                                     <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                        <b-button style="background-color: #F6A249; width: 100%;" class="mb-2">
+                                        <b-button style="width: 100%;" class="mb-2" id="orange-primary">
                                             <b>Iniciar sesión <b-icon icon="arrow-right" aria-hidden="true"></b-icon></b>
                                         </b-button>
                                     </div>

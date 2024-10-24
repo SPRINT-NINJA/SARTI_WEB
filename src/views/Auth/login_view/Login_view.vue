@@ -30,7 +30,7 @@
                                     </b-form-input>
 
                                     <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                        <b-button class="button-continue mb-2" @click="login()" style="background-color: #F6A249;" >
+                                        <b-button class="button-continue mb-2" @click="login()" id="orange-primary" >
                                             <b>Continuar <b-icon icon="arrow-right" aria-hidden="true"></b-icon></b>
                                         </b-button>
                                     </div>
