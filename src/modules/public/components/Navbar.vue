@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable type="dark" variant="dark">
+    <b-navbar toggleable type="dark" variant="orange-primary">
       <!-- Brand a la izquierda -->
       <b-navbar-brand href="#">
         <img alt="Vue logo" class="logo"  src="@/assets/SARTI-LOGO.svg" width="40" height="50" />
