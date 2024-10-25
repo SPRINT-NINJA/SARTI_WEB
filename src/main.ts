@@ -7,6 +7,8 @@ import './assets/main.css'
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/styles/styles.css'
+import './assets/styles/styles.scss'
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
