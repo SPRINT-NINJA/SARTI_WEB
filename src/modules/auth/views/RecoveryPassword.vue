@@ -27,8 +27,8 @@
           md="8"
           class="d-flex flex-column align-items-center section-right p-4"
         >
-          <b-card class="w-100 h-100">
-            <b-form @submit="">
+          <b-card class="w-100 h-100 shadow">
+            <b-form>
               <div class="p-5">
                 <section v-if="!isVerifiedAccount">
                   <b-form-group
@@ -39,11 +39,20 @@
                     <b-form-input
                       id="input-1"
                       type="email"
+                      v-model="v$.email.$model"
                       placeholder="example@gmail.com"
                       required
+                      :state="v$.email.$dirty ? !v$.email.$error : null"
+                      @blur="v$.email.$touch()"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                      v-for="error in v$.email.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="" @click="verifyEmail"
+                  <b-button block variant="orange-primary" @click="verifyEmail"
                     >Verificar correo</b-button
                   >
                 </section>
@@ -55,10 +64,23 @@
                   >
                     <b-form-input
                       id="input-1"
-                      type="email"
+                      type="text"
                       placeholder="*****"
                       required
+                      v-model="v$.recoveryPassword.code.$model"
+                      :state="
+                        v$.recoveryPassword.code.$dirty
+                          ? !v$.recoveryPassword.code.$error
+                          : null
+                      "
+                      @blur="v$.recoveryPassword.code.$touch()"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                      v-for="error in v$.recoveryPassword.code.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                   </b-form-group>
                   <b-form-group
                     id="input-group-1"
@@ -70,9 +92,22 @@
                       type="email"
                       placeholder="********"
                       required
+                      v-model="v$.recoveryPassword.password.$model"
+                      :state="
+                        v$.recoveryPassword.password.$dirty
+                          ? !v$.recoveryPassword.password.$error
+                          : null
+                      "
+                      @blur="v$.recoveryPassword.password.$touch()"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                      v-for="error in v$.recoveryPassword.password.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="" @click="verifyEmail"
+                  <b-button block variant="orange-primary" @click="verifyEmail"
                     >Cambair contraseña</b-button
                   >
                 </section>
@@ -90,21 +125,9 @@ import RecoveryPasswordViewModel from "@/modules/auth/viewmodels/RecoveryPasswor
 export default {
   name: "RecoveryPassword",
   components: {
-    Navbar: defineAsyncComponent(
-      () => import("@/modules/public/components/Navbar.vue")
-    ),
+    Navbar: () => import("@/modules/public/components/Navbar.vue"),
   },
   mixins: [RecoveryPasswordViewModel],
 };
 </script>
-<style scoped>
-.section-left {
-  background-color: #f8f9fa; /* Color claro para contraste */
-}
-
-.section-right {
-  background-color: #e9ecef; /* Otro color claro para diferenciación */
-}
-
-/* Responsivo: ambas secciones ocupan 50% de altura en pantallas pequeñas */
-</style>
+<style scoped></style>
