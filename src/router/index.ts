@@ -54,6 +54,15 @@ const router = new VueRouter({
             title: "Crear cuenta cliente",
             requireAuth: false,
           },
+        },{
+          path: "/create-account-delivery_man",
+          props: true,
+          name: "create-account-delivery_man",
+          component: () => import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
+          meta: {
+            title: "Crear cuenta cliente",
+            requireAuth: false,
+          },
         },
         ...publicRouter,
       ],
