@@ -16,13 +16,8 @@
             <h2 class="text-center my-3">{{ steps[currentStep - 1] }}</h2>
             <b-row v-if="steps[currentStep - 1] === 'Datos personales'">
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Correo electrónico"
-                  label-for="input-1"
-                >
+                <b-form-group label="Correo electrónico">
                   <b-form-input
-                    id="input-1"
                     type="email"
                     v-model="delivery_man.email"
                     placeholder="maria@gmail.com"
@@ -31,11 +26,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Contraseña"
-                  label-for="input-1"
-                >
+                <b-form-group label="Contraseña">
                   <b-input-group class="mb-2">
                     <b-input-group-prepend is-text>
                       <b-icon
@@ -53,11 +44,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Repetir contraseña"
-                  label-for="input-1"
-                >
+                <b-form-group label="Repetir contraseña">
                   <b-input-group class="mb-2">
                     <b-input-group-prepend is-text>
                       <b-icon
@@ -68,20 +55,14 @@
                     </b-input-group-prepend>
                     <b-form-input
                       :type="passwordVisibleConfirm ? 'text' : 'password'"
-                      v-model="aaa"
                       placeholder="Ingresa tu contraseña"
                     ></b-form-input>
                   </b-input-group>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Nombre(s)"
-                  label-for="input-1"
-                >
+                <b-form-group label="Nombre(s)">
                   <b-form-input
-                    id="input-1"
                     type="text"
                     placeholder="Maria"
                     v-model="delivery_man.name"
@@ -90,13 +71,8 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Apellido Paterno"
-                  label-for="input-1"
-                >
+                <b-form-group label="Apellido Paterno">
                   <b-form-input
-                    id="input-1"
                     type="text"
                     placeholder="Lopez"
                     v-model="delivery_man.first_last_name"
@@ -105,13 +81,8 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group
-                  id="input-group-1"
-                  label="Apellido Materno"
-                  label-for="input-1"
-                >
+                <b-form-group label="Apellido Materno">
                   <b-form-input
-                    id="input-1"
                     type="text"
                     v-model="delivery_man.second_last_name"
                     placeholder="Delgado"
@@ -120,32 +91,65 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row v-if="steps[currentStep - 1] === 'Identificación oficial (Frontal)'">
-                <b-col cols="12" md="6" >
-                    <b-alert show variant="warning">
-                        <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen <b>FRONTAL</b> de tu credencial.
-                    </b-alert>
-                    <img alt="example ine" class="text-center" width="300" src="@/assets/ine.png" />
-                </b-col>
-                <b-col cols="12" md="6" >
-                    <b-row>
-                        <b-col cols="12" md="6" class="text-rigth">
-                        <b-button variant="brown-cacao" ><b-icon icon="camera" aria-hidden="true"></b-icon>Tomar Foto</b-button>
-                        </b-col>
-                        <b-col cols="12" md="6" class="text-left">
-                        <b-button variant="brown-cacao"> <b-icon icon="box-arrow-in-up" aria-hidden="true"></b-icon>Subir Foto</b-button>
-                        </b-col>
-                    </b-row>
-                    <b-card  class="my-2">
-
-                    </b-card>
-
-                </b-col>
+            <b-row
+              v-if="
+                steps[currentStep - 1] === 'Identificación oficial (Frontal)'
+              "
+            >
+              <b-col cols="12" md="6">
+                <b-alert show variant="warning">
+                  <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen
+                  <b>FRONTAL</b> de tu credencial.
+                </b-alert>
+                <img
+                  alt="example ine"
+                  class="text-center"
+                  width="400"
+                  src="@/assets/ine.png"
+                />
+              </b-col>
+              <b-col cols="12" md="6">
+                <b-row>
+                  <b-col cols="12" md="6" class="text-rigth">
+                    <b-button variant="brown-cacao" @click="showCameraOption" :disabled="showUploadImage"
+                      ><b-icon icon="camera" aria-hidden="true"></b-icon
+                      >Fotografía</b-button
+                    >
+                  </b-col>
+                  <b-col cols="12" md="6" class="text-left">
+                    <b-button variant="brown-cacao" @click="showUploadOption" :disabled="showTakePicture">
+                      <b-icon icon="box-arrow-in-up" aria-hidden="true"></b-icon
+                      >Subir Foto</b-button
+                    >
+                  </b-col>
+                </b-row>
+                <b-card v-show="showTakePicture" class="my-2 text-center">
+                  <Camera
+                    v-show="takePhoto === false"
+                    v-on:takePicture="takePicture"
+                  />
+                  <Gallery v-show="takePhoto" />
+                  <b-button variant="red-palete" v-show="takePhoto" @click="takePicture" class="my-2">
+                     <b>Volver a tomar </b>
+                     </b-button>
+                     <b-button variant="orange-secundary" v-show="takePhoto" @click="()=>{}" class="my-2 mx-2">
+                     <b>Subir foto </b>
+                     </b-button>
+                     <!-- La imagen a descargar o cargar  -->
+                     <img src="">
+                </b-card>
+                <b-card v-show="showUploadImage" class="my-2">
+                  <h3>Subir imagen</h3>
+                </b-card>
+              </b-col>
             </b-row>
-            <b-row v-if="steps[currentStep - 1] === 'Identificación oficial  (Trasera)'">
+            <b-row
+              v-if="
+                steps[currentStep - 1] === 'Identificación oficial  (Trasera)'
+              "
+            >
             </b-row>
-            <b-row v-if="steps[currentStep - 1] === 'Foto Facial'">
-            </b-row>
+            <b-row v-if="steps[currentStep - 1] === 'Foto Facial'"> </b-row>
           </b-row>
 
           <!-- Botones de navegación en las esquinas inferiores -->
@@ -180,6 +184,8 @@
 <script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
+import Camera from "@/components/Camera.vue";
+import Gallery from "@/components/Gallery.vue";
 import CreateAccountDelivery_ManViewModels from "../viewmodels/CreateAccountDelivery_ManViewModels";
 
 export default {
@@ -189,13 +195,15 @@ export default {
     Navbar: defineAsyncComponent(
       () => import("@/modules/public/components/Navbar.vue")
     ),
+    Camera,
+    Gallery,
   },
   mixins: [CreateAccountDelivery_ManViewModels],
 };
 </script>
 
 <style scoped>
-.img-ine{
-    widows: 5%;
+.img-ine {
+  widows: 5%;
 }
 </style>
