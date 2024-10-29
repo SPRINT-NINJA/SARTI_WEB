@@ -2,7 +2,7 @@
   <div class="my-2">
     <b-container>
       <b-row>
-        <b-col cols="12" md="6" class="text-right">
+        <b-col v-show="imageTakePhoto === ''" cols="12" md="6" class="text-right">
           <b-button
             variant="brown-cacao"
             @click="showCameraOption"
@@ -11,7 +11,7 @@
             >Fotografía</b-button
           >
         </b-col>
-        <b-col cols="12" md="6" class="text-left">
+        <b-col v-show="imageTakePhoto === ''" cols="12" md="6" class="text-left">
           <b-button
             variant="brown-cacao"
             @click="showUploadOption"
@@ -21,9 +21,9 @@
             Foto</b-button
           >
         </b-col>
-        <b-col cols="12" md="12">
+        <b-col  cols="12" md="12">
           <b-card
-            v-if="showTakePicture === false && showUploadImage === false"
+            v-if="showTakePicture === false && showUploadImage === false && imageTakePhoto === ''"
             class="my-5 text-center"
           >
             <h3 class="text-grey">
@@ -31,10 +31,25 @@
               Escoje una opción
               <b-icon icon="arrow-up-circle"></b-icon>
             </h3>
+            
+          </b-card>
+          <b-card
+            v-if=" imageTakePhoto != '' && showTakePicture === false"
+            class="my-5 text-center"
+          >
+          <h4 class="text-center" v-if="loading">Cargando...</h4>
+          <b-progress :value="valueProgress" v-if="loading" class="mb-3"></b-progress>
+          <h4 v-else>Imagen cargada correctamente </h4>
+              <img
+              :src="imageTakePhoto"
+              v-show="showimageTaked"
+              class="photo"
+              height="200"
+            />
           </b-card>
         </b-col>
         <b-col cols="12" md="12">
-          <b-card v-show="showTakePicture" class="my-2 text-center">
+          <b-card v-show="showTakePicture && loading===false" class="my-2 text-center">
             <Camera
               v-show="takePhoto === false && showimageTaked == false"
               v-on:takePicture="takePicture"
@@ -56,18 +71,12 @@
             >
               <b>Subir foto </b>
             </b-button>
-            <b-progress :value="valueProgress" v-if="loading" class="mb-3"></b-progress>
-            <img
-              :src="imageTakePhoto"
-              v-show="showimageTaked"
-              class="photo"
-              height="200"
-            />
           </b-card>
+           
         </b-col>
         <b-col cols="12" md="12">
-          <b-card v-show="showUploadImage" class="my-2">
-            <DropZone @images-uploaded="updateImagesUpload" />
+          <b-card v-show="showUploadImage && hide_dropzone === false" class="my-2">
+            <DropZone @images-uploaded="updateImagesUpload" v-on:showLoading="showLoading"  />
           </b-card>
         </b-col>
       </b-row>
@@ -76,13 +85,13 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineComponent } from "vue";
+import { defineComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
 import Camera from "@/components/Camera.vue";
 import Captured from "@/components/Captured.vue";
 import DropZone from "@/components/DropZone.vue";
 
-export default Vue.extend({
+export default defineComponent({
   name: "OptionsUploadImage",
   components: {
     StepProgress,
@@ -109,6 +118,8 @@ export default Vue.extend({
       loading: false,
       valueProgress: this.progressValue,
       showimageTaked: false,
+      hide_dropzone:false,
+      temporaryImage:"",
       imagesUpload: [] as { name: string; url: string }[],// valores de las imagenes cargadas en el dropzone
     };
   },
@@ -121,8 +132,9 @@ export default Vue.extend({
   methods: {
     updateImagesUpload(images: { name: string; url: string }[]) {
       this.imagesUpload = images;
+      console.log('Updating image with: ', images[0].url);
       if (images.length > 0) {
-        this.imageTakePhoto = images[0].url;
+        this.temporaryImage = images[0].url;
         this.$emit("update:image", this.imageTakePhoto); // Emitir la URL de la primera imagen seleccionada
       }
     },
@@ -158,6 +170,7 @@ export default Vue.extend({
     showLoading() {
       this.loading = !this.loading;
       this.loading = true;
+      this.showTakePicture = false;
 
       const interval = 3000 / 100; // 3 segundos dividido entre 100 incrementos
       const timer = setInterval(() => {
@@ -167,6 +180,10 @@ export default Vue.extend({
           this.showimageTaked = true;
           clearInterval(timer);
           this.loading = false;
+        }
+        if(this.temporaryImage != ''){
+          this.hide_dropzone = true
+          this.imageTakePhoto = this.temporaryImage
         }
       }, interval);
     },

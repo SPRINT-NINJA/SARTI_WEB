@@ -31,7 +31,7 @@
         <img :src="image.url" />
       </div>
     </div>
-    <button type="button">Subir</button>
+    <button type="button" @click="$emit('showLoading')">Subir</button>
   </div>
 </template>
 
