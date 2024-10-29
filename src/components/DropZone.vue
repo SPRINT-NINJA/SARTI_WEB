@@ -35,8 +35,9 @@
   </div>
 </template>
 
+
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
   data() {
@@ -63,18 +64,7 @@ export default defineComponent({
           });
         }
       }
-    },
-    deleteImage(index: number) {
-      this.images.splice(index, 1);
-    },
-    onDragOver(event: DragEvent) {
-      event.preventDefault();
-      this.isDragging = true;
-      event.dataTransfer!.dropEffect = "copy";
-    },
-    onDragLeave(event: DragEvent) {
-      event.preventDefault();
-      this.isDragging = false;
+      this.$emit("images-uploaded", this.images); // Emitir evento con las imágenes
     },
     onDrop(event: DragEvent) {
       event.preventDefault();
@@ -91,10 +81,24 @@ export default defineComponent({
           });
         }
       }
+      this.$emit("images-uploaded", this.images); // Emitir evento con las imágenes
+    },
+    deleteImage(index: number) {
+      this.images.splice(index, 1);
+    },
+    onDragOver(event: DragEvent) {
+      event.preventDefault();
+      this.isDragging = true;
+      event.dataTransfer!.dropEffect = "copy";
+    },
+    onDragLeave(event: DragEvent) {
+      event.preventDefault();
+      this.isDragging = false;
     },
   },
 });
 </script>
+
 
 <style scoped>
 .card {

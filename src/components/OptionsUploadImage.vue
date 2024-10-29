@@ -39,7 +39,7 @@
               v-show="takePhoto === false && showimageTaked == false"
               v-on:takePicture="takePicture"
             />
-            <Gallery  v-show="takePhoto && showimageTaked == false" />
+            <Gallery v-show="takePhoto && showimageTaked == false" />
             <b-button
               variant="red-palete"
               v-show="takePhoto && showimageTaked == false"
@@ -56,13 +56,18 @@
             >
               <b>Subir foto </b>
             </b-button>
-            <b-progress :value="value" v-if="loading" class="mb-3" ></b-progress>
-            <img :src="imageTakePhoto" v-show="showimageTaked" class="photo" height="200" />
+            <b-progress :value="valueProgress" v-if="loading" class="mb-3"></b-progress>
+            <img
+              :src="imageTakePhoto"
+              v-show="showimageTaked"
+              class="photo"
+              height="200"
+            />
           </b-card>
         </b-col>
         <b-col cols="12" md="12">
           <b-card v-show="showUploadImage" class="my-2">
-            <DropZone />
+            <DropZone @images-uploaded="updateImagesUpload" />
           </b-card>
         </b-col>
       </b-row>
@@ -71,10 +76,10 @@
 </template>
 
 <script lang="ts">
-import Vue,{ defineComponent } from "vue";
+import Vue, { defineComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
 import Camera from "@/components/Camera.vue";
-import Gallery from "@/components/Gallery.vue";
+import Gallery from "@/components/Camera.vue";
 import DropZone from "@/components/DropZone.vue";
 
 export default Vue.extend({
@@ -85,18 +90,42 @@ export default Vue.extend({
     Gallery,
     DropZone,
   },
+  props: {
+    progressValue: {
+      type: Number,
+      default: 0,
+    },
+    image: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       showUploadImage: false,
       showTakePicture: false,
       takePhoto: false,
-      imageTakePhoto: "",
+      imageTakePhoto: this.image, // Inicializar con el valor pasado por la propiedad image
       loading: false,
-      value: 0,
-      showimageTaked: false
+      valueProgress: this.progressValue,
+      showimageTaked: false,
+      imagesUpload: [] as { name: string; url: string }[],// valores de las imagenes cargadas en el dropzone
     };
   },
+  watch: {
+    // Asegura que cualquier cambio en la prop image se refleje en el valor local
+    image(newValue) {
+      this.imageTakePhoto = newValue;
+    },
+  },
   methods: {
+    updateImagesUpload(images: { name: string; url: string }[]) {
+      this.imagesUpload = images;
+      if (images.length > 0) {
+        this.imageTakePhoto = images[0].url;
+        this.$emit("update:image", this.imageTakePhoto); // Emitir la URL de la primera imagen seleccionada
+      }
+    },
     takePicture() {
       const ratio = window.innerHeight > window.innerWidth ? 16 / 9 : 9 / 16;
       const picture = document.querySelector(
@@ -119,7 +148,7 @@ export default Vue.extend({
           // Convertir el contenido del canvas en una URL de base64
           const imageDataUrl = picture.toDataURL("image/png");
           this.imageTakePhoto = imageDataUrl;
-          console.log(imageDataUrl); // Muestra la URL de la imagen en consola
+          this.$emit("update:image", imageDataUrl);
         }
         this.takePhoto = !this.takePhoto;
       } else {
@@ -129,17 +158,15 @@ export default Vue.extend({
     showLoading() {
       this.loading = !this.loading;
       this.loading = true;
-      this.value = 0;
 
       const interval = 3000 / 100; // 3 segundos dividido entre 100 incrementos
       const timer = setInterval(() => {
-        if (this.value < 100) {
-          this.value += 1;
+        if (this.valueProgress < 100) {
+          this.valueProgress += 1;
         } else {
-            this.showimageTaked = true;
+          this.showimageTaked = true;
           clearInterval(timer);
           this.loading = false;
-
         }
       }, interval);
     },

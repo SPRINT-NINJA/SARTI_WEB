@@ -38,6 +38,9 @@ export default defineComponent({
       password: "",
       passwordVisible: false,
       passwordVisibleConfirm: false,
+      progress1: 0, 
+      progress2: 0, 
+      progress3: 0,
     };
   },
   methods: {

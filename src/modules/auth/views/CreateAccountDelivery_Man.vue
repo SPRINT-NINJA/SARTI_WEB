@@ -105,7 +105,7 @@
                 />
               </b-col>
               <b-col cols="12" md="6">
-                <OptionsUploadImage /> 
+                <OptionsUploadImage :image="delivery_man.front_identification_photo" @update:image="delivery_man.front_identification_photo = $event" :progress-value="progress1" />
               </b-col>
             </b-row>
             <b-row
@@ -126,12 +126,12 @@
                 />
               </b-col>
               <b-col cols="12" md="6">
-                <OptionsUploadImage />
+                <OptionsUploadImage :image="delivery_man.back_identification_photo" @update:image="delivery_man.back_identification_photo = $event" :progress-value="progress2" />
               </b-col>
             </b-row>
             <b-row v-if="steps[currentStep - 1] === 'Foto Facial'">
               <b-col cols="12" md="12">
-              <OptionsUploadImage /> 
+                <OptionsUploadImage :image="delivery_man.face_photo" @update:image="delivery_man.face_photo = $event" :progress-value="progress3" />
               </b-col>
             </b-row>
           </b-row>
