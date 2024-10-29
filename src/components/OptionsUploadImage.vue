@@ -36,13 +36,13 @@
         <b-col cols="12" md="12">
           <b-card v-show="showTakePicture" class="my-2 text-center">
             <Camera
-              v-show="takePhoto === false && loading === false"
+              v-show="takePhoto === false && showimageTaked == false"
               v-on:takePicture="takePicture"
             />
-            <Gallery v-show="takePhoto && loading === false" />
+            <Gallery  v-show="takePhoto && showimageTaked == false" />
             <b-button
               variant="red-palete"
-              v-show="takePhoto"
+              v-show="takePhoto && showimageTaked == false"
               @click="takePicture"
               class="my-2"
             >
@@ -50,14 +50,14 @@
             </b-button>
             <b-button
               variant="orange-secundary"
-              v-show="takePhoto"
+              v-show="takePhoto && showimageTaked == false"
               @click="showLoading"
               class="my-2 mx-2"
             >
               <b>Subir foto </b>
             </b-button>
-            <b-progress :value="value" v-if="loading" class="mb-3"></b-progress>
-            <img :src="imageTakePhoto" v-show="loading === false" class="photo" height="200" />
+            <b-progress :value="value" v-if="loading" class="mb-3" ></b-progress>
+            <img :src="imageTakePhoto" v-show="showimageTaked" class="photo" height="200" />
           </b-card>
         </b-col>
         <b-col cols="12" md="12">
@@ -93,6 +93,7 @@ export default Vue.extend({
       imageTakePhoto: "",
       loading: false,
       value: 0,
+      showimageTaked: false
     };
   },
   methods: {
@@ -135,8 +136,10 @@ export default Vue.extend({
         if (this.value < 100) {
           this.value += 1;
         } else {
+            this.showimageTaked = true;
           clearInterval(timer);
           this.loading = false;
+
         }
       }, interval);
     },
