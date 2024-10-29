@@ -173,9 +173,7 @@ export default {
   name: "CreateAccountDelivery_Man",
   components: {
     StepProgress,
-    Navbar: defineAsyncComponent(
-      () => import("@/modules/public/components/Navbar.vue")
-    ),
+    Navbar: () => import("@/modules/public/components/Navbar.vue"),
     OptionsUploadImage,
   },
   mixins: [CreateAccountDelivery_ManViewModels],

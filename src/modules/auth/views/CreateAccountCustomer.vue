@@ -68,7 +68,6 @@
                     </b-input-group-prepend>
                     <b-form-input
                       :type="passwordVisibleConfirm ? 'text' : 'password'"
-                      v-model="aaa"
                       placeholder="Ingresa tu contraseña"
                     ></b-form-input>
                   </b-input-group>
@@ -313,9 +312,7 @@ export default {
   name: "CreateAccountcustomer",
   components: {
     StepProgress,
-    Navbar: defineAsyncComponent(
-      () => import("@/modules/public/components/Navbar.vue")
-    ),
+    Navbar: () => import("@/modules/public/components/Navbar.vue"),
   },
   mixins: [CreateAccountCustomerViewModels],
 };

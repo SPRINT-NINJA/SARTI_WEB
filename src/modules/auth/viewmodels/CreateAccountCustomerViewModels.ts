@@ -1,7 +1,7 @@
-import Vue from "vue";
+import { defineComponent } from "vue";
 
 
-export default Vue.extend({
+export default defineComponent({
     setup(){
         // se declara el vuevalidate
     },
@@ -9,7 +9,7 @@ export default Vue.extend({
         return {
             customer:{
                 email:"",
-                passwod:"",
+                password:"",
                 name:"",
                 first_last_name:"",
                 second_last_name:"",

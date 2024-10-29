@@ -43,7 +43,7 @@
             <b-button
               variant="red-palete"
               v-show="takePhoto && showimageTaked == false"
-              @click="takePicture"
+              @click="takePicture()"
               class="my-2"
             >
               <b>Volver a tomar </b>
@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineAsyncComponent } from "vue";
+import Vue,{ defineComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
 import Camera from "@/components/Camera.vue";
 import Gallery from "@/components/Gallery.vue";
