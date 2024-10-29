@@ -12,8 +12,8 @@
         />
 
         <b-container fluid class="form-content">
-          <b-row class="d-flex align-items-center justify-content-center">
             <h2 class="text-center my-3">{{ steps[currentStep - 1] }}</h2>
+          <b-row class="d-flex align-items-center justify-content-center">
             <b-row v-if="steps[currentStep - 1] === 'Datos personales'">
               <b-col cols="12" md="4">
                 <b-form-group label="Correo electrónico">
@@ -91,11 +91,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row
-              v-if="
-                steps[currentStep - 1] === 'Identificación oficial (Frontal)'
-              "
-            >
+            <b-row v-if="steps[currentStep - 1] === 'Identificación oficial (Frontal)'">
               <b-col cols="12" md="6">
                 <b-alert show variant="warning">
                   <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen
@@ -109,50 +105,36 @@
                 />
               </b-col>
               <b-col cols="12" md="6">
-                <b-row>
-                  <b-col cols="12" md="6" class="text-rigth">
-                    <b-button variant="brown-cacao" @click="showCameraOption" :disabled="showUploadImage"
-                      ><b-icon icon="camera" aria-hidden="true"></b-icon
-                      >Fotografía</b-button
-                    >
-                  </b-col>
-                  <b-col cols="12" md="6" class="text-left">
-                    <b-button variant="brown-cacao" @click="showUploadOption" :disabled="showTakePicture">
-                      <b-icon icon="box-arrow-in-up" aria-hidden="true"></b-icon
-                      >Subir Foto</b-button
-                    >
-                  </b-col>
-                </b-row>
-                <b-card v-show="showTakePicture" class="my-2 text-center">
-                  <Camera
-                    v-show="takePhoto === false"
-                    v-on:takePicture="takePicture"
-                  />
-                  <Gallery v-show="takePhoto" />
-                  <b-button variant="red-palete" v-show="takePhoto" @click="takePicture" class="my-2">
-                     <b>Volver a tomar </b>
-                     </b-button>
-                     <b-button variant="orange-secundary" v-show="takePhoto" @click="()=>{}" class="my-2 mx-2">
-                     <b>Subir foto </b>
-                     </b-button>
-                     <!-- La imagen a descargar o cargar  -->
-                     <img src="">
-                </b-card>
-                <b-card v-show="showUploadImage" class="my-2">
-                  <h3>Subir imagen</h3>
-                </b-card>
+                <OptionsUploadImage /> 
               </b-col>
             </b-row>
             <b-row
               v-if="
-                steps[currentStep - 1] === 'Identificación oficial  (Trasera)'
+                steps[currentStep - 1] === 'Identificación oficial (Trasera)'
               "
             >
+            <b-col cols="12" md="6">
+                <b-alert show variant="warning">
+                  <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen
+                  <b>FRONTAL</b> de tu credencial.
+                </b-alert>
+                <img
+                  alt="example ine"
+                  class="text-center"
+                  width="400"
+                  src="@/assets/ine.png"
+                />
+              </b-col>
+              <b-col cols="12" md="6">
+                <OptionsUploadImage />
+              </b-col>
             </b-row>
-            <b-row v-if="steps[currentStep - 1] === 'Foto Facial'"> </b-row>
+            <b-row v-if="steps[currentStep - 1] === 'Foto Facial'">
+              <b-col cols="12" md="12">
+              <OptionsUploadImage /> 
+              </b-col>
+            </b-row>
           </b-row>
-
-          <!-- Botones de navegación en las esquinas inferiores -->
           <b-row class="navigation-buttons">
             <b-col cols="6" md="6" class="text-left">
               <b-button
@@ -184,8 +166,7 @@
 <script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
-import Camera from "@/components/Camera.vue";
-import Gallery from "@/components/Gallery.vue";
+import OptionsUploadImage from "@/components/OptionsUploadImage.vue";
 import CreateAccountDelivery_ManViewModels from "../viewmodels/CreateAccountDelivery_ManViewModels";
 
 export default {
@@ -195,15 +176,12 @@ export default {
     Navbar: defineAsyncComponent(
       () => import("@/modules/public/components/Navbar.vue")
     ),
-    Camera,
-    Gallery,
+    OptionsUploadImage,
   },
   mixins: [CreateAccountDelivery_ManViewModels],
 };
 </script>
 
 <style scoped>
-.img-ine {
-  widows: 5%;
-}
+
 </style>
