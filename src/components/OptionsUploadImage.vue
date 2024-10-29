@@ -39,7 +39,7 @@
               v-show="takePhoto === false && showimageTaked == false"
               v-on:takePicture="takePicture"
             />
-            <Gallery v-show="takePhoto && showimageTaked == false" />
+            <Captured v-show="takePhoto && showimageTaked == false" />
             <b-button
               variant="red-palete"
               v-show="takePhoto && showimageTaked == false"
@@ -79,7 +79,7 @@
 import Vue, { defineComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
 import Camera from "@/components/Camera.vue";
-import Gallery from "@/components/Camera.vue";
+import Captured from "@/components/Captured.vue";
 import DropZone from "@/components/DropZone.vue";
 
 export default Vue.extend({
@@ -87,7 +87,7 @@ export default Vue.extend({
   components: {
     StepProgress,
     Camera,
-    Gallery,
+    Captured,
     DropZone,
   },
   props: {
