@@ -24,10 +24,18 @@
                   <b-form-input
                     id="input-1"
                     type="email"
-                    v-model="customer.email"
                     placeholder="maria@gmail.com"
+                    v-model="v$.customer.email.$model"
+                    :state="v$.customer.email.$dirty ? !v$.customer.email.$error : null"
+                    @blur="v$.customer.email.$touch()"
                     required
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.email.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
@@ -46,10 +54,18 @@
                     </b-input-group-prepend>
                     <b-form-input
                       :type="passwordVisible ? 'text' : 'password'"
-                      v-model="customer.password"
                       placeholder="Ingresa tu contraseña"
+                      v-model="v$.customer.password.$model"
+                      :state="v$.customer.password.$dirty ? !v$.customer.password.$error : null"
+                      @blur="v$.customer.password.$touch()"
                     ></b-form-input>
                   </b-input-group>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.password.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
@@ -58,7 +74,7 @@
                   label="Repetir contraseña"
                   label-for="input-1"
                 >
-                  <b-input-group class="mb-2">
+                <b-input-group class="mb-2">
                     <b-input-group-prepend is-text>
                       <b-icon
                         :icon="passwordVisibleConfirm ? 'eye' : 'eye-slash'"
@@ -83,9 +99,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Maria"
-                    v-model="customer.name"
-                    required
-                  ></b-form-input>
+                    v-model="v$.customer.name.$model"
+                      :state="v$.customer.name.$dirty ? !v$.customer.name.$error : null"
+                      @blur="v$.customer.name.$touch()"
+                    ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.name.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
@@ -98,9 +121,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Lopez"
-                    v-model="customer.first_last_name"
-                    required
-                  ></b-form-input>
+                    v-model="v$.customer.first_last_name.$model"
+                    :state="v$.customer.first_last_name.$dirty ? !v$.customer.first_last_name.$error : null"
+                      @blur="v$.customer.first_last_name.$touch()"
+                    ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.first_last_name.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
@@ -112,10 +142,17 @@
                   <b-form-input
                     id="input-1"
                     type="text"
-                    v-model="customer.second_last_name"
+                    v-model="v$.customer.second_last_name.$model"
                     placeholder="Delgado"
-                    required
-                  ></b-form-input>
+                    :state="v$.customer.second_last_name.$dirty ? !v$.customer.second_last_name.$error : null"
+                      @blur="v$.customer.second_last_name.$touch()"
+                    ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.second_last_name.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
             </b-row>
@@ -130,9 +167,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Emiliano Zapata"
-                    v-model="customer.address.city"
-                    required
+                    v-model="v$.customer.address.city.$model"
+                    :state="v$.customer.address.city.$dirty ? !v$.customer.address.city.$error : null"
+                    @blur="v$.customer.address.city.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.city.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
@@ -145,9 +189,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Palo escrito"
-                    v-model="customer.address.colony"
-                    required
+                    v-model="v$.customer.address.colony.$model"
+                    :state="v$.customer.address.colony.$dirty ? !v$.customer.address.colony.$error : null"
+                    @blur="v$.customer.address.colony.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.colony.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
@@ -160,9 +211,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Morelos"
-                    v-model="customer.address.state"
-                    required
+                    v-model="v$.customer.address.state.$model"
+                    :state="v$.customer.address.state.$dirty ? !v$.customer.address.state.$error : null"
+                    @blur="v$.customer.address.state.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.state.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
@@ -175,9 +233,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Dos rosas"
-                    v-model="customer.address.street"
-                    required
+                    v-model="v$.customer.address.street.$model"
+                    :state="v$.customer.address.street.$dirty ? !v$.customer.address.street.$error : null"
+                    @blur="v$.customer.address.street.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.street.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
 
@@ -191,9 +256,16 @@
                     id="input-1"
                     type="text"
                     placeholder="3 de Mayo"
-                    v-model="customer.address.locality"
-                    required
+                    v-model="v$.customer.address.locality.$model"
+                    :state="v$.customer.address.locality.$dirty ? !v$.customer.address.locality.$error : null"
+                    @blur="v$.customer.address.locality.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.locality.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
 
@@ -207,9 +279,16 @@
                     id="input-1"
                     type="text"
                     placeholder="Local propio/Negocio"
-                    v-model="customer.address.address_type"
-                    required
+                    v-model="v$.customer.address.address_type.$model"
+                    :state="v$.customer.address.address_type.$dirty ? !v$.customer.address.address_type.$error : null"
+                    @blur="v$.customer.address.address_type.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.address_type.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
@@ -222,9 +301,16 @@
                     id="input-1"
                     type="number"
                     placeholder="3"
-                    v-model="customer.address.external_number"
-                    required
+                    v-model="v$.customer.address.external_number.$model"
+                    :state="v$.customer.address.external_number.$dirty ? !v$.customer.address.external_number.$error : null"
+                    @blur="v$.customer.address.external_number.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.external_number.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
@@ -237,9 +323,16 @@
                     id="input-1"
                     type="number"
                     placeholder="2"
-                    v-model="customer.address.internal_number"
-                    required
+                    v-model="v$.customer.address.internal_number.$model"
+                    :state="v$.customer.address.internal_number.$dirty ? !v$.customer.address.internal_number.$error : null"
+                    @blur="v$.customer.address.internal_number.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.city.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
@@ -252,9 +345,16 @@
                     id="input-1"
                     type="number"
                     placeholder="67982"
-                    v-model="customer.address.zip_code"
-                    required
+                    v-model="v$.customer.address.zip_code.$model"
+                    :state="v$.customer.address.zip_code.$dirty ? !v$.customer.address.zip_code.$error : null"
+                    @blur="v$.customer.address.zip_code.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.zip_code.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="12">
@@ -266,8 +366,16 @@
                   <b-form-textarea
                     id="textarea"
                     placeholder="Local pintado de rojo ,etc..."
-                    v-model="customer.address.reference_near"
+                    v-model="v$.customer.address.reference_near.$model"
+                    :state="v$.customer.address.reference_near.$dirty ? !v$.customer.address.reference_near.$error : null"
+                    @blur="v$.customer.address.reference_near.$touch()"
                   ></b-form-textarea>
+                  <b-form-invalid-feedback
+                      v-for="error in v$.customer.address.reference_near.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
             </b-row>

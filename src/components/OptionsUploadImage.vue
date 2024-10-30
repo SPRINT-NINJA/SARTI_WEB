@@ -2,7 +2,12 @@
   <div class="my-2">
     <b-container>
       <b-row>
-        <b-col v-show="imageTakePhoto === ''" cols="12" md="6" class="text-right">
+        <b-col
+          v-show="imageTakePhoto === ''"
+          cols="12"
+          md="6"
+          class="text-right"
+        >
           <b-button
             variant="brown-cacao"
             @click="showCameraOption"
@@ -11,7 +16,12 @@
             >Fotografía</b-button
           >
         </b-col>
-        <b-col v-show="imageTakePhoto === ''" cols="12" md="6" class="text-left">
+        <b-col
+          v-show="imageTakePhoto === ''"
+          cols="12"
+          md="6"
+          class="text-left"
+        >
           <b-button
             variant="brown-cacao"
             @click="showUploadOption"
@@ -21,9 +31,13 @@
             Foto</b-button
           >
         </b-col>
-        <b-col  cols="12" md="12">
+        <b-col cols="12" md="12">
           <b-card
-            v-if="showTakePicture === false && showUploadImage === false && imageTakePhoto === ''"
+            v-if="
+              showTakePicture === false &&
+              showUploadImage === false &&
+              imageTakePhoto === ''
+            "
             class="my-5 text-center"
           >
             <h3 class="text-grey">
@@ -31,25 +45,24 @@
               Escoje una opción
               <b-icon icon="arrow-up-circle"></b-icon>
             </h3>
-            
           </b-card>
           <b-card
-            v-if=" imageTakePhoto != '' && showTakePicture === false"
+            v-if="imageTakePhoto != '' && showTakePicture === false"
             class="my-5 text-center"
           >
-          <h4 class="text-center" v-if="loading">Cargando...</h4>
-          <b-progress :value="valueProgress" v-if="loading" class="mb-3"></b-progress>
-          <h4 v-else>Imagen cargada correctamente </h4>
-              <img
-              :src="imageTakePhoto"
-              v-show="showimageTaked"
-              class="photo"
-              height="200"
-            />
+            <h4 class="text-center" v-if="loading">Cargando...</h4>
+            <b-progress
+              :value="valueProgress"
+              v-if="loading"
+              class="mb-3"
+            ></b-progress>
           </b-card>
         </b-col>
         <b-col cols="12" md="12">
-          <b-card v-show="showTakePicture && loading===false" class="my-2 text-center">
+          <b-card
+            v-show="showTakePicture && loading === false"
+            class="my-2 text-center"
+          >
             <Camera
               v-show="takePhoto === false && showimageTaked == false"
               v-on:takePicture="takePicture"
@@ -72,11 +85,16 @@
               <b>Subir foto </b>
             </b-button>
           </b-card>
-           
         </b-col>
         <b-col cols="12" md="12">
-          <b-card v-show="showUploadImage && hide_dropzone === false" class="my-2">
-            <DropZone @images-uploaded="updateImagesUpload" v-on:showLoading="showLoading"  />
+          <b-card
+            v-show="showUploadImage && hide_dropzone === false"
+            class="my-2"
+          >
+            <DropZone
+              @images-uploaded="updateImagesUpload"
+              v-on:showLoading="showLoading"
+            />
           </b-card>
         </b-col>
       </b-row>
@@ -120,19 +138,34 @@ export default defineComponent({
       showimageTaked: false,
       hide_dropzone:false,
       temporaryImage:"",
-      imagesUpload: [] as { name: string; url: string }[],// valores de las imagenes cargadas en el dropzone
+      imagesUpload: [] as { name: string; url: string }[],
+      timeCharging:false// valores de las imagenes cargadas en el dropzone
     };
   },
   watch: {
     // Asegura que cualquier cambio en la prop image se refleje en el valor local
     image(newValue) {
       this.imageTakePhoto = newValue;
+      console.log("Nuevo",newValue === "" ? 'ta vacío':'ta lleno',this.timeCharging ? 'ya subio tu':'no ha subito tu ')
+      if(newValue === "" ) this.clear();
     },
   },
   methods: {
+    clear() {
+    this.showUploadImage = false;
+    this.showTakePicture = false;
+    this.takePhoto = false;
+    this.imageTakePhoto = this.image; // Inicializar con el valor pasado por la propiedad image
+    this.loading = false;
+    this.valueProgress = this.progressValue;
+    this.showimageTaked = false;
+    this.hide_dropzone = false;
+    this.temporaryImage = "";
+    this.imagesUpload = [] as { name: string; url: string }[]; // Valores de las imágenes cargadas en el dropzone
+    this.timeCharging = false;
+  },
     updateImagesUpload(images: { name: string; url: string }[]) {
       this.imagesUpload = images;
-      console.log('Updating image with: ', images[0].url);
       if (images.length > 0) {
         this.temporaryImage = images[0].url;
         this.$emit("update:image", this.imageTakePhoto); // Emitir la URL de la primera imagen seleccionada
@@ -154,9 +187,6 @@ export default defineComponent({
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = "high";
           ctx.drawImage(video, 0, 0, picture.width, picture.height);
-          console.log(
-            ctx.drawImage(video, 0, 0, picture.width, picture.height)
-          );
           // Convertir el contenido del canvas en una URL de base64
           const imageDataUrl = picture.toDataURL("image/png");
           this.imageTakePhoto = imageDataUrl;
@@ -180,7 +210,9 @@ export default defineComponent({
           this.showimageTaked = true;
           clearInterval(timer);
           this.loading = false;
+          this.timeCharging = true;
         }
+        this.$emit("charge-image-upload", this.timeCharging);
         if(this.temporaryImage != ''){
           this.hide_dropzone = true
           this.imageTakePhoto = this.temporaryImage
@@ -199,7 +231,7 @@ export default defineComponent({
         this.showTakePicture = false;
       }
     },
-  },
+  }
 });
 </script>
 

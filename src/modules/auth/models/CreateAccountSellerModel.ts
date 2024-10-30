@@ -2,7 +2,7 @@ import Vue from "vue";
 
 export interface Seller {
   email: string;
-  password: string; // Corregido de 'passwod' a 'password'
+  password: string; 
   name: string;
   first_last_name: string;
   second_name: string;
