@@ -1,0 +1,110 @@
+.container-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+}
+
+.container-progress .steps {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.container-progress .steps .circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+    color: #999;
+    font-size: 20px;
+    border: 4px solid #e0e0e0;
+    transition: all 1s ease;
+    z-index: 1; /* Asegura que los círculos estén sobre la barra */
+}
+
+.container-progress .steps .circle.active {
+    border-color: #ffa446;
+    color: #ffa446;
+}
+
+.container-progress .steps .progress-bar {
+    position: absolute;
+    top: 50%; /* Centra la barra verticalmente */
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #e0e0e0;
+    transform: translateY(-50%); /* Ajusta la posición para estar centrado */
+}
+
+.container-progress .steps .progress-bar .indicator {
+    position: absolute;
+    height: 100%;
+    width: 0%; /* Cambiará dinámicamente */
+    background-color: #ffa446;
+    transition: all 1s ease;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+    .container-progress {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .container-progress .steps .circle {
+        height: 40px;
+        width: 40px;
+        font-size: 16px;
+    }
+}
+
+/* Responsivo para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .container-progress .steps .circle {
+        height: 35px;
+        width: 35px;
+        font-size: 14px;
+        border-width: 3px;
+    }
+
+    .container-progress .steps {
+        gap: 10px;
+    }
+
+    .container-progress .steps .progress-bar {
+        height: 3px;
+    }
+}
+
+.custom-card {
+    width: 75%;
+  }
+  .form-content {
+    position: relative;
+    padding-bottom: 4rem;
+  }
+  .navigation-buttons {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    padding: 0 1.5rem;
+  }
+  .navigation-buttons .text-left {
+    text-align: left;
+  }
+  .navigation-buttons .text-right {
+    text-align: right;
+  }
+  .b-icon {
+    margin-right: 5px; /* Espaciado opcional entre el ícono y el campo de entrada */
+  }
