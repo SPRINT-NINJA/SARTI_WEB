@@ -35,6 +35,63 @@ const router = new VueRouter({
             title: "Iniciar sesión",
             requireAuth: false,
           },
+        },{
+          path: "/cart-customer-list",
+          props: true,
+          name: "cart-customer-list",
+          component: () => import("../modules/carts/views/CartCustomerProductListView.vue"),
+          meta: {
+            title: "Carrito",
+            requireAuth: false,
+          },
+        },
+        {
+          path: "/login",
+          props: true,
+          name: "login",
+          component: () => import("../modules/auth/views/Login.vue"),
+          meta: {
+            title: "Iniciar sesión",
+            requireAuth: false,
+          },
+        },
+        {
+          path: "/create-account",
+          props: true,
+          name: "CreateAccount",
+          component: () => import("../modules/auth/views/CreateAccount.vue"),
+          meta: {
+            title: "Crear Cuenta",
+            requireAuth: false,
+          },
+        },
+        {
+          path: "/create-account-seller",
+          props: true,
+          name: "create-account-seller",
+          component: () => import("../modules/auth/views/CreateAccountSeller.vue"),
+          meta: {
+            title: "Crear cuenta emprendedor",
+            requireAuth: false,
+          },
+        },{
+          path: "/create-account-customer",
+          props: true,
+          name: "create-account-customer",
+          component: () => import("../modules/auth/views/CreateAccountCustomer.vue"),
+          meta: {
+            title: "Crear cuenta cliente",
+            requireAuth: false,
+          },
+        },{
+          path: "/create-account-delivery_man",
+          props: true,
+          name: "create-account-delivery_man",
+          component: () => import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
+          meta: {
+            title: "Crear cuenta cliente",
+            requireAuth: false,
+          },
         },
         ...publicRouter,
       ],
