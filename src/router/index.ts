@@ -37,6 +37,26 @@ const router = new VueRouter({
           },
         },
         {
+          path: "/login",
+          props: true,
+          name: "login",
+          component: () => import("../modules/auth/views/Login.vue"),
+          meta: {
+            title: "Iniciar sesión",
+            requireAuth: false,
+          },
+        },
+        {
+          path: "/create-account",
+          props: true,
+          name: "CreateAccount",
+          component: () => import("../modules/auth/views/CreateAccount.vue"),
+          meta: {
+            title: "Crear Cuenta",
+            requireAuth: false,
+          },
+        },
+        {
           path: "/create-account-seller",
           props: true,
           name: "create-account-seller",
