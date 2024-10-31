@@ -35,6 +35,15 @@ const router = new VueRouter({
             title: "Iniciar sesión",
             requireAuth: false,
           },
+        },{
+          path: "/cart-customer-list",
+          props: true,
+          name: "cart-customer-list",
+          component: () => import("../modules/carts/views/CartCustomerProductListView.vue"),
+          meta: {
+            title: "Carrito",
+            requireAuth: false,
+          },
         },
         {
           path: "/login",
