@@ -9,7 +9,7 @@
           <b-row>
             <b-col cols="12" md="9">
               <b-row>
-                <b-col cols="6" md="2">
+                <b-col cols="12" md="3">
                   <img
                     src="https://n9.cl/stich"
                     alt="producto"
@@ -17,8 +17,8 @@
                   />
                 </b-col>
                 <b-col
-                  cols="6"
-                  md="10"
+                  cols="12"
+                  md="9"
                   class="d-flex justify-content-right align-items-center"
                 >
                   <h5>Un producto espera tu opinión</h5>
@@ -36,34 +36,33 @@
         </b-container>
       </b-card>
     </div>
-          <!-- pedido preview -->
-    <div class="d-flex align-items-center justify-content-center my-2">
+    <!-- pedido preview -->
+    <div class="d-flex align-items-center justify-content-center my-2 " v-for="order in ordersList" :key="order.order.dateForArrive">
       <b-card class="card-preview-order">
-        <b-card-text class="date-text">15 de octubre del 2024</b-card-text>
+        <b-card-text class="date-text"> {{ parseDateByRead(order.order.dateForArrive) }} </b-card-text>
         <hr/>
         <b-container>
             <b-row>
                 <b-col cols="12" md="9">
-                    <b-row  cols="12" md="8" class="d-flex justify-content-right align-items-center">
-                        <b-col cols="12" md="4">
+                    <b-row  cols="12" md="8" >
+                        <b-col cols="12" md="3">
                     <img
-                    src="https://n9.cl/stich"
+                    :src="order.order.product.mainImage"
                     alt="producto"
                     class="img-main-product"
                   /> 
                         </b-col>
-                        <b-col>
-                            <b-card-text>Pendiente</b-card-text>
-                            <b-card-text>
-                                Paquete de Stich peluche edición especial
-                            </b-card-text>
-                            <b-card-text>1 unidad</b-card-text>
+                        <b-col cols="12" md="9" class="d-stretch justify-content-right align-items-center">
+                            <p>
+                              <b-badge :variant="assignColorBystatus(order.order.status)">{{ order.order.status }}</b-badge> <br>
+                              {{ order.order.product.name }}<br>
+                              {{ order.order.product.name }}</p>
                         </b-col>
                     </b-row>
                 </b-col>
                 <b-col cols="12" md="3">
-                    <b-button class="my-2" variant="orange-secundary"> Ver compra</b-button>
-                    <b-button variant="orange-secundary"> Volver a comprar</b-button>
+                    <b-button class="my-2 mx-2" size="sm" variant="orange-secundary"> Ver compra</b-button>
+                    <b-button variant="orange-secundary" size="sm"> Volver a comprar</b-button>
                 </b-col>
             </b-row>
         </b-container>
@@ -96,8 +95,8 @@ export default {
   display: flex;
   align-items: baseline;
   justify-content: right;
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   transition: transform 0.3s ease;
