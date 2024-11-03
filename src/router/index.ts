@@ -101,6 +101,15 @@ const router = new VueRouter({
             title: "Lista de pedidos",
             requireAuth: false,
           },
+        },{
+          path: "/customer-oder-detail",
+          props: true,
+          name: "customer-oder-detail",
+          component: () => import("../modules/orders/views/CustomerOrderDetailsView.vue"),
+          meta: {
+            title: "Detalle de pedido",
+            requireAuth: false,
+          },
         },
         ...publicRouter,
       ],
