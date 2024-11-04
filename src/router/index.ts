@@ -102,9 +102,9 @@ const router = new VueRouter({
             requireAuth: false,
           },
         },{
-          path: "/customer-oder-detail",
+          path: "/customer-order-detail",
           props: true,
-          name: "customer-oder-detail",
+          name: "customer-order-detail",
           component: () => import("../modules/orders/views/CustomerOrderDetailsView.vue"),
           meta: {
             title: "Detalle de pedido",

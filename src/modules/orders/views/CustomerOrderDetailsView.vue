@@ -8,28 +8,28 @@
         <b-row >
           <b-col cols="12" md="12">
             <img
-              src="https://n9.cl/stich"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
               alt="producto"
               class="img-main-product"
             />
           </b-col>
           <b-col cols="4" md="4">
             <img
-              src="https://n9.cl/stich"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
               alt="producto"
               class="my-2 img-main-miniature"
             />
           </b-col>
           <b-col cols="4" md="4">
             <img
-              src="https://n9.cl/stich"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
               alt="producto"
               class="my-2 img-main-miniature"
             />
           </b-col>
           <b-col cols="4" md="4">
             <img
-              src="https://n9.cl/stich"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
               alt="producto"
               class="my-2 img-main-miniature"
             />
