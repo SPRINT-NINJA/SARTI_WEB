@@ -93,9 +93,9 @@ const router = new VueRouter({
             requireAuth: false,
           },
         },{
-          path: "/customer-oder-list",
+          path: "/customer-order-list",
           props: true,
-          name: "customer-oder-list",
+          name: "customer-order-list",
           component: () => import("../modules/orders/views/CustomerOrderListView.vue"),
           meta: {
             title: "Lista de pedidos",

@@ -15,7 +15,7 @@
               <b-row>
                 <b-col cols="12" md="3">
                   <img
-                    src="https://n9.cl/stich"
+                    src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
                     alt="producto"
                     class="img-main-product"
                   />
