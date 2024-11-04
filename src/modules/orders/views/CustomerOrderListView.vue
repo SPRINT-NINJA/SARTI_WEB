@@ -2,6 +2,10 @@
   <!-- Agregar componente de cristian -->
   <div>
     <navbar />
+    <banner-overlay
+      :imgSrc="require('../../../assets/banner-pedido.svg')"
+      :content="'LISTA DE PEDIDOS'"
+    />
     <div class="d-flex align-items-center justify-content-center">
       <b-card bg-variant="orange-soft" class="card-preview-order my-2">
         <b-container>
@@ -74,11 +78,14 @@
 <script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
 import CustomerOrderListViewModel from "../viewmodels/CustomerOrderListViewModel";
-
+import BannerComponent from "@/modules/public/components/BannerComponent.vue";
+import BannerOverlay from "@/modules/public/components/BannerOverlay.vue";
 export default {
   name: "CustomerOrderListView",
   components: {
     Navbar: () => import("@/modules/public/components/Navbar.vue"),
+    BannerComponent: BannerComponent,
+    BannerOverlay: BannerOverlay,
   },
   mixins: [CustomerOrderListViewModel],
 };
