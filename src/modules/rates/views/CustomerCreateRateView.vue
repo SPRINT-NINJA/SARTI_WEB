@@ -14,7 +14,7 @@
               alt="producto"
               class="my-2 img-main-product"
             />
-            <h5 class="my-3 text-center" >Detalles del producto</h5>
+            <h5 class="my-3 text-center">Detalles del producto</h5>
             <b-card-text>
               Lorem Ipsum es simplemente el texto de relleno de las imprentas y
               archivos de texto. Lorem Ipsum ha sido el texto de relleno
@@ -36,6 +36,8 @@
               id="rating-10"
               stars="10"
               size="lg"
+              no-border
+              no-focus
             ></b-form-rating>
             <b-form-group
               id="input-group-1"
