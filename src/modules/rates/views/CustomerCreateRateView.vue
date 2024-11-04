@@ -10,7 +10,7 @@
         >
           <b-card>
             <img
-              src="https://n9.cl/stich"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
               alt="producto"
               class="my-2 img-main-product"
             />
