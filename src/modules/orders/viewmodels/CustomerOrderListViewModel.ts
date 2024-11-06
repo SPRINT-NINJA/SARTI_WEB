@@ -17,7 +17,7 @@ const testCustomerOrderList: CustomerOrderList[] = [
   {
     order: {
       status: "Entregado",
-      amount: "150.00",
+      amount: "1",
       dateForArrive:"2024-09-12",
       product: {
         name: "Paquete de Stitch peluche edición especial",
@@ -30,7 +30,7 @@ const testCustomerOrderList: CustomerOrderList[] = [
   {
     order: {
       status: "Pendiente de Envío",
-      amount: "80.00",
+      amount: "8",
       dateForArrive:"2024-09-12",
       product: {
         name: "Taza personalizada de Stitch",
@@ -43,7 +43,7 @@ const testCustomerOrderList: CustomerOrderList[] = [
   {
     order: {
       status: "Recolección",
-      amount: "120.00",
+      amount: "12",
       dateForArrive:"2024-09-12",
       product: {
         name: "Cojín Stitch edición limitada",
