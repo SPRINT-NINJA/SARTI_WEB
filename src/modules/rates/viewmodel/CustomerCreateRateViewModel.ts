@@ -1,4 +1,6 @@
 import { defineComponent } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required,maxLength, minLength, email, helpers } from "@vuelidate/validators";
 
 export interface CreateRateCustomer{
     comment:string,
@@ -24,16 +26,27 @@ const testProduct: productRate =
 
 
 export default defineComponent({
+    setup(){
+        const v$ = useVuelidate();
+        return { v$ };
+    },
     data(){
         return{
             getProduct:{} as productRate,
             review:{
                 comment:"",
                 rate:0,
-                image:""
+                image:{}
             },
             imagesUpload: {},
-            showConfirmImage: false
+            showConfirmImage: false,
+            errorMessagges:{
+                required:"Por favor llena el formulario",
+                invalidText:"No se aceptan caracteres especiales",
+                minLengthText:"Se aceptan solo el minímo de 10 caracteres",
+                maxLengthText:"Solo máximo 100 caracteres"
+            },
+            fillForm:true
         }
     },
     methods:{
@@ -44,6 +57,7 @@ export default defineComponent({
             this.imagesUpload = images;
         },
         SendReview(){
+            console.log(this.review)
             this.$swal.fire({
                 title: "¿Estás Seguro?",
                 text: "Se enviara la reseña de este producto, muchas gracias por realizarla",
@@ -77,13 +91,34 @@ export default defineComponent({
                 reverseButtons: true
               }).then((result) => {
                 if (result.isConfirmed) {
-                    this.showConfirmImage = true
+                    this.review.image = this.imagesUpload;
+                    this.showConfirmImage = true;
                 }
               });
+        },
+        fillFormAprove(){
+            if(this.review.comment != null  && this.review.image.length > 0 && this.review.rate > 0 ) 
+                return true;
         }
-
     },
     mounted(){
         this.getProductByRate();
+    },
+    validations(){
+        return{
+            review:{
+                comment:{
+                    required: helpers.withMessage(this.errorMessagges.required, required),
+                    maxLength: helpers.withMessage(this.errorMessagges.maxLengthText,maxLength(100)),
+                    minLength: helpers.withMessage(this.errorMessagges.minLengthText,minLength(10)),
+                    valid: helpers.withMessage(
+                      this.errorMessagges.invalidText,
+                      (value:string)=>{
+                        return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
+                      }
+                    )
+                }
+            }
+        }
     }
 });

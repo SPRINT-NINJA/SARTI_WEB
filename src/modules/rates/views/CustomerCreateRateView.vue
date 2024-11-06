@@ -33,6 +33,7 @@
               size="lg"
               no-border
               no-focus
+              v-model="review.rate"
             ></b-form-rating>
             <b-form-group id="input-group-1" class="my-2">
               <label>
@@ -43,8 +44,18 @@
                 placeholder="Comenta acerca del producto que compraste"
                 rows="3"
                 max-rows="6"
+              v-model="v$.review.comment.$model"
+                :state="
+                  v$.review.comment.$dirty ? !v$.review.comment.$error : null
+                "
+                @blur="v$.review.comment.$touch()"
+              ></b-form-textarea>
+              <b-form-invalid-feedback
+                v-for="error in v$.review.comment.$errors"
+                :key="error.$uid"
               >
-              </b-form-textarea>
+                {{ error.$message }}
+              </b-form-invalid-feedback>
             </b-form-group>
           </b-form>
           <h5>Comparte fotos de tu producto</h5>
@@ -55,7 +66,6 @@
           />
           <div v-show="showConfirmImage">
             <b-container fluid>
-             
               <b-row>
                 <b-col v-for="value in imagesUpload" :key="value" cols="auto">
                   <img
@@ -68,7 +78,7 @@
             </b-container>
           </div>
           <div class="d-flex justify-content-end mt-auto">
-            <b-button class="my-3" variant="red-palete" @click="SendReview"
+            <b-button class="my-3" variant="red-palete" @click="SendReview" :disabled="!fillFormAprove() && !v$.review.comment.$dirty || v$.review.comment.$invalid"
               >Enviar reseña</b-button
             >
           </div>
@@ -83,7 +93,7 @@ import CustomerCreateRateViewModel from "../viewmodel/CustomerCreateRateViewMode
 import DropZone from "@/components/DropZone.vue";
 
 export default {
-  name: "CustomerCreateRateViewModel",
+  name: "CustomerCreateRate",
   components: {
     Navbar: () => import("@/modules/public/components/Navbar.vue"),
     DropZone,
