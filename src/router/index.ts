@@ -119,6 +119,15 @@ const router = new VueRouter({
             title: "Creación de reseña",
             requireAuth: false,
           },
+        },{
+          path: "/customer-buy-order",
+          props: true,
+          name: "customer-buy-order",
+          component: () => import("../modules/orders/views/CustomerBuyOrderView.vue"),
+          meta: {
+            title: "Creación de reseña",
+            requireAuth: false,
+          },
         },
         ...publicRouter,
       ],
