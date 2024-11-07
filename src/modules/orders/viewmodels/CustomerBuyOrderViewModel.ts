@@ -138,6 +138,7 @@ export default defineComponent ({
           if(this.takeinTheshop){
             this.sendByAddress = false;
           }
+          this.CountTotalWithDelivery();
         },
         changeSelectOrderAddress(){
           if(this.sendByAddress){
