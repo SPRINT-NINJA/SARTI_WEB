@@ -56,6 +56,7 @@
                 :alt="product.name"
                 class="custom-img"
                 role="button"
+                @click="getProductPerDetails(product)"
               />
               <div class="p-2">
                 <span>{{ product.name }}</span>
