@@ -29,14 +29,6 @@ const test_cartProductList: ICartCustomerProductList[] = [
 },
 {
   mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-  name: "Vanilla Cupcake",
-  price: 590.0,
-  status: "Disponible",
-  stock: 20,
-  amount: 3
-},
-{
-  mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
   name: "Strawberry Cheesecake",
   price: 40.0,
   status: "No disponible",

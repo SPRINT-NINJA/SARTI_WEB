@@ -38,7 +38,7 @@
                       <b-col
                         cols="12"
                         md="2"
-                        class="d-flex justify-content-end align-items-center"
+                        class="d-flex justify-content-end align-items-center my-2"
                       >
                         <b-badge
                           :variant="
