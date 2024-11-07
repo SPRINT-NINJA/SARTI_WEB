@@ -59,7 +59,7 @@ export default defineComponent ({
               { value: 'd', text: 'This one is disabled', disabled: true }
             ],
             takeinTheshop:false,
-            sendByAddress:false,
+            sendByAddress:true,
             quantity:1
         }
     },
