@@ -60,7 +60,7 @@
         </b-row>
         <b-row class="d-flex align-items-center justify-content-center">
           <b-col cols="auto">
-            <b-button variant="orange-secundary" class="btn-centered"
+            <b-button variant="orange-primary" class="btn-centered"
               >Crear reseña</b-button
             >
           </b-col>
