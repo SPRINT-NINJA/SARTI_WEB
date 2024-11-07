@@ -110,6 +110,15 @@ const router = new VueRouter({
             title: "Detalle de pedido",
             requireAuth: false,
           },
+        },{
+          path: "/customer-create-rate",
+          props: true,
+          name: "customer-create-rate",
+          component: () => import("../modules/rates/views/CustomerCreateRateView.vue"),
+          meta: {
+            title: "Creación de reseña",
+            requireAuth: false,
+          },
         },
         ...publicRouter,
       ],
