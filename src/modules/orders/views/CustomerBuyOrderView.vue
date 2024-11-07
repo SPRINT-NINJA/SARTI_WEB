@@ -122,7 +122,7 @@
                   <p>${{ total }}</p>
                   <p>${{ sendByAddress ? "30" : "0" }}</p>
                   <p> 
-                    <b>${{ total }}</b>
+                    <b>${{ totalFinal }}</b>
                   </p>
                 </b-col>
               </b-row>

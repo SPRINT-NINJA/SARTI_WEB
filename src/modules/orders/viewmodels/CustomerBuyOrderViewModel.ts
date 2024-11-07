@@ -50,6 +50,7 @@ export default defineComponent ({
         return{
           cartCustomerProductList:[] as ICartCustomerProductList[],
           total:0.0,
+          totalFinal:0.0,
           options: [
               { value: null, text: 'Please select an option' },
               { value: 'a', text: 'This is First option' },
@@ -69,6 +70,14 @@ export default defineComponent ({
           const amount = product.amount || 0;
           return acc + (amount > 0 ? product.price * amount : 0);
         }, 0)
+        this.CountTotalWithDelivery();
+      },
+      CountTotalWithDelivery():void{
+        if(this.sendByAddress){
+          this.totalFinal = 30 + this.total;
+        }else{
+          this.totalFinal= this.total;
+        }
       },
       quantityOptions(stock: number) {
           const options = [{ text: "Elegir...", value: 0 }];
@@ -134,6 +143,7 @@ export default defineComponent ({
           if(this.sendByAddress){
             this.takeinTheshop = false;
           }
+          this.CountTotalWithDelivery();
         }
 
     },
