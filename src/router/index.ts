@@ -1,6 +1,7 @@
   import Vue from "vue";
   import VueRouter from "vue-router";
   import publicRouter from "./public-router";
+  import deliveryRouter from "./delivery-router";
 
   Vue.use(VueRouter);
 
@@ -37,21 +38,7 @@
             },
           },
           ...publicRouter,
-        ],
-      },
-      {
-        path: "/delivery",
-        component: { render: (c: any) => c("router-view") },
-        children: [
-          {
-            path: "order-list",
-            name: "order-list",
-            component: () => import("../modules/delivery/views/OrderList.vue"),
-            meta: {
-              title: "Lista de Pedidos",
-              requireAuth: true,
-            },
-          },
+          ...deliveryRouter,
         ],
       },
     ],
