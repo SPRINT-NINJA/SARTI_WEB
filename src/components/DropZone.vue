@@ -9,13 +9,12 @@
       @dragleave.prevent="onDragLeave"
       @drop.prevent="onDrop"
     >
-      <span>
+      <span class="text-center">
         Arrastra y suelta imágenes aquí o
         <span class="select" role="button" @click="selectFiles"
           >Seleccionar</span
         >
       </span>
-      <div class="select">Suelta las imágenes aquí</div>
       <input
         name="file"
         type="file"
@@ -26,23 +25,23 @@
       />
     </div>
     <div class="container">
-      <div class="image" v-for="(image, index) in images" :key="index">
+      <div class="image my-2" v-for="(image, index) in images" :key="index">
         <span class="delete" @click="deleteImage(index)">&times;</span>
         <img :src="image.url" />
       </div>
     </div>
-    <button type="button" @click="$emit('showLoading')">Subir</button>
+    <button type="button" @click="$emit('showLoading')">Subir imagen</button>
   </div>
 </template>
 
-
 <script lang="ts">
 import { defineComponent } from "vue";
+import VueSweetalert2 from "vue-sweetalert2";
 
 export default defineComponent({
   data() {
     return {
-      images: [] as { name: string; url: string }[],
+      images: [] as { name: string; url: string; base64: string }[],
       isDragging: false,
     };
   },
@@ -56,15 +55,37 @@ export default defineComponent({
       if (!files) return;
 
       for (let i = 0; i < files.length; i++) {
-        if (files[i].type.split("/")[0] !== "image") continue;
-        if (!this.images.some((e) => e.name === files[i].name)) {
-          this.images.push({
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
+        const file = files[i];
+        // Verificar si el archivo es una imagen
+        if (file.type.split("/")[0] !== "image") {
+          this.$swal.fire({
+            icon: "error", // Cambia el icono a "error" o el que prefieras
+            title: "Solo se permiten archivos de imagen",
+            toast: true,
+            position: "top-end", // Puedes cambiar la posición a "top-start", "bottom-start", "bottom-end", etc.
+            showConfirmButton: false,
+            timer: 3000, // La duración de la alerta en milisegundos
+            timerProgressBar: true,
           });
+          continue;
+        }
+        if (!this.images.some((e) => e.name === file.name)) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const base64 = e.target?.result as string;
+            this.images.push({
+              name: file.name,
+              url: URL.createObjectURL(file), // Para previsualización
+              base64, // Imagen en formato Base64
+            });
+            this.$emit(
+              "images-uploaded",
+              this.images.map((img) => img.base64)
+            ); // Emitir evento con imágenes en Base64
+          };
+          reader.readAsDataURL(file); // Convertir a Base64
         }
       }
-      this.$emit("images-uploaded", this.images); // Emitir evento con las imágenes
     },
     onDrop(event: DragEvent) {
       event.preventDefault();
@@ -73,15 +94,29 @@ export default defineComponent({
       if (!files) return;
 
       for (let i = 0; i < files.length; i++) {
-        if (files[i].type.split("/")[0] !== "image") continue;
-        if (!this.images.some((e) => e.name === files[i].name)) {
-          this.images.push({
-            name: files[i].name,
-            url: URL.createObjectURL(files[i]),
-          });
+        const file = files[i];
+        // Verificar si el archivo es una imagen
+        if (file.type.split("/")[0] !== "image") {
+          alert("Solo se permiten archivos de imagen.");
+          continue;
+        }
+        if (!this.images.some((e) => e.name === file.name)) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const base64 = e.target?.result as string;
+            this.images.push({
+              name: file.name,
+              url: URL.createObjectURL(file), // Para previsualización
+              base64, // Imagen en formato Base64
+            });
+            this.$emit(
+              "images-uploaded",
+              this.images.map((img) => img.base64)
+            ); // Emitir evento con imágenes en Base64
+          };
+          reader.readAsDataURL(file); // Convertir a Base64
         }
       }
-      this.$emit("images-uploaded", this.images); // Emitir evento con las imágenes
     },
     deleteImage(index: number) {
       this.images.splice(index, 1);
@@ -98,7 +133,6 @@ export default defineComponent({
   },
 });
 </script>
-
 
 <style scoped>
 .card {
@@ -123,7 +157,7 @@ export default defineComponent({
   font-weight: 400;
   padding: 8px 13px;
   width: 100%;
-  background: #6f5846;
+  background: var(--brown-cacao);
 }
 .card .drag-area {
   height: 150px;
