@@ -1,1 +1,19 @@
 @import "./base.css";
+
+.details-price{
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+.available-stock{
+    color:rgb(172, 168, 175);
+}
+.rating-score{
+    font-size: 42px;
+    color: #FFC107;
+    font-weight: bold;
+}
+.total-qualifications{
+    font-size: 14px;
+    color: #6c757d;
+}
+
