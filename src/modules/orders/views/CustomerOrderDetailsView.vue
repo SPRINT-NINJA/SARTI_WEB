@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <b-container  class="my-2">
     <b-row>
       <b-col cols="12" md="6">
@@ -60,7 +59,7 @@
         </b-row>
         <b-row class="d-flex align-items-center justify-content-center">
           <b-col cols="auto">
-            <b-button variant="orange-secundary" class="btn-centered"
+            <b-button variant="orange-primary" class="btn-centered"
               >Crear reseña</b-button
             >
           </b-col>
@@ -80,9 +79,6 @@
 import CustomerOrderDetailsViewModel from "../viewmodels/CustomerOrderDetailsViewModel";
 export default {
   name: "CustomerOrderDetail",
-  components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
-  },
   mixins: [CustomerOrderDetailsViewModel],
 };
 </script>
