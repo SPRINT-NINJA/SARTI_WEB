@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <b-container>
       <b-row class="my-5">
         <b-col
@@ -95,7 +94,6 @@ import DropZone from "@/components/DropZone.vue";
 export default {
   name: "CustomerCreateRate",
   components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
     DropZone,
   },
   mixins: [CustomerCreateRateViewModel],

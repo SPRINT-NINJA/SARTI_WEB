@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import publicRouter from "./public-router";
+import customerRouter from "./customer-router";
 
 Vue.use(VueRouter);
 
@@ -92,44 +93,9 @@ const router = new VueRouter({
             title: "Crear cuenta cliente",
             requireAuth: false,
           },
-        },{
-          path: "/customer-order-list",
-          props: true,
-          name: "customer-order-list",
-          component: () => import("../modules/orders/views/CustomerOrderListView.vue"),
-          meta: {
-            title: "Lista de pedidos",
-            requireAuth: false,
-          },
-        },{
-          path: "/customer-order-detail",
-          props: true,
-          name: "customer-order-detail",
-          component: () => import("../modules/orders/views/CustomerOrderDetailsView.vue"),
-          meta: {
-            title: "Detalle de pedido",
-            requireAuth: false,
-          },
-        },{
-          path: "/customer-create-rate",
-          props: true,
-          name: "customer-create-rate",
-          component: () => import("../modules/rates/views/CustomerCreateRateView.vue"),
-          meta: {
-            title: "Creación de reseña",
-            requireAuth: false,
-          },
-        },{
-          path: "/customer-buy-order",
-          props: true,
-          name: "customer-buy-order",
-          component: () => import("../modules/orders/views/CustomerBuyOrderView.vue"),
-          meta: {
-            title: "Creación de reseña",
-            requireAuth: false,
-          },
         },
         ...publicRouter,
+        ...customerRouter
       ],
     },
   ],
