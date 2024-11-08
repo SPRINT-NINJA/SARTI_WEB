@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import publicRouter from "./public-router";
+import customerRouter from "./customer-router";
 
 Vue.use(VueRouter);
 
@@ -93,15 +94,6 @@ const router = new VueRouter({
             requireAuth: false,
           },
         },{
-          path: "/customer-order-list",
-          props: true,
-          name: "customer-order-list",
-          component: () => import("../modules/orders/views/CustomerOrderListView.vue"),
-          meta: {
-            title: "Lista de pedidos",
-            requireAuth: false,
-          },
-        },{
           path: "/customer-order-detail",
           props: true,
           name: "customer-order-detail",
@@ -121,6 +113,7 @@ const router = new VueRouter({
           },
         },
         ...publicRouter,
+        ...customerRouter
       ],
     },
   ],
