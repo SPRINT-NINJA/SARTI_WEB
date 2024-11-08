@@ -48,13 +48,30 @@
         </b-row>
       </section>
       <section>
-        <b-row class="my-2" >
+        <b-row class="my-2">
           <b-col cols="12" md="8">
-            <b-card overlay class="card-by-image"  footer-tag="footer">
-           
-                <template #footer>
-                  <em>Footer Slot</em>
-                </template>
+            <b-card
+              overlay
+              class="card-by-image"
+              footer-tag="footer"
+              style="position: relative; height: 300px"
+            >
+              <template #footer>
+                <h2>Bajilla pintada a mano</h2>
+                    <div class="d-flex align-items-end justify-content-end">
+                <b-form-rating
+                      v-model="ratingTaste"
+                      stars="10"
+                      readonly
+                      no-border
+                      no-focus
+                      variant="warning"
+                      
+                      style="background-color: transparent;"
+                    ></b-form-rating>
+                      <h3>$3000</h3>
+                    </div>
+              </template>
             </b-card>
           </b-col>
           <b-col col="12" md="4">
@@ -149,6 +166,16 @@ export default {
   background-size: cover;
   background-position: center;
 }
+
+.card-by-image footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(59, 59, 59, 0.8); /* Cambia el color si es necesario */
+  padding: 10px;
+  color: white;
+}
+
 .card-by-image-little {
   height: 250px;
   max-height: 250px;

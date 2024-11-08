@@ -33,6 +33,7 @@ export default defineComponent({
           rating: 8.5,
         },
       ],
+      ratingTaste:9
     };
   },
   methods: {
