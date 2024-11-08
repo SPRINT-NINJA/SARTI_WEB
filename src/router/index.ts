@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import publicRouter from "./public-router";
+import deliveryRouter from "./delivery-router";
 import customerRouter from "./customer-router";
 
 Vue.use(VueRouter);
@@ -36,11 +37,13 @@ const router = new VueRouter({
             title: "Iniciar sesión",
             requireAuth: false,
           },
-        },{
+        },
+        {
           path: "/cart-customer-list",
           props: true,
           name: "cart-customer-list",
-          component: () => import("../modules/carts/views/CartCustomerProductListView.vue"),
+          component: () =>
+            import("../modules/carts/views/CartCustomerProductListView.vue"),
           meta: {
             title: "Carrito",
             requireAuth: false,
@@ -70,32 +73,38 @@ const router = new VueRouter({
           path: "/create-account-seller",
           props: true,
           name: "create-account-seller",
-          component: () => import("../modules/auth/views/CreateAccountSeller.vue"),
+          component: () =>
+            import("../modules/auth/views/CreateAccountSeller.vue"),
           meta: {
             title: "Crear cuenta emprendedor",
             requireAuth: false,
           },
-        },{
+        },
+        {
           path: "/create-account-customer",
           props: true,
           name: "create-account-customer",
-          component: () => import("../modules/auth/views/CreateAccountCustomer.vue"),
+          component: () =>
+            import("../modules/auth/views/CreateAccountCustomer.vue"),
           meta: {
             title: "Crear cuenta cliente",
             requireAuth: false,
           },
-        },{
+        },
+        {
           path: "/create-account-delivery_man",
           props: true,
           name: "create-account-delivery_man",
-          component: () => import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
+          component: () =>
+            import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
           meta: {
             title: "Crear cuenta cliente",
             requireAuth: false,
           },
         },
         ...publicRouter,
-        ...customerRouter
+        ...customerRouter,
+        ...deliveryRouter,
       ],
     },
   ],
