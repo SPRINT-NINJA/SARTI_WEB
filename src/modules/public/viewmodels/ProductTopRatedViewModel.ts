@@ -1,4 +1,3 @@
-import { encryptParamsId } from "@/kernel/utils/cryptojs";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -37,21 +36,6 @@ export default defineComponent({
     };
   },
   methods: {
-    async getProductPerDetails(item: any) {
-      try {
-        const { id } = item;
-        const encryptParam = encryptParamsId(id.toString());
-        await this.$router.push({ name: "product-details", params: { id: encryptParam} });
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async getTopRatedProduct(){
-      try {
-        await this.$router.push({name:"top-rated"})
-      } catch (error) {
-        console.error(error);
-      }
-    }
+   
   },
 });
