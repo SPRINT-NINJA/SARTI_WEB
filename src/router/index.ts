@@ -93,24 +93,6 @@ const router = new VueRouter({
             title: "Crear cuenta cliente",
             requireAuth: false,
           },
-        },{
-          path: "/customer-order-detail",
-          props: true,
-          name: "customer-order-detail",
-          component: () => import("../modules/orders/views/CustomerOrderDetailsView.vue"),
-          meta: {
-            title: "Detalle de pedido",
-            requireAuth: false,
-          },
-        },{
-          path: "/customer-create-rate",
-          props: true,
-          name: "customer-create-rate",
-          component: () => import("../modules/rates/views/CustomerCreateRateView.vue"),
-          meta: {
-            title: "Creación de reseña",
-            requireAuth: false,
-          },
         },
         ...publicRouter,
         ...customerRouter

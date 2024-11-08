@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <b-container  class="my-2">
     <b-row>
       <b-col cols="12" md="6">
@@ -80,9 +79,6 @@
 import CustomerOrderDetailsViewModel from "../viewmodels/CustomerOrderDetailsViewModel";
 export default {
   name: "CustomerOrderDetail",
-  components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
-  },
   mixins: [CustomerOrderDetailsViewModel],
 };
 </script>

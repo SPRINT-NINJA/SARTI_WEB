@@ -1,7 +1,6 @@
 <template>
   <!-- Agregar componente de cristian -->
   <div>
-    <navbar />
     <banner-overlay
       :imgSrc="require('../../../assets/banner-pedido.svg')"
       :content="'LISTA DE PEDIDOS'"
@@ -105,7 +104,6 @@ import BannerOverlay from "@/modules/public/components/BannerOverlay.vue";
 export default {
   name: "CustomerOrderListView",
   components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
     BannerComponent: BannerComponent,
     BannerOverlay: BannerOverlay,
   },
