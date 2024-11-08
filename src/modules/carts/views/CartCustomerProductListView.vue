@@ -21,7 +21,7 @@
             v-for="value in cartCustomerProductList"
             :key="value.name"
             class="card-preview-product my-2"
-             :class="{'disabled-card': value.status === 'No disponible'}"
+            :class="{'disabled-card': value.status === 'No disponible'}"
           >
             <b-row>
               <b-col cols="12" md="2">

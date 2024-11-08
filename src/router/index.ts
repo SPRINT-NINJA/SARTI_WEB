@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import publicRouter from "./public-router";
+import customerRouter from "./customer-router";
 
 Vue.use(VueRouter);
 
@@ -94,6 +95,7 @@ const router = new VueRouter({
           },
         },
         ...publicRouter,
+        ...customerRouter
       ],
     },
   ],
