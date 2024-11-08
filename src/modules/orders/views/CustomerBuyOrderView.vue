@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <div class="d-flex align-items-center justify-content-center">
       <b-card class="background-card-other my-3">
         <b-row class="mx-2">
@@ -198,9 +197,6 @@
 import CustomerBuyOrderViewModel from "../viewmodels/CustomerBuyOrderViewModel";
 export default {
   name: "CustomerOrderBuy",
-  components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
-  },
   mixins: [CustomerBuyOrderViewModel],
 };
 </script>
