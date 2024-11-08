@@ -31,6 +31,15 @@ export default [
           title: "Creación de reseña",
           requireAuth: false,
         },
+      },{
+        path: "buy-order",
+        props: true,
+        name: "buy-order",
+        component: () => import("../modules/orders/views/CustomerBuyOrderView.vue"),
+        meta: {
+          title: "Creación de reseña",
+          requireAuth: false,
+        },
       },
     ],
   },
