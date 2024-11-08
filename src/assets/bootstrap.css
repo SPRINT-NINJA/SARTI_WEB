@@ -10,6 +10,9 @@
   --orange-primary-darker: #cc8538;
   --orange-primary-focus: rgba(255, 164, 70, 0.5);
 
+  --orange-soft: rgba(255, 183, 130, 0.8);
+  --orange-soft-dark: rgba(230, 149, 112, 0.8);
+
   --orange-secundary: #f18052;
   --orange-secundary-dark: #d66e46;
   --orange-secundary-darker: #bf633f;
@@ -7665,6 +7668,17 @@ a.bg-orange-primary:focus,
 button.bg-orange-primary:hover,
 button.bg-orange-primary:focus {
   background-color: var(--orange-primary-dark) !important;
+}
+
+.bg-orange-soft {
+  background-color: var(--orange-soft) !important;
+}
+
+a.bg-orange-soft:hover,
+a.bg-orange-soft:focus,
+button.bg-orange-soft:hover,
+button.bg-orange-soft:focus {
+  background-color: var(--orange-soft-dark) !important;
 }
 
 .bg-orange-secundary {
