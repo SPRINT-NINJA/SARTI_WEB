@@ -33,7 +33,8 @@ export default defineComponent({
           rating: 8.5,
         },
       ],
-      ratingTaste:9
+      ratingTaste:9,
+      imageUrl:"https://picsum.photos/1000/1000"
     };
   },
   methods: {

@@ -58,7 +58,7 @@
             >
               <template #footer>
                 <h2>Bajilla pintada a mano</h2>
-                    <div class="d-flex align-items-end justify-content-end">
+                    <div class="d-flex align-items-between justify-content-between">
                 <b-form-rating
                       v-model="ratingTaste"
                       stars="10"
@@ -66,7 +66,7 @@
                       no-border
                       no-focus
                       variant="warning"
-                      
+                      class="w-50 mx-2"
                       style="background-color: transparent;"
                     ></b-form-rating>
                       <h3>$3000</h3>
@@ -74,14 +74,29 @@
               </template>
             </b-card>
           </b-col>
-          <b-col col="12" md="4">
+          <b-col cols="12" md="4">
             <b-card
               overlay
-              text-variant="white"
-              title="Image Overlay"
-              sub-title="Subtitle"
               class="card-by-image-little"
+              footer-tag="footer"
+              style="position: relative; height: 300px"
             >
+              <template #footer>
+                <h3>Bajilla pintada a mano</h3>
+                    <div class="d-flex align-items-between justify-content-between">
+                <b-form-rating
+                      v-model="ratingTaste"
+                      stars="10"
+                      readonly
+                      no-border
+                      no-focus
+                      variant="warning"
+                      class="w-50"
+                      style="background-color: transparent;"
+                    ></b-form-rating>
+                      <h4>$3000</h4>
+                    </div>
+              </template>
             </b-card>
           </b-col>
         </b-row>
@@ -156,15 +171,19 @@ export default {
   width: 100%;
 }
 .card-by-image {
-  height: 250px;
-  max-height: 250px;
-  width: 820px;
-  max-width: 820px;
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   transition: transform 0.3s ease;
   background-image: url("https://picsum.photos/1000/1000");
   background-size: cover;
   background-position: center;
+}
+
+.card-by-image:hover {
+  transform: scale(1.02);
 }
 
 .card-by-image footer {
@@ -177,14 +196,26 @@ export default {
 }
 
 .card-by-image-little {
-  height: 250px;
-  max-height: 250px;
-  width: 380px;
-  max-width: 380px;
+  height: 100%;
+  max-height: 100%;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   transition: transform 0.3s ease;
   background-image: url("https://picsum.photos/1000/1000");
   background-size: cover;
   background-position: center;
+}
+.card-by-image-little:hover {
+  transform: scale(1.02);
+}
+
+.card-by-image-little footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(59, 59, 59, 0.8); /* Cambia el color si es necesario */
+  padding: 10px;
+  color: white;
 }
 </style>
