@@ -11,7 +11,7 @@
             sm="6"
             md="4"
             lg="3"
-            v-for="product in products"
+            v-for="product in productPart1"
             :key="product.id"
             class="mt-2 mb-2"
           >
@@ -21,7 +21,7 @@
                 :alt="product.name"
                 class="custom-img"
                 role="button"
-                @click="getProductPerDetails(product)"
+                @click="()=>{}"
               />
               <div class="p-2">
                 <span>{{ product.name }}</span>
@@ -54,13 +54,13 @@
               overlay
               class="card-by-image"
               footer-tag="footer"
-              style="position: relative; height: 300px"
+              :style="{ backgroundImage: `url(${productPart2[0].image || imageUrl   })`, position: 'relative', height: '300px' }"
             >
               <template #footer>
-                <h2>Bajilla pintada a mano</h2>
+                <h2>{{ productPart2[0].name }}</h2>
                     <div class="d-flex align-items-between justify-content-between">
                 <b-form-rating
-                      v-model="ratingTaste"
+                      v-model="productPart2[0].rating"
                       stars="10"
                       readonly
                       no-border
@@ -69,7 +69,7 @@
                       class="w-50 mx-2"
                       style="background-color: transparent;"
                     ></b-form-rating>
-                      <h3>$3000</h3>
+                      <h3>${{ productPart2[0].price }}</h3>
                     </div>
               </template>
             </b-card>
@@ -79,13 +79,13 @@
               overlay
               class="card-by-image-little"
               footer-tag="footer"
-              style="position: relative; height: 300px"
+              :style="{ backgroundImage: `url(${productPart2[1].image || imageUrl   })`, position: 'relative', height: '300px' }"
             >
               <template #footer>
-                <h3>Bajilla pintada a mano</h3>
+                <h3>{{ productPart2[1].name }}</h3>
                     <div class="d-flex align-items-between justify-content-between">
                 <b-form-rating
-                      v-model="ratingTaste"
+                      v-model="productPart2[1].rating"
                       stars="10"
                       readonly
                       no-border
@@ -94,7 +94,7 @@
                       class="w-50"
                       style="background-color: transparent;"
                     ></b-form-rating>
-                      <h4>$3000</h4>
+                      <h4>${{ productPart2[1].price }}</h4>
                     </div>
               </template>
             </b-card>
@@ -108,7 +108,7 @@
             sm="6"
             md="4"
             lg="3"
-            v-for="product in products"
+            v-for="product in productPart3"
             :key="product.id"
             class="mt-2 mb-2"
           >
@@ -118,7 +118,7 @@
                 :alt="product.name"
                 class="custom-img"
                 role="button"
-                @click="getProductPerDetails(product)"
+                @click="()=>{}"
               />
               <div class="p-2">
                 <span>{{ product.name }}</span>
@@ -177,7 +177,6 @@ export default {
   max-width: 100%;
   overflow: hidden;
   transition: transform 0.3s ease;
-  background-image: url("https://picsum.photos/1000/1000");
   background-size: cover;
   background-position: center;
 }
