@@ -47,8 +47,7 @@ export default defineComponent({
   methods: {
     async getsellerProduct(item: any) {
       try {
-        const { id } = item;
-        const encryptParam = encryptParamsId(id.toString());
+        const encryptParam = encryptParamsId(item.toString());
         await this.$router.push({ name: "seller-products", params: { id: encryptParam} });
       } catch (error) {
         console.error(error);

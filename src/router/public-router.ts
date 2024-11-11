@@ -35,7 +35,7 @@ export default [
         name: "seller-products",
         component: () => import("../modules/public/views/ProductBySellerView.vue"),
         meta: {
-          title: "Detalles de producto",
+          title: "Detalles de producto por emprendedor",
           requireAuth: false,
         },
       },
