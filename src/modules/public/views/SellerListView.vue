@@ -25,6 +25,7 @@
                 :src="seller.mainImage"
                 class="custom-img"
                 role="button"
+                @click="getsellerProduct(seller.id)"
               />
               <div class="p-2 text-center">
                 <h5>Tienda <b>{{ seller.name }}</b>
@@ -35,7 +36,7 @@
               <div class="text-center my-2">
                 <b-row>
                   <b-col cols="12" md="12">
-                    <b-button variant="red-palete">Ver productos
+                    <b-button @click="getsellerProduct(seller.id)" variant="red-palete">Ver productos
                       <b-icon icon="box-arrow-in-up-right"></b-icon>
                     </b-button>
                   </b-col>
