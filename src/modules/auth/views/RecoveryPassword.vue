@@ -11,7 +11,7 @@
         >
           <section v-if="!isVerifiedAccount">
             <h1 class="text-center mb-4">
-              Ingresa tu correo electrónico para iniciar sesión
+              Ingresa tu correo electrónico para recuperar tu contraseña
             </h1>
           </section>
           <section v-else>

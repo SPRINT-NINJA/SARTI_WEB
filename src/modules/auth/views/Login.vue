@@ -65,7 +65,7 @@
                                     <b-button block variant="orange-primary" @click="Login" :disabled="!v$.recoveryPassword.password.$dirty || v$.recoveryPassword.password.$invalid">Iniciar Sesión <b-icon icon="arrow-right" aria-hidden="true"></b-icon></b-button>
                                     <br>
                                     <div class="text-center mb-4">
-                                        <a block to="login" href="" style="color:black;">¿Olvidaste tu contraseña?</a>
+                                        <a block to="login" href="./recovery-pass" style="color:black;">¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </section>
                             </div>

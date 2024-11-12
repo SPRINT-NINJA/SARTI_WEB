@@ -9,6 +9,7 @@ export default defineComponent({
   data() {
     return {
       email: "",
+      verifiedEmail: "",
       recoveryPassword: {
         code: "",
         password: "",
@@ -29,8 +30,46 @@ export default defineComponent({
     };
   },
   methods: {
-    verifyEmail() {
+    async verifyEmail() {
+      this.verifiedEmail = this.email;
+      try {
+        this.loading = true;
+        const response = await axios.post("/auth/send-recovery-code", this.email);
+
+        localStorage.setItem('token', JSON.stringify(response.data.data));
+
+        Swal.fire({
+          title: '¡Bienvenido!',
+          text: 'Iniciaste sesión correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        });
+      } catch (error) {
+        // Manejo de error
+        if (error.response) {
+          // Error con respuesta del servidor
+          console.error("Error en la respuesta:", error.response.data);
+
+          alert("Error de recuperacion de ocntrasena: " + error.response.data.message);
+        } else if (error.request) {
+          // No hubo respuesta del servidor
+          console.error("Error en la solicitud:", error.request);
+          Swal.fire({
+            title: '¡Error!',
+            text: 'Error al concectarse al servidor.',
+            icon: 'alert',
+            confirmButtonText: 'Aceptar',
+          });
+        } else {
+          // Otro error
+          console.error("Error:", error.message);
+          alert("Ocurrió un error inesperado.");
+        }
+      } finally {
+        this.loading = false; // Ocultar la pantalla de carga
+      }
       this.isVerifiedAccount = !this.isVerifiedAccount;
+
     },
   },
   validations() {
