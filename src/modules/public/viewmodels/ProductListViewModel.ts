@@ -1,3 +1,4 @@
+import { encryptParamsId } from "@/kernel/utils/cryptojs";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -24,7 +25,6 @@ export default defineComponent({
           price: 300,
           image: "https://picsum.photos/1000/1000",
           rating: 9,
-
         },
         {
           id: 4,
@@ -35,5 +35,16 @@ export default defineComponent({
         },
       ],
     };
+  },
+  methods: {
+    async getProductPerDetails(item: any) {
+      try {
+        const { id } = item;
+        const encryptParam = encryptParamsId(id.toString());
+        await this.$router.push({ name: "product-details", params: { id: encryptParam} });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
