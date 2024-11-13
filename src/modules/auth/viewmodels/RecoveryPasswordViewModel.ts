@@ -1,6 +1,9 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
+import Swal from "sweetalert2";
+import axios from "./../../../config/axios";
+
 export default defineComponent({
   setup() {
     const v$ = useVuelidate();
@@ -34,42 +37,111 @@ export default defineComponent({
       this.verifiedEmail = this.email;
       try {
         this.loading = true;
-        const response = await axios.post("/auth/send-recovery-code", this.email);
 
-        localStorage.setItem('token', JSON.stringify(response.data.data));
+        const response = await axios.post("/auth/send-recovery-code", {
+          email: this.email,
+        });
+        console.log(response.data);
 
         Swal.fire({
-          title: '¡Bienvenido!',
-          text: 'Iniciaste sesión correctamente.',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
+          title: "¡Código enviado!",
+          text: "Hemos enviado un código de verificación a tu correo electrónico.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
         });
       } catch (error) {
-        // Manejo de error
+        // Manejo de errores mejorado
         if (error.response) {
-          // Error con respuesta del servidor
           console.error("Error en la respuesta:", error.response.data);
-
-          alert("Error de recuperacion de ocntrasena: " + error.response.data.message);
+          Swal.fire({
+            title: "Error de recuperación",
+            text:
+              error.response.data.message ||
+              "Ocurrió un problema al enviar el código de verificación.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
         } else if (error.request) {
-          // No hubo respuesta del servidor
           console.error("Error en la solicitud:", error.request);
           Swal.fire({
-            title: '¡Error!',
-            text: 'Error al concectarse al servidor.',
-            icon: 'alert',
-            confirmButtonText: 'Aceptar',
+            title: "Error de conexión",
+            text: "No se pudo conectar al servidor. Inténtalo de nuevo más tarde.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
           });
         } else {
-          // Otro error
           console.error("Error:", error.message);
-          alert("Ocurrió un error inesperado.");
+          Swal.fire({
+            title: "Error inesperado",
+            text: "Ocurrió un error inesperado. Por favor, intenta nuevamente.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
         }
       } finally {
         this.loading = false; // Ocultar la pantalla de carga
       }
-      this.isVerifiedAccount = !this.isVerifiedAccount;
 
+      this.isVerifiedAccount = !this.isVerifiedAccount;
+    },
+
+    async changePassword() {
+      const recoveryData = {
+        email: this.verifiedEmail,
+        code: this.recoveryPassword.code,
+        password: this.recoveryPassword.password,
+      };
+
+      try {
+        this.loading = true;
+
+        const response = await axios.post(
+          "/auth/change-password",
+          recoveryData
+        );
+
+        console.log(response.data);
+
+        Swal.fire({
+          title: "¡Se cambió la contraseña!",
+          text: "La contraseña de cambió correctamente.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        });
+
+        this.$router.push("/login");
+      } catch (error) {
+        // Manejo de errores mejorado
+        if (error.response) {
+          console.error("Error en la respuesta:", error.response.data);
+          Swal.fire({
+            title: "Error de recuperación",
+            text:
+              error.response.data.message ||
+              "Ocurrió un problema al cambiar la contraseña.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        } else if (error.request) {
+          console.error("Error en la solicitud:", error.request);
+          Swal.fire({
+            title: "Error de conexión",
+            text: "No se pudo conectar al servidor. Inténtalo de nuevo más tarde.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        } else {
+          console.error("Error:", error.message);
+          Swal.fire({
+            title: "Error inesperado",
+            text: "Ocurrió un error inesperado. Por favor, intenta nuevamente.",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+          });
+        }
+      } finally {
+        this.loading = false; 
+      }
     },
   },
   validations() {
@@ -83,7 +155,7 @@ export default defineComponent({
           required: helpers.withMessage(this.errorMessagges.required, required),
           minLength: helpers.withMessage(
             this.errorMessagges.minLength,
-            minLength(6)
+            minLength(5)
           ),
         },
         password: {

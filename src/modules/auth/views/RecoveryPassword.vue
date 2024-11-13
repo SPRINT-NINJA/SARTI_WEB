@@ -107,8 +107,8 @@
                       {{ error.$message }}
                     </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="orange-primary" @click="verifyEmail"
-                    >Cambair contraseña</b-button
+                  <b-button block variant="orange-primary" @click="changePassword"
+                    >Cambiar contraseña</b-button
                   >
                 </section>
               </div>

@@ -59,8 +59,7 @@ export default defineComponent({
           confirmButtonText: 'Aceptar',
         });
 
-        // Realiza las acciones necesarias con la respuesta (por ejemplo, guardar token, redirigir, etc.)
-        this.$router.push("/delivery/order-list"); // Ejemplo de redirección
+        this.$router.push("/delivery/order-list"); 
       } catch (error) {
         // Manejo de error
         if (error.response) {
