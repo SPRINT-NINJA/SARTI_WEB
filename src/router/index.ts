@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import publicRouter from "./public-router";
 import deliveryRouter from "./delivery-router";
 import customerRouter from "./customer-router";
+import sellerRouter from "./seller-router";
 
 Vue.use(VueRouter);
 
@@ -105,6 +106,7 @@ const router = new VueRouter({
         ...publicRouter,
         ...customerRouter,
         ...deliveryRouter,
+        ...sellerRouter
       ],
     },
   ],
