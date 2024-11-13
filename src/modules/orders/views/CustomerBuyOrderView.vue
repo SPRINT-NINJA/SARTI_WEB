@@ -123,7 +123,7 @@
                   <p> 
                     <b>${{ totalFinal }}</b>
                   </p>
-                </b-col>
+                </b-col>  
               </b-row>
             </b-row>
           </b-col>

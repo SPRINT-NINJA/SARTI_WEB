@@ -1,4 +1,5 @@
 import { defineComponent } from "vue";
+import { encryptParamsId } from "@/kernel/utils/cryptojs";
 
 export default defineComponent({
   data() {
@@ -44,6 +45,14 @@ export default defineComponent({
     };
   },
   methods: {
+    async getsellerProduct(item: any) {
+      try {
+        const encryptParam = encryptParamsId(item.toString());
+        await this.$router.push({ name: "seller-products", params: { id: encryptParam} });
+      } catch (error) {
+        console.error(error);
+      }
+    },
     
   },
 });

@@ -30,6 +30,14 @@ export default [
           title: "Detalles de producto",
           requireAuth: false,
         },
+      },{
+        path: "seller-products/:id",
+        name: "seller-products",
+        component: () => import("../modules/public/views/ProductBySellerView.vue"),
+        meta: {
+          title: "Detalles de producto por emprendedor",
+          requireAuth: false,
+        },
       },
     ],
   },
