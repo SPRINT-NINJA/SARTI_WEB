@@ -22,6 +22,14 @@ export default [
           title: "Detalles de producto",
           requireAuth: false,
         },
+      },{
+        path: "seller-list",
+        name: "seller-list",
+        component: () => import("../modules/public/views/SellerListView.vue"),
+        meta: {
+          title: "Detalles de producto",
+          requireAuth: false,
+        },
       },
     ],
   },
