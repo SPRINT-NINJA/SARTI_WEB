@@ -37,7 +37,7 @@ export default defineComponent({
                 comment:"",
                 rate:0,
                 image:{}
-            },
+            } as any,
             imagesUpload: {},
             showConfirmImage: false,
             errorMessagges:{
@@ -104,21 +104,4 @@ export default defineComponent({
     mounted(){
         this.getProductByRate();
     },
-    validations(){
-        return{
-            review:{
-                comment:{
-                    required: helpers.withMessage(this.errorMessagges.required, required),
-                    maxLength: helpers.withMessage(this.errorMessagges.maxLengthText,maxLength(100)),
-                    minLength: helpers.withMessage(this.errorMessagges.minLengthText,minLength(10)),
-                    valid: helpers.withMessage(
-                      this.errorMessagges.invalidText,
-                      (value:string)=>{
-                        return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
-                      }
-                    )
-                }
-            }
-        }
-    }
 });

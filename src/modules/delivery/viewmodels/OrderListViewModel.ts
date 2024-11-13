@@ -10,7 +10,7 @@ export default defineComponent({
     return {
       currentPage: 1, 
       itemsPerPage: 4, 
-      selectedOrder: null,
+      selectedOrder: null as any,
       orders: [
         {
           id: 1,
@@ -81,7 +81,7 @@ export default defineComponent({
       console.log("Pedido rechazado")
     },
     
-    openOrderModal(orderId) {
+    openOrderModal(orderId: any) {
       this.selectedOrder = this.orders.find(order => order.id === orderId);
       this.$bvModal.show("order-modal");
     },
@@ -93,7 +93,4 @@ export default defineComponent({
         return this.orders.slice(start, end);
     },
 },
-  validations() {
-    return {};
-  },
 });

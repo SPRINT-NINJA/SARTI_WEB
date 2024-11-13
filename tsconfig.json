@@ -5,7 +5,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "allowJs": true,
+    "types": ["node"],  // Adds Node.js types
+    "moduleResolution": "node",
   },
 
   "references": [
