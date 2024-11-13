@@ -46,5 +46,12 @@ export default defineComponent({
         console.error(error);
       }
     },
+    async getTopRatedProduct(){
+      try {
+        await this.$router.push({name:"top-rated"})
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
 });
