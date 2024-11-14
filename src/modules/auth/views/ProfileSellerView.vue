@@ -22,7 +22,9 @@
             </section>
         </div>
         <b-row>
-         
+          <b-col cols="12" md="8" v-show="profileEdit">
+            <EditSellerAccount :profile="profile" />
+          </b-col>
           <b-col cols="12" md="8" v-show="!profileEdit">
             <section>
               <b-card>
@@ -97,7 +99,7 @@
                 </b-card>
               </b-col>
             </b-row>
-            
+            <EditAccount v-show="profileEdit" :email="profile.email"/>
             <b-card class="my-3">
               <b-card-body>
                 <div
