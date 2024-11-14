@@ -95,10 +95,9 @@
                 </b-col>
               </b-row>
               <EditAccount v-show="profileEdit" :email="profile.email" />
-              <b-card class="my-3">
-                <b-card-body>
+         
                   <div
-                    class="d-flex justify-content-center align-items-center my-2"
+                    class="d-flex justify-content-center align-items-center my-3"
                   >
                     <b-button
                       class="mx-2 w-100"
@@ -114,8 +113,7 @@
                       {{ profileEdit ? "Regresar" : "Editar Perfil" }}
                     </b-button>
                   </div>
-                </b-card-body>
-              </b-card>
+        
             </b-col>
           </b-row>
         </div>
