@@ -118,7 +118,6 @@
                 :alt="product.name"
                 class="custom-img"
                 role="button"
-                @click="()=>{}"
               />
               <div class="p-2">
                 <span>{{ product.name }}</span>
