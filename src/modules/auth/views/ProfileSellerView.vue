@@ -22,9 +22,7 @@
             </section>
         </div>
         <b-row>
-          <b-col cols="12" md="8" v-show="profileEdit">
-            <EditSellerAccount :profile="profile" />
-          </b-col>
+         
           <b-col cols="12" md="8" v-show="!profileEdit">
             <section>
               <b-card>
@@ -61,8 +59,9 @@
           </b-col>
           <b-col cols="12" md="4">
             <b-row>
+              
               <b-col>
-                <b-card class="text-center ">
+                <b-card  v-show="!profileEdit" class="text-center ">
                   <b-card-title> Productos </b-card-title>
                   <b-icon
                     class="my-3"
@@ -80,7 +79,7 @@
                 </b-card>
               </b-col>
               <b-col>
-                <b-card class="text-center ">
+                <b-card  v-show="!profileEdit" class="text-center ">
                   <b-card-title> Pedidos </b-card-title>
                   <b-icon
                     class="my-3"
@@ -98,7 +97,7 @@
                 </b-card>
               </b-col>
             </b-row>
-
+            
             <b-card class="my-3">
               <b-card-body>
                 <div
@@ -117,7 +116,7 @@
                 </div>
               </b-card-body>
             </b-card>
-            <EditAccount v-show="profileEdit"/>
+           
           </b-col>
         </b-row>
         </div>
