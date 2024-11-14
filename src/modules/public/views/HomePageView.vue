@@ -1,7 +1,7 @@
 <template>
   <div class="w-100">
     <banner-overlay
-      :imgSrc="require('../../../assets/orange-banner-modern.avif')"
+      :imgSrc="require('../../../assets/banner-principal.svg')"
       :content="'Los mejores productos se encuentran aquí'"
     />
 
@@ -15,6 +15,7 @@
                 alt="Emprendedores"
                 class="custom-img"
                 role="button"
+                @click="goToSellers()"
               />
               <b-card-body>
                 <b-card-title>Emprendedores</b-card-title>

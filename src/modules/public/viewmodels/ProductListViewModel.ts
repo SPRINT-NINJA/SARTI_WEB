@@ -46,5 +46,12 @@ export default defineComponent({
         console.error(error);
       }
     },
+    async goToSellers() {
+      try {
+        await this.$router.push({ name: "seller-list" });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
 });
