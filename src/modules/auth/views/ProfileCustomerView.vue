@@ -26,7 +26,8 @@
           </div>
           <b-row>
             <b-col cols="12" md="8" v-show="profileEdit">
-              <EditSellerAccount :profile="profile" />
+              <EditCustomerAccount :profile="profile" />
+
             </b-col>
             <b-col cols="12" md="8" v-show="!profileEdit">
               <section>
@@ -54,7 +55,7 @@
               <b-row>
                 <b-col>
                   <b-card v-show="!profileEdit" class="text-center">
-                    <b-card-title> Ver Productos </b-card-title>
+                    <b-card-title> Productos </b-card-title>
                     <b-icon
                       class="my-3"
                       icon="shop-window"
@@ -127,12 +128,16 @@
 import BannerComponent from "../../public/components/BannerComponent.vue";
 import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileCustomerViewModel from "../viewmodels/ProfileCustomerViewModel";
+import EditCustomerAccount from "@/components/EditCustomerAccount.vue";
+import EditAccount from "@/components/EditAccount.vue";
 
 export default {
   name: "ProfileCustomer",
   components: {
     BannerComponent: BannerComponent,
     BannerOverlay: BannerOverlay,
+    EditCustomerAccount,
+    EditAccount
   },
   mixins: [ProfileCustomerViewModel],
 };
