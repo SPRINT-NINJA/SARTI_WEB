@@ -1,10 +1,19 @@
 export default [
     {
         path: "/delivery",
-        component: { render: (c: any) => c("router-view") },
-        redirect: { name: "order-list" },
-        name: "delivery",
+        component: () =>  import("../views/PublicView.vue"),
+        redirect: { name: "profile" },
+        name: "seller",
         children: [
+            {
+                path: "profile",
+                name: "profile",
+                component: () => import("../modules/auth/views/ProfileDeliveryManView.vue"),
+                meta: {
+                    title: "Perfil Repartidor",
+                    requireAuth: true,
+                },
+            },
             {
                 path: "order-list",
                 name: "order-list",
