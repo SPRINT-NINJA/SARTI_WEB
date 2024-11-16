@@ -146,7 +146,6 @@ export default defineComponent({
     // Asegura que cualquier cambio en la prop image se refleje en el valor local
     image(newValue) {
       this.imageTakePhoto = newValue;
-      console.log("Nuevo",newValue === "" ? 'ta vacío':'ta lleno',this.timeCharging ? 'ya subio tu':'no ha subito tu ')
       if(newValue === "" ) this.clear();
     },
   },
@@ -166,9 +165,9 @@ export default defineComponent({
   },
     updateImagesUpload(images: { name: string; url: string }[]) {
       this.imagesUpload = images;
+      console.log(this.imagesUpload)
       if (images.length > 0) {
-        this.temporaryImage = images[0].url;
-        this.$emit("update:image", this.imageTakePhoto); // Emitir la URL de la primera imagen seleccionada
+        this.temporaryImage = images[0];
       }
     },
     takePicture() {
@@ -216,6 +215,7 @@ export default defineComponent({
         if(this.temporaryImage != ''){
           this.hide_dropzone = true
           this.imageTakePhoto = this.temporaryImage
+          this.$emit("update:image", this.imageTakePhoto);
         }
       }, interval);
     },

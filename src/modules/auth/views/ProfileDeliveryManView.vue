@@ -11,10 +11,11 @@
             class="avatar-overlay"
             variant="orange-secundary"
             size="9rem"
-            :src="profile.facePhoto"
+            :src="profile.facePhoto"   
           >
           </b-avatar>
         </div>
+        
         <div>
           <div class="my-5 mx-2">
             <section v-show="!profileEdit">
@@ -26,11 +27,12 @@
             </section>
           </div>
           <b-row>
-            <b-col cols="12" md="8" v-show="profileEdit">
-              <h1>Edit Aqui</h1>
-            </b-col>
-            <b-col cols="12" md="8" v-show="!profileEdit">
-              <section>
+            <b-col cols="12" md="8" >
+            <Transition  name="bounce">
+              <EditDeliveryMan v-if="profileEdit" :profile="profile"/>
+            </Transition>
+            <Transition  name="slide-fade">
+              <section v-if="!profileEdit">
                 <b-card>
                   <b-card-title>Identificación</b-card-title>
                   <hr />
@@ -48,6 +50,7 @@
                   </b-card-body>
                 </b-card>
               </section>
+            </Transition>
             </b-col>
             <b-col cols="12" md="4">
               <b-row>
@@ -92,7 +95,9 @@
                   </b-card>
                 </b-col>
               </b-row>
-              <EditAccount v-show="profileEdit" :email="profile.email" />
+              <Transition  name="bounce">
+                <EditAccount v-if="profileEdit" :email="profile.email" />
+              </Transition>
 
               <div
                 class="d-flex justify-content-center align-items-center my-3"
@@ -122,6 +127,7 @@ import BannerComponent from "../../public/components/BannerComponent.vue";
 import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileDeliveryManViewModel from "../viewmodels/ProfileDeliveryManViewModel";
 import EditAccount from "@/components/EditAccount.vue";
+import EditDeliveryMan from "@/components/EditDeliveryMan.vue";
 
 export default {
   name: "ProfileCustomer",
@@ -129,6 +135,7 @@ export default {
     BannerComponent: BannerComponent,
     BannerOverlay: BannerOverlay,
     EditAccount,
+    EditDeliveryMan
   },
   mixins: [ProfileDeliveryManViewModel],
 };
