@@ -1,82 +1,32 @@
-import { defineComponent } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { required,maxLength, minLength, email, helpers } from "@vuelidate/validators";
 
+import { defineComponent, reactive } from 'vue';
+import { schema } from '../../../components/validationSchema';
+import { useValidation } from '@vee-validate/core';
 
 export default defineComponent({
   setup() {
-    const v$ = useVuelidate();
-    return { v$ };
-  },
-  data() {
-    return {
-      seller: {
-        email: "",
-        password: "",
-        name: "",
-        first_last_name: "",
-        second_last_name: "",
-        description: "",
-        wallet: "",
-        address: {
-          city: "",
-          colony: "",
-          external_number: "",
-          internal_number: "",
-          locality: "",
-          reference_near: "", // referencia del lugar
-          state: "",
-          street: "",
-          zip_code: "", // codigo postal,
-          address_type: "",
-        },
-      },
-      errorMessagges: {
-        required: "Campo obligatorio",
-        invalidEmail: "Correo inválido",
-        invalidTextWithNumber:"No se aceptan caracteres especiales",
-        invalidText:"No se aceptan números",
-        minLengthReference_near:"Mínimo 20 caracteres",
-        maxLengthReference_near:"Máximo 100 caracteres",
-        minLength: "Mínimo 4 caracteres",
-        maxLength: "Máximo 45 caracteres",
-        minLengthNumber: "Mínimo 2 caracteres",
-        maxLengthNumber: "Máximo 5 caracteres",
-        minLengthTextarea:"Mínimo 45 caracteres",
-        maxLengthTextarea:"Máximos 255 caracteres",
-        noneScripts: "Campo inválido no se aceptan scripts",
-        valid: "Campos inválido - caracteres inválidos",
-        password: {
-          valid:
-            "La contraseña debe tener mínimo una mayúscula, un caracter especial (# . _) y un número (longitud de 3 a 16 car.)",
-        },
-      },
-      currentStep: 1,
-      steps: ["Datos personales", "Dirección", "Descripción del negocio"],
-      password: "",
-      passwordVisible: false,
-      passwordVisibleConfirm: false,
+    // Datos del formulario
+    const form = reactive({
+      email: '',
+      password: '',
+    });
+
+    // Validación
+    const { errors, validate } = useValidation(schema);
+
+    const submitForm = async () => {
+      const isValid = await validate(form);
+      if (isValid) {
+        console.log('Formulario enviado', form);
+      } else {
+        console.log('Errores de validación', errors);
+      }
     };
-  },
-  methods: {
-    submitAccountForm() {
-      alert("Formulario enviado");
-    },
-    nextStep() {
-      if (this.currentStep < this.steps.length) {
-        this.currentStep++;
-      }
-    },
-    prevStep() {
-      if (this.currentStep > 1) {
-        this.currentStep--;
-      }
-    },
-    togglePasswordVisibility() {
-      this.passwordVisible = !this.passwordVisible;
-    },
-    togglePasswordVisibilityConfirm() {
-      this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
-    },
+
+    return {
+      form,
+      errors,
+      submitForm,
+    };
   },
 });
