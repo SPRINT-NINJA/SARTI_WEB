@@ -3,7 +3,7 @@ export interface IVerifyEmail {
 }
 
 export interface IVerifyPassword {
-    email: string;
+    password: string;
 }
 
 export interface IUserInfo {

@@ -29,6 +29,7 @@
                 alt="Mejores calificados"
                 class="custom-img"
                 role="button"
+                @click="getTopRatedProduct()"
               />
               <b-card-body>
                 <b-card-title>Mejores calificados</b-card-title>
