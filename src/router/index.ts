@@ -1,8 +1,10 @@
+
 import Vue from "vue";
 import VueRouter from "vue-router";
 import publicRouter from "./public-router";
 import deliveryRouter from "./delivery-router";
 import customerRouter from "./customer-router";
+import Swal from "sweetalert2";
 import sellerRouter from "./seller-router";
 
 Vue.use(VueRouter);
@@ -111,5 +113,30 @@ const router = new VueRouter({
     },
   ],
 });
+
+// Agregar un guardia global para verificar el token en el localStorage
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
+  // Verificar si la ruta requiere autenticación
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    // Si no hay token, redirigir a la página de inicio
+    if (!token) {
+      Swal.fire({
+        title: 'No autenticado',
+        text: 'Necesitas iniciar sesión para acceder a esta página.',
+        icon: 'warning',
+        confirmButtonText: 'Aceptar',
+      }).then(() => {
+        next({ path: '/sarti/home-page' }); // Redirigir a la página de inicio
+      });
+    } else {
+      next(); // Continuar si hay token
+    }
+  } else {
+    next(); // Si no requiere autenticación, permitir acceso
+  }
+});
+
 
 export default router;

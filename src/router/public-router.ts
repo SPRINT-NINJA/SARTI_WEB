@@ -38,7 +38,15 @@ export default [
           title: "Detalles de producto por emprendedor",
           requireAuth: false,
         },
-      },
+      },{
+        path: "top-rated",
+        name: "top-rated",
+        component: () => import("../modules/public/views/ProductTopRatedView.vue"),
+        meta: {
+          title: "Mejores Calificados",
+          requireAuth: false,
+        }
+    }
     ],
   },
 ];
