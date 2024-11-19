@@ -11,7 +11,7 @@
         >
           <section v-if="!isVerifiedAccount">
             <h1 class="text-center mb-4">
-              Ingresa tu correo electrónico para iniciar sesión
+              Ingresa tu correo electrónico para recuperar tu contraseña
             </h1>
           </section>
           <section v-else>
@@ -107,8 +107,8 @@
                       {{ error.$message }}
                     </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="orange-primary" @click="verifyEmail"
-                    >Cambair contraseña</b-button
+                  <b-button block variant="orange-primary" @click="changePassword"
+                    >Cambiar contraseña</b-button
                   >
                 </section>
               </div>
