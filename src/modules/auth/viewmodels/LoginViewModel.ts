@@ -1,6 +1,10 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
+
+import axios from "./../../../config/axios";
+import Swal from 'sweetalert2';
+
 export default defineComponent({
   setup() {
     const v$ = useVuelidate();
@@ -8,9 +12,11 @@ export default defineComponent({
   },
   data() {
     return {
+      loading: false,
       email: "",
+      verifiedEmail: "",
+      password: "",
       recoveryPassword: {
-        code: "",
         password: "",
       },
       isVerifiedAccount: false,
@@ -30,7 +36,54 @@ export default defineComponent({
   },
   methods: {
     verifyEmail() {
+      console.log(this.email);
+      this.verifiedEmail = this.email;
       this.isVerifiedAccount = !this.isVerifiedAccount;
+    },
+    async Login() {
+      const loginData = {
+        email: this.verifiedEmail,
+        password: this.recoveryPassword.password,
+      };
+
+      try {
+        this.loading = true;
+        const response = await axios.post("/auth/sign-in", loginData);
+
+        localStorage.setItem('token', JSON.stringify(response.data.data));
+
+        Swal.fire({
+          title: '¡Bienvenido!',
+          text: 'Iniciaste sesión correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+        });
+
+        this.$router.push("/delivery/order-list"); 
+      } catch (error) {
+        // Manejo de error
+        if (error.response) {
+          // Error con respuesta del servidor
+          console.error("Error en la respuesta:", error.response.data);
+
+          alert("Error de login: " + error.response.data.message);
+        } else if (error.request) {
+          // No hubo respuesta del servidor
+          console.error("Error en la solicitud:", error.request);
+          Swal.fire({
+            title: '¡Error!',
+            text: 'Error al concectarse al servidor.',
+            icon: 'alert',
+            confirmButtonText: 'Aceptar',
+          });
+        } else {
+          // Otro error
+          console.error("Error:", error.message);
+          alert("Ocurrió un error inesperado.");
+        }
+      } finally {
+        this.loading = false; // Ocultar la pantalla de carga
+      }
     },
   },
   validations() {
@@ -40,13 +93,6 @@ export default defineComponent({
         email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
       },
       recoveryPassword: {
-        code: {
-          required: helpers.withMessage(this.errorMessagges.required, required),
-          minLength: helpers.withMessage(
-            this.errorMessagges.minLength,
-            minLength(6)
-          ),
-        },
         password: {
           required: helpers.withMessage(this.errorMessagges.required, required),
           valid: helpers.withMessage(
