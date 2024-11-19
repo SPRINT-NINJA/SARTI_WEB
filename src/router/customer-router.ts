@@ -2,9 +2,18 @@ export default [
   {
     path: "/customer",
     component: () =>  import("../views/PublicView.vue"),
-    redirect: { name: "order-list" },
+    redirect: { name: "profile" },
     name: "customer",
     children: [
+      {
+        path: "profile",
+        name: "profile",
+        component: () => import("../modules/auth/views/ProfileCustomerView.vue"),
+        meta: {
+          title: "Perfil",
+          requireAuth: false,
+        },
+      },
       {
         path: "order-list",
         name: "order-list",
