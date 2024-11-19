@@ -14,6 +14,18 @@
                         <h1 class="text-center mb-4">
                             Ingresa tu contraseña de SARTI
                         </h1>
+
+                        <div class="d-flex justify-content-center">
+                            <b-list-group class="w-100" style="max-width: 300px;">
+                                <b-list-group-item class="d-flex align-items-center justify-content-start">
+                                    <b-avatar class="mr-3" size="60px"></b-avatar>
+                                    <span class="text-white">
+                                        <b style="color:black;">{{ email }}</b>
+                                    </span>
+                                </b-list-group-item>
+                            </b-list-group>
+                        </div>
+                        
                     </section>
                 </b-col>
 
@@ -24,7 +36,7 @@
                             <div class="p-5">
                                 <section v-if="!isVerifiedAccount">
                                     <b-form-group id="input-group-1" label="Correo electrónico:" label-for="input-1">
-                                        <b-form-input id="input-1" type="email" v-model="v$.email.$model"
+                                        <b-form-input id="input-1" type="email" v-model="email"
                                             placeholder="example@gmail.com" required
                                             :state="v$.email.$dirty ? !v$.email.$error : null"
                                             @blur="v$.email.$touch()"></b-form-input>
@@ -40,7 +52,7 @@
                                 </section>
                                 <section v-else>
                                     <b-form-group id="input-group-1" label="Contraseña:" label-for="input-1">
-                                        <b-form-input id="input-1" type="email" placeholder="********" required
+                                        <b-form-input id="input-1" type="password" placeholder="********" required
                                             v-model="v$.recoveryPassword.password.$model" :state="v$.recoveryPassword.password.$dirty
                                                     ? !v$.recoveryPassword.password.$error
                                                     : null
@@ -50,10 +62,10 @@
                                             {{ error.$message }}
                                         </b-form-invalid-feedback>
                                     </b-form-group>
-                                    <b-button block variant="orange-primary" @click="verifyEmail" :disabled="!v$.recoveryPassword.password.$dirty || v$.recoveryPassword.password.$invalid">Iniciar Sesión <b-icon icon="arrow-right" aria-hidden="true"></b-icon></b-button>
+                                    <b-button block variant="orange-primary" @click="Login" :disabled="!v$.recoveryPassword.password.$dirty || v$.recoveryPassword.password.$invalid">Iniciar Sesión <b-icon icon="arrow-right" aria-hidden="true"></b-icon></b-button>
                                     <br>
                                     <div class="text-center mb-4">
-                                        <a block to="login" href="" style="color:black;">¿Olvidaste tu contraseña?</a>
+                                        <a block to="login" href="./recovery-pass" style="color:black;">¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </section>
                             </div>
