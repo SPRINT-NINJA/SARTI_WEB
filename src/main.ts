@@ -9,6 +9,26 @@ import './assets/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
+import * as rules from 'vee-validate/dist/rules';
+import { configure } from 'vee-validate';
+
+// Registrar componentes globales
+Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
+
+// Agregar todas las reglas predeterminadas
+Object.keys(rules).forEach(rule => {
+  extend(rule, rules[rule]);
+});
+
+// Configurar mensajes globales opcionales
+configure({
+  classes: {
+    valid: 'is-valid',
+    invalid: 'is-invalid',
+  },
+});
 
 // Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
