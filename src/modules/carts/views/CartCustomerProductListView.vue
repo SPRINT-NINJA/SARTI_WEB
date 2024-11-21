@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar />
     <b-container>
       <b-card class="background-card my-3">
         <b-row class="mx-2">

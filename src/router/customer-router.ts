@@ -49,6 +49,16 @@ export default [
           title: "Creación de reseña",
           requireAuth: false,
         },
+      }, {
+        path: "cart",
+        props: true,
+        name: "carts",
+        component: () =>
+          import("../modules/carts/views/CartCustomerProductListView.vue"),
+        meta: {
+          title: "Carrito",
+          requireAuth: false,
+        },
       },
     ],
   },

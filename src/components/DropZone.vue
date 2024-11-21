@@ -39,10 +39,18 @@ import { defineComponent } from "vue";
 import VueSweetalert2 from "vue-sweetalert2";
 
 export default defineComponent({
+  name:"DropZone",
+  props:{
+    limitImages:{
+      type:Number,
+      default:0,
+    }
+  },
   data() {
     return {
       images: [] as { name: string; url: string; base64: string }[],
       isDragging: false,
+      limitLength: this.limitImages,
     };
   },
   methods: {
@@ -67,6 +75,18 @@ export default defineComponent({
             timer: 3000, // La duración de la alerta en milisegundos
             timerProgressBar: true,
           });
+          if( this.images.length > this.limitLength){
+            this.$swal.fire({
+            icon: "error", // Cambia el icono a "error" o el que prefieras
+            title: "Estas sobrepasando el límite de imagenes por favor elimina algunas",
+            toast: true,
+            position: "top-end", // Puedes cambiar la posición a "top-start", "bottom-start", "bottom-end", etc.
+            showConfirmButton: false,
+            timer: 3000, // La duración de la alerta en milisegundos
+            timerProgressBar: true,
+          });
+          }
+          
           continue;
         }
         if (!this.images.some((e) => e.name === file.name)) {
