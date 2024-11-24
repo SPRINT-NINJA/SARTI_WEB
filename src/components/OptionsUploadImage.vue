@@ -2,98 +2,30 @@
   <div class="my-2">
     <b-container>
       <b-row>
-        <b-col
-          v-show="imageTakePhoto === ''"
-          cols="12"
-          md="6"
-          class="text-right"
-        >
-          <b-button
-            variant="brown-cacao"
-            @click="showCameraOption"
-            :disabled="showUploadImage"
-            ><b-icon icon="camera" aria-hidden="true"></b-icon
-            >Fotografía</b-button
-          >
-        </b-col>
-        <b-col
-          v-show="imageTakePhoto === ''"
-          cols="12"
-          md="6"
-          class="text-left"
-        >
-          <b-button
-            variant="brown-cacao"
-            @click="showUploadOption"
-            :disabled="showTakePicture"
-          >
-            <b-icon icon="box-arrow-in-up" aria-hidden="true"></b-icon>Subir
-            Foto</b-button
-          >
-        </b-col>
-        <b-col cols="12" md="12">
-          <b-card
-            v-if="
-              showTakePicture === false &&
-              showUploadImage === false &&
-              imageTakePhoto === ''
-            "
+        <b-col cols="12" md="12"
+         v-if="imageTakePhoto.length != 0"
             class="my-5 text-center"
-          >
-            <h3 class="text-grey">
-              <b-icon icon="arrow-up-circle"></b-icon>
-              Escoje una opción
-              <b-icon icon="arrow-up-circle"></b-icon>
-            </h3>
-          </b-card>
-          <b-card
-            v-if="imageTakePhoto != '' && showTakePicture === false"
-            class="my-5 text-center"
-          >
-            <h4 class="text-center" v-if="loading">Cargando...</h4>
+        >
+            <h4 class="text-center text-grey parpadeo-lento" v-if="loading">Cargando
+              <b-icon icon="arrow-counterclockwise" animation="spin-reverse" ></b-icon>
+            </h4>
             <b-progress
+              variant="orange-primary"
               :value="valueProgress"
               v-if="loading"
               class="mb-3"
             ></b-progress>
-          </b-card>
         </b-col>
         <b-col cols="12" md="12">
           <b-card
-            v-show="showTakePicture && loading === false"
-            class="my-2 text-center"
-          >
-            <Camera
-              v-show="takePhoto === false && showimageTaked == false"
-              v-on:takePicture="takePicture"
-            />
-            <Captured v-show="takePhoto && showimageTaked == false" />
-            <b-button
-              variant="red-palete"
-              v-show="takePhoto && showimageTaked == false"
-              @click="takePicture()"
-              class="my-2"
-            >
-              <b>Volver a tomar </b>
-            </b-button>
-            <b-button
-              variant="orange-secundary"
-              v-show="takePhoto && showimageTaked == false"
-              @click="showLoading"
-              class="my-2 mx-2"
-            >
-              <b>Subir foto </b>
-            </b-button>
-          </b-card>
-        </b-col>
-        <b-col cols="12" md="12">
-          <b-card
-            v-show="showUploadImage && hide_dropzone === false"
+            v-show="hide_dropzone === false"
             class="my-2"
           >
             <DropZone
               @images-uploaded="updateImagesUpload"
               v-on:showLoading="showLoading"
+              :limitImages="3"
+              :checkImages="updateImagesUpload.length"
             />
           </b-card>
         </b-col>
@@ -123,23 +55,27 @@ export default defineComponent({
       default: 0,
     },
     image: {
-      type: String,
-      default: "",
+      type: Array,
+      default: [],
     },
+    limitImages:{
+      type: Number,
+      default: 1
+    }
   },
   data() {
     return {
       showUploadImage: false,
-      showTakePicture: false,
       takePhoto: false,
-      imageTakePhoto: this.image, // Inicializar con el valor pasado por la propiedad image
+      imageTakePhoto: this.image as any, // Inicializar con el valor pasado por la propiedad image
       loading: false,
       valueProgress: this.progressValue,
       showimageTaked: false,
       hide_dropzone:false,
-      temporaryImage:"",
+      temporaryImage: [] as { name: string; url: string }[],
       imagesUpload: [] as { name: string; url: string }[],
-      timeCharging:false// valores de las imagenes cargadas en el dropzone
+      timeCharging:false,
+      disabledUpload:false
     };
   },
   watch: {
@@ -152,56 +88,40 @@ export default defineComponent({
   methods: {
     clear() {
     this.showUploadImage = false;
-    this.showTakePicture = false;
     this.takePhoto = false;
     this.imageTakePhoto = this.image; // Inicializar con el valor pasado por la propiedad image
     this.loading = false;
     this.valueProgress = this.progressValue;
     this.showimageTaked = false;
     this.hide_dropzone = false;
-    this.temporaryImage = "";
-    this.imagesUpload = [] as { name: string; url: string }[]; // Valores de las imágenes cargadas en el dropzone
+    this.temporaryImage = [] as [];
+    this.imagesUpload = [] as []; // Valores de las imágenes cargadas en el dropzone
     this.timeCharging = false;
+    
   },
-    updateImagesUpload(images: { name: string; url: string }[]) {
+  updateImagesUpload(images: []) {
       this.imagesUpload = images;
-      console.log(this.imagesUpload)
       if (images.length > 0) {
-        this.temporaryImage = images[0];
-      }
-    },
-    takePicture() {
-      const ratio = window.innerHeight > window.innerWidth ? 16 / 9 : 9 / 16;
-      const picture = document.querySelector(
-        "canvas"
-      ) as HTMLCanvasElement | null;
-      const video = document.querySelector("video") as HTMLVideoElement | null;
-
-      if (picture && video) {
-        const ctx = picture.getContext("2d");
-        picture.width = window.innerWidth < 400 ? window.innerWidth : 400;
-        picture.height = window.innerHeight / ratio;
-
-        if (ctx) {
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = "high";
-          ctx.drawImage(video, 0, 0, picture.width, picture.height);
-          // Convertir el contenido del canvas en una URL de base64
-          const imageDataUrl = picture.toDataURL("image/png");
-          this.imageTakePhoto = imageDataUrl;
-          this.$emit("update:image", imageDataUrl);
-        }
-        this.takePhoto = !this.takePhoto;
-      } else {
-        console.warn("Canvas or video element not found.");
-      }
+        this.temporaryImage = images;
+     }
     },
     showLoading() {
+      if (this.imagesUpload.length > this.limitImages) {
+        this.$swal.fire({
+          icon: "error",
+          title: `Has alcanzado el límite de imágenes permitido. Solo puedes subir un máximo de ${this.limitImages} imágenes.`,
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+        return;
+      }
       this.loading = !this.loading;
-      this.loading = true;
-      this.showTakePicture = false;
+      this.loading = true;      
 
-      const interval = 3000 / 100; // 3 segundos dividido entre 100 incrementos
+      const interval = 3000 / 100; 
       const timer = setInterval(() => {
         if (this.valueProgress < 100) {
           this.valueProgress += 1;
@@ -212,25 +132,13 @@ export default defineComponent({
           this.timeCharging = true;
         }
         this.$emit("charge-image-upload", this.timeCharging);
-        if(this.temporaryImage != ''){
+        if(this.temporaryImage.length != 0 ){
           this.hide_dropzone = true
           this.imageTakePhoto = this.temporaryImage
           this.$emit("update:image", this.imageTakePhoto);
         }
       }, interval);
-    },
-    showCameraOption() {
-      this.showTakePicture = !this.showTakePicture;
-      if (this.showUploadImage) {
-        this.showUploadImage = false;
-      }
-    },
-    showUploadOption() {
-      this.showUploadImage = !this.showUploadImage;
-      if (this.showTakePicture) {
-        this.showTakePicture = false;
-      }
-    },
+    }
   }
 });
 </script>
@@ -248,4 +156,18 @@ export default defineComponent({
   max-width: 400px;
   margin: 0 auto;
 }
+
+@keyframes parpadeoLento {
+  0%, 100% {
+    opacity: 1; /* Totalmente visible */
+  }
+  50% {
+    opacity: 0; /* Invisible */
+  }
+}
+
+.parpadeo-lento {
+  animation: parpadeoLento 1s infinite; /* 2 segundos por ciclo, repite infinitamente */
+}
+
 </style>

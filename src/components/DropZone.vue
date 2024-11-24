@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="top">
-      <p>Arrastra y suelta imágenes</p>
+      <p>Arrastra y suelta imágenes o toma fotografías</p>
     </div>
     <div
       class="drag-area"
@@ -10,10 +10,16 @@
       @drop.prevent="onDrop"
     >
       <span class="text-center">
+        <b-icon icon="image" scale="2"></b-icon> <br />
         Arrastra y suelta imágenes aquí o
         <span class="select" role="button" @click="selectFiles"
           >Seleccionar</span
         >
+        o
+        <span class="select" role="button" v-b-modal.modal-1
+          >Tomar fotografía
+          <b-icon icon="camera"></b-icon>
+        </span>
       </span>
       <input
         name="file"
@@ -31,29 +37,118 @@
       </div>
     </div>
     <button type="button" @click="$emit('showLoading')">Subir imagen</button>
+
+    <!-- CAMARA -->
+    <b-modal id="modal-1" title="Tomar Foto" hide-footer>
+      <b-alert class="nunito-font" show variant="warning">
+        <b>ADVERTENCIA</b> Por favor habilita el permiso sobre el uso de la
+        camara y así permitir tomar las fotografías
+      </b-alert>
+      <Camera
+        v-show="takePhoto === false && showimageTaked == false"
+        v-on:takePicture="takePicture"
+      />
+      <div class="text-center">
+        <Captured v-show="takePhoto && showimageTaked == false" />
+        <b-row>
+          <b-col>
+            <b-button
+              variant="red-palete"
+              v-show="takePhoto && showimageTaked == false"
+              @click="takePicture()"
+              class="my-2"
+            >
+              <b>Volver a tomar </b>
+            </b-button>
+          </b-col>
+          <b-col>
+            <b-button
+              variant="orange-secundary"
+              v-show="takePhoto && showimageTaked == false"
+              class="my-2 mx-2"
+              @click="pushImagesByCamera"
+            >
+              <b>Agregar foto </b>
+            </b-button>
+          </b-col>
+        </b-row>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import VueSweetalert2 from "vue-sweetalert2";
+import Camera from "@/components/Camera.vue";
+import Captured from "@/components/Captured.vue";
 
 export default defineComponent({
-  name:"DropZone",
-  props:{
-    limitImages:{
-      type:Number,
-      default:0,
-    }
+  name: "DropZone",
+  components: {
+    Camera,
+    Captured,
   },
   data() {
     return {
-      images: [] as { name: string; url: string; base64: string }[],
+      images: [] as Array<{ name: string; url: string; base64: string }>, // Asegúrate de usar 'Array<...>'
       isDragging: false,
-      limitLength: this.limitImages,
+      takePhoto: false,
+      showimageTaked: false,
+      imageTakePhoto: "",
     };
   },
   methods: {
+    takePicture() {
+      const ratio = window.innerHeight > window.innerWidth ? 16 / 9 : 9 / 16;
+      const picture = document.querySelector(
+        "canvas"
+      ) as HTMLCanvasElement | null;
+      const video = document.querySelector("video") as HTMLVideoElement | null;
+
+      if (picture && video) {
+        const ctx = picture.getContext("2d");
+        picture.width = window.innerWidth < 400 ? window.innerWidth : 400;
+        picture.height = window.innerHeight / ratio;
+
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = "high";
+          ctx.drawImage(video, 0, 0, picture.width, picture.height);
+          // Convertir el contenido del canvas en una URL de base64
+          const imageDataUrl = picture.toDataURL("image/png");
+          this.imageTakePhoto = imageDataUrl;
+        }
+        this.takePhoto = !this.takePhoto;
+      } else {
+        console.warn("Canvas or video element not found.");
+      }
+    },
+    pushImagesByCamera() {
+      if (this.imageTakePhoto) {
+        const imageName = `photo-${Date.now()}.png`;
+        this.images.push({
+          name: imageName,
+          url: this.imageTakePhoto,
+          base64: this.imageTakePhoto,
+        });
+        this.showimageTaked = true;
+
+        // Emitir las imágenes actualizadas
+        this.$emit(
+          "images-uploaded",
+          this.images.map((img) => img.base64)
+        );
+
+        // Limpiar estados
+        this.imageTakePhoto = "";
+        this.takePhoto = false;
+        this.showimageTaked = false;
+
+        // Ocultar el modal
+        this.$bvModal.hide("modal-1");
+      }
+    },
+
     selectFiles() {
       (this.$refs.fileInput as HTMLInputElement).click();
     },
@@ -64,7 +159,6 @@ export default defineComponent({
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        // Verificar si el archivo es una imagen
         if (file.type.split("/")[0] !== "image") {
           this.$swal.fire({
             icon: "error", // Cambia el icono a "error" o el que prefieras
@@ -75,20 +169,9 @@ export default defineComponent({
             timer: 3000, // La duración de la alerta en milisegundos
             timerProgressBar: true,
           });
-          if( this.images.length > this.limitLength){
-            this.$swal.fire({
-            icon: "error", // Cambia el icono a "error" o el que prefieras
-            title: "Estas sobrepasando el límite de imagenes por favor elimina algunas",
-            toast: true,
-            position: "top-end", // Puedes cambiar la posición a "top-start", "bottom-start", "bottom-end", etc.
-            showConfirmButton: false,
-            timer: 3000, // La duración de la alerta en milisegundos
-            timerProgressBar: true,
-          });
-          }
-          
           continue;
         }
+
         if (!this.images.some((e) => e.name === file.name)) {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -120,6 +203,8 @@ export default defineComponent({
           alert("Solo se permiten archivos de imagen.");
           continue;
         }
+
+        // Evitar agregar imágenes duplicadas
         if (!this.images.some((e) => e.name === file.name)) {
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -140,6 +225,10 @@ export default defineComponent({
     },
     deleteImage(index: number) {
       this.images.splice(index, 1);
+      this.$emit(
+        "images-uploaded",
+        this.images.map((img) => img.base64)
+      );
     },
     onDragOver(event: DragEvent) {
       event.preventDefault();
@@ -155,6 +244,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.tam-take-picture {
+  width: 90%;
+  height: 300px;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  transition: transform 0.3s ease;
+}
+
 .card {
   width: 100%;
   padding: 10px;

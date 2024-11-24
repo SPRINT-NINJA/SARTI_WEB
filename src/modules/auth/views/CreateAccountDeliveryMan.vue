@@ -158,13 +158,13 @@
             </b-row>
             <b-row
               v-if="
-                steps[currentStep - 1] === 'Identificación oficial (Frontal)'
+                steps[currentStep - 1] === 'Identificación oficial'
               "
             >
               <b-col cols="12" md="6">
                 <b-alert show variant="warning">
-                  <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen
-                  <b>FRONTAL</b> de tu credencial.
+                  <b>¡TEN CUIDADO!</b> Solo toma o sube la imagen
+                  de las dos caras de tu identificación.
                 </b-alert>
                 <img
                   alt="example ine"
@@ -175,64 +175,28 @@
               </b-col>
               <b-col cols="12" md="6">
                 <OptionsUploadImage
-                  :image="delivery_man.front_identification_photo"
+                  :image="identifiactionPhoto"
                   @update:image="
-                    delivery_man.front_identification_photo = $event
+                  identifiactionPhoto = $event
                   "
                   v-show="timeCharging === false"
                   :progress-value="progress1" @charge-image-upload="timeCharging = $event"
+                  :limitImages="2"
                 />
                 <b-card
                   v-show="timeCharging"
                   class="my-5 text-center"
                 >
                   <h4 >Imagen cargada correctamente</h4>
+                  <b-row>
+                  <b-col class="my-2" cols="12" md="12" v-for="(item, index) in identifiactionPhoto"  :key="index">
                   <img
-                    :src="delivery_man.front_identification_photo"
+                    :src="item"
                     class="photo"
-                    height="200"
+                    height="100"
                   />
-                </b-card>
-              </b-col>
-            </b-row>
-            <b-row
-              v-if="
-                steps[currentStep - 1] === 'Identificación oficial (Trasera)'
-              "
-            >
-              <b-col cols="12" md="6">
-                <b-alert show variant="warning">
-                  <b>¡ADVERTENCIA!</b> Solo toma o sube la imagen
-                  <b>FRONTAL</b> de tu credencial.
-                </b-alert>
-                <img
-                  alt="example ine"
-                  class="text-center"
-                  width="400"
-                  src="@/assets/ine.png"
-                />
-              </b-col>
-              <b-col cols="12" md="6">
-                <OptionsUploadImage
-                  :image="''"
-                  @update:image="
-                    delivery_man.back_identification_photo = $event
-                  "
-                  v-show="timeCharging2 === false"
-                  @charge-image-upload="timeCharging2 = $event"
-                  :progress-value="progress2"
-                />
-
-                <b-card
-                  v-show="timeCharging2"
-                  class="my-5 text-center"
-                >
-                  <h4 >Imagen cargada correctamente</h4>
-                  <img
-                    :src="delivery_man.back_identification_photo"
-                    class="photo"
-                    height="200"
-                  />
+                  </b-col>
+                  </b-row>
                 </b-card>
               </b-col>
             </b-row>
@@ -244,6 +208,7 @@
                   :progress-value="progress3"
                   v-show="timeCharging3 === false"
                   @charge-image-upload="timeCharging3 = $event"
+                  :limitImages="1"
                 />
                 <b-card
                   v-show="timeCharging3"
@@ -310,7 +275,8 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 200px;
   margin: 0 auto;
 }
+
 </style>
