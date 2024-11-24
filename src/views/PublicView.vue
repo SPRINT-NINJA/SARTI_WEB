@@ -3,6 +3,15 @@
     <div class="navigation">
       <ul>
         <li
+        >
+          <a href="#" >
+            <span class="icon">
+              <img src="../assets/SARTI-LOGO.svg" alt="SARTI">
+            </span>
+            <span class="title">SARTI</span>
+          </a>
+        </li>
+        <li
           v-for="(item, index) in menuItems"
           :key="index"
           :class="{ hovered: hoveredIndex === index }"
@@ -56,6 +65,7 @@ export default defineComponent({
       { title: "Mi perfil", icon: "person", link: "/seller/profile" },
       { title: "Mis Productos", icon: "inboxes", link: "/seller/" },
       { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
+      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
     ]);
 
     const menuItemsCustomer = [
@@ -63,20 +73,26 @@ export default defineComponent({
       { title: "Mis Compras", icon: "bag", link: "/customer/order-list" },
       { title: "Mejores calificados", icon: "star", link: "/sarti/top-rated" },
       { title: "Emprendedores", icon: "shop", link: "/sarti/seller-list" },
+      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
     ];
 
     const menuItemsDelivery = [
       { title: "Mi perfil", icon: "person", link: "/delivery/profile" },
       {title: "En Recolección",icon: "geo-fill",link: "/delivery/order-list"},
       { title: "Mis Pedidos", icon: "mailbox", link: "/delivery/order-assigned" },
+      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
+    ];
+
+    const menuItemswithoutAccount = [
+      { title: "Crear tu cuenta", icon: "file-earmark-person", link: "/create-account" },
+      {title: "Iniciar Sesión",icon: "box-arrow-in-right",link: "/delivery/order-list"},
     ];
 
     //Menú dinamico
     const menuItems = ref([
-      { title: "SARTI ", icon: "bag-fill", link: "/customer/profile" },
       { title: "Inicio", icon: "house", link: "/sarti/home-page" },
-      ...menuItemsCustomer,
-      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
+      ...menuItemswithoutAccount,
+      
     ]);
 
     const toggleMenu = () => {
