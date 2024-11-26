@@ -67,6 +67,7 @@
                   <b-form-input
                     id="input-1"
                     type="text"
+                    v-model="product.name"
                     required
                   ></b-form-input>
                 </b-form-group>
@@ -81,6 +82,7 @@
                     <b-form-input
                       id="input-2"
                       type="number"
+                      v-model="product.price"
                       required
                     ></b-form-input>
                   </b-input-group>
@@ -95,6 +97,7 @@
                   <b-form-textarea
                     id="input-2"
                     type="number"
+                    v-model="product.description"
                     required
                   ></b-form-textarea>
                 </b-form-group>

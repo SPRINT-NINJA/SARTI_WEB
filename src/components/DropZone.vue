@@ -27,6 +27,7 @@
         class="file-input"
         ref="fileInput"
         multiple
+        accept="image/*"
         @change="onFileSelect"
       />
     </div>
@@ -84,6 +85,12 @@ import Captured from "@/components/Captured.vue";
 
 export default defineComponent({
   name: "DropZone",
+  props: {
+    image: {
+      type: Array,
+      default: [],
+    },
+  },
   components: {
     Camera,
     Captured,
@@ -95,9 +102,39 @@ export default defineComponent({
       takePhoto: false,
       showimageTaked: false,
       imageTakePhoto: "",
+      imagesPreview: this.image,
     };
   },
+  mounted() {
+    this.updateImagesUpload();
+  },
   methods: {
+    updateImagesUpload() {
+      if (this.image && Array.isArray(this.image)) {
+        // Iterar sobre cada URL en el array this.image
+        this.image.forEach((url: string) => {
+          this.images.push({
+            name: `photo-${Date.now()}.png`, // Nombre único basado en timestamp
+            url: url, // Asignar directamente la URL
+            base64: "", // Si no hay Base64, puede quedar vacío
+          });
+        });
+
+        // Emitir evento con las imágenes actualizadas
+        this.$emit(
+          "images-uploaded",
+          this.images.map((img) => img.url) // Emitir solo las URLs
+        );
+
+        // Limpiar estados
+        this.imageTakePhoto = "";
+        this.takePhoto = false;
+        this.showimageTaked = false;
+
+        // Ocultar el modal
+        this.$bvModal.hide("modal-1");
+      }
+    },
     takePicture() {
       const ratio = window.innerHeight > window.innerWidth ? 16 / 9 : 9 / 16;
       const picture = document.querySelector(

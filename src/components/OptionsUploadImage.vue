@@ -3,7 +3,7 @@
     <b-container>
       <b-row>
         <b-col cols="12" md="12"
-         v-if="imageTakePhoto.length != 0"
+         v-if="imageTakePhoto.length != 0 && loading"
             class="my-5 text-center"
         >
             <h4 class="text-center text-grey parpadeo-lento" v-if="loading">Cargando
@@ -19,13 +19,13 @@
         <b-col cols="12" md="12">
           <b-card
             v-show="hide_dropzone === false"
-            class="my-2"
           >
             <DropZone
               @images-uploaded="updateImagesUpload"
               v-on:showLoading="showLoading"
               :limitImages="3"
               :checkImages="updateImagesUpload.length"
+              :image="imageTakePhoto"
             />
           </b-card>
         </b-col>
@@ -103,6 +103,7 @@ export default defineComponent({
       this.imagesUpload = images;
       if (images.length > 0) {
         this.temporaryImage = images;
+        
      }
     },
     showLoading() {
@@ -110,6 +111,19 @@ export default defineComponent({
         this.$swal.fire({
           icon: "error",
           title: `Has alcanzado el límite de imágenes permitido. Solo puedes subir un máximo de ${this.limitImages} imágenes.`,
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+        return;
+      }
+
+      if (this.imagesUpload.length < this.limitImages) {
+        this.$swal.fire({
+          icon: "warning",
+          title: `Por favor aun te faltan imagenes por agregar solo son: ${ this.limitImages- this.imagesUpload.length }`,
           toast: true,
           position: "top-end",
           showConfirmButton: false,
