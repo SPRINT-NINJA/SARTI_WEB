@@ -102,6 +102,16 @@
                   ></b-form-textarea>
                 </b-form-group>
               </b-col>
+              
+              <b-col cols="12" md="12" lg="12" >
+                <div  class="d-flex justify-content-end mt-auto">
+                  <b-button variant="red-palete" >
+                    Rgistrar Producto
+                  </b-button>
+
+                </div>
+
+              </b-col>
             </b-row>
           </b-form>
         </b-card>
