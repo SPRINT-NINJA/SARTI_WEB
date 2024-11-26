@@ -15,7 +15,7 @@ export default [
           },
         },
         {
-            path: "rate-list",
+            path: "rate-list/:id",
             name: "rate-list",
             component: () => import("../modules/rates/views/RatesListView.vue"),
             meta: {
@@ -33,7 +33,7 @@ export default [
           },
       },
       {
-        path: "update-product",
+        path: "update-product/:id",
         name: "update-product",
         component: () => import("../modules/products/view/ProductEditView.vue"),
         meta: {
