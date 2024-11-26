@@ -112,14 +112,13 @@ export default defineComponent({
     updateImagesUpload() {
       if (this.image && Array.isArray(this.image)) {
         // Iterar sobre cada URL en el array this.image
-        this.image.forEach((url: string) => {
+        this.image.forEach((url: any) => {
           this.images.push({
             name: `photo-${Date.now()}.png`, // Nombre único basado en timestamp
             url: url, // Asignar directamente la URL
-            base64: "", // Si no hay Base64, puede quedar vacío
+            base64: "", 
           });
         });
-
         // Emitir evento con las imágenes actualizadas
         this.$emit(
           "images-uploaded",
