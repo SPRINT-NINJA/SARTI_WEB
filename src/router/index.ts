@@ -4,10 +4,13 @@ import VueRouter from "vue-router";
 import publicRouter from "./public-router";
 import deliveryRouter from "./delivery-router";
 import customerRouter from "./customer-router";
-import Swal from "sweetalert2";
 import sellerRouter from "./seller-router";
+import {jwtDecode} from 'jwt-decode';
+import { ERoles } from "@/kernel/types";
 
 Vue.use(VueRouter);
+const DEFAULT_TITLE = "SARTI";
+
 
 const router = new VueRouter({
   mode: "history",
@@ -21,16 +24,6 @@ const router = new VueRouter({
       path: "/",
       component: { render: (c: any) => c("router-view") },
       children: [
-        // {
-        //   path: '/login',
-        //   props: true,
-        //   name: 'login',
-        //   component: () => import('../modules/auth/views/LoginView.vue'),
-        //   meta: {
-        //     title: 'Iniciar sesión',
-        //     requireAuth: false
-        //   }
-        // },
         {
           path: "/recovery-pass",
           props: true,
@@ -114,29 +107,63 @@ const router = new VueRouter({
   ],
 });
 
-// Agregar un guardia global para verificar el token en el localStorage
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
 
-  // Verificar si la ruta requiere autenticación
-  if (to.matched.some(record => record.meta.requireAuth)) {
-    // Si no hay token, redirigir a la página de inicio
-    if (!token) {
-      Swal.fire({
-        title: 'No autenticado',
-        text: 'Necesitas iniciar sesión para acceder a esta página.',
-        icon: 'warning',
-        confirmButtonText: 'Aceptar',
-      }).then(() => {
-        next({ path: '/sarti/home-page' }); // Redirigir a la página de inicio
-      });
-    } else {
-      next(); // Continuar si hay token
+
+router.beforeEach((to, from, next) => {
+  if (localStorage.token) {
+    const rl: any = jwtDecode(localStorage.token);
+    const roles = rl.role;
+    const role = roles[0].authority;
+    if (
+      (role === ERoles.SELLER &&
+        to.matched.some((route) => route.path === "/sarti")) ||
+      (role === ERoles.SELLER &&
+        to.matched.some((route) => route.path === "/home-page")) ||
+      (role === ERoles.SELLER &&
+        to.matched.some((route) => route.path === "/login"))
+    )
+      next("/seller");
+    if (
+      (role === ERoles.CUSTOMER &&
+        to.matched.some((route) => route.path === "/sarti")) ||
+      (role === ERoles.CUSTOMER &&
+        to.matched.some((route) => route.path === "/home-page")) ||
+      (role === ERoles.CUSTOMER &&
+        to.matched.some((route) => route.path === "/login"))
+    )
+      next("/customer");
+    if (
+      (role === ERoles.DELIVERYMAN &&
+        to.matched.some((route) => route.path === "/sarti")) ||
+      (role === ERoles.DELIVERYMAN &&
+        to.matched.some((route) => route.path === "/login"))
+    )
+      next("/delivery");
+    if (role && to.matched.some((route) => route.meta.requireAuth)) {
+      const allowedRoles = to.meta!.role;
+      if (allowedRoles.includes(role)) {
+        next();
+        return;
+      }
+      next("/login");
+      return;
     }
-  } else {
-    next(); // Si no requiere autenticación, permitir acceso
+    next();
+    return;
   }
+  if (!to.matched.some((noAuth) => noAuth.meta.requireAuth)) {
+    next();
+    return;
+  }
+  next("/login");
 });
+
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    document.title = to.meta?.title || DEFAULT_TITLE;
+  });
+});
+
 
 
 export default router;

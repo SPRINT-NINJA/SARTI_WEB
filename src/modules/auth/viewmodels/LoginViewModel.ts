@@ -1,9 +1,15 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
+import AuthService from "../services/AuthService";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { jwtDecode } from "jwt-decode";
+import { ERoles } from "@/kernel/types";
 
-import axios from "./../../../config/axios";
-import Swal from 'sweetalert2';
+
+interface CustomJwtPayload {
+  role: { authority: string }[];
+}
 
 export default defineComponent({
   setup() {
@@ -12,7 +18,8 @@ export default defineComponent({
   },
   data() {
     return {
-      loading: false,
+      userData: {} as any,
+      isLoading: false,
       email: "",
       verifiedEmail: "",
       password: "",
@@ -35,54 +42,55 @@ export default defineComponent({
     };
   },
   methods: {
-    verifyEmail() {
-      console.log(this.email);
-      this.verifiedEmail = this.email;
-      this.isVerifiedAccount = !this.isVerifiedAccount;
-    },
-    async Login() {
-      const loginData = {
-        email: this.verifiedEmail,
-        password: this.recoveryPassword.password,
-      };
-
+    async verifyEmail() {
       try {
-        this.loading = true;
-        const response = await axios.post("/auth/sign-in", loginData);
-
-        localStorage.setItem('token', JSON.stringify(response.data.data));
-
-        Swal.fire({
-          title: '¡Bienvenido!',
-          text: 'Iniciaste sesión correctamente.',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-        });
-
-        this.$router.push("/delivery/order-list"); 
-      } catch (error) {
-        // Manejo de error
-        if (error.response) {
-          // Error con respuesta del servidor
-          console.error("Error en la respuesta:", error.response.data);
-
-          alert("Error de login: " + error.response.data.message);
-        } else if (error.request) {
-          // No hubo respuesta del servidor
-          console.error("Error en la solicitud:", error.request);
-          Swal.fire({
-            title: '¡Error!',
-            text: 'Error al concectarse al servidor.',
-            icon: 'alert',
-            confirmButtonText: 'Aceptar',
-          });
-        } else {
-          // Otro error
-          console.error("Error:", error.message);
-          alert("Ocurrió un error inesperado.");
+        this.isLoading = true;
+        const resp = await AuthService.getUser({ email: this.email });
+        const { error } = resp;
+        if (!error) {
+          this.verifiedEmail = this.email;
+          this.isVerifiedAccount = !this.isVerifiedAccount;
         }
-      } finally {
-        this.loading = false; // Ocultar la pantalla de carga
+        console.log("response correo",resp);
+        this.userData = resp;
+      } catch (error) {
+        console.log(error);
+      }finally{
+        this.isLoading = false;
+      }
+    },
+    async sigin() {
+      try {
+        const resp = await AuthService.sigin({
+          email: this.verifiedEmail,
+          password: this.password,
+        });
+        console.log("response login",resp);
+        if (!resp.error) {
+          localStorage.setItem('token', JSON.stringify(resp));
+          if (await this.checkNextRedirect())
+            SweetAlertCustom.welcomeMessage();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async checkNextRedirect() {
+      if (localStorage.token) {
+        if (jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.SELLER) {
+          await this.$router.replace("/seller");
+          return true;
+        } else if (
+          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.CUSTOMER
+        ) {
+          await this.$router.replace("/customer");
+          return true;
+        } else if (
+          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.DELIVERYMAN
+        ) {
+          await this.$router.replace("/delivery");
+          return true;
+        }
       }
     },
   },
@@ -91,7 +99,7 @@ export default defineComponent({
       email: {
         required: helpers.withMessage(this.errorMessagges.required, required),
         email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
-      },
+      } as any,
       recoveryPassword: {
         password: {
           required: helpers.withMessage(this.errorMessagges.required, required),
@@ -110,7 +118,8 @@ export default defineComponent({
             }
           ),
         },
-      },
+      } as any,
+      password: {} as any,
     };
   },
 });

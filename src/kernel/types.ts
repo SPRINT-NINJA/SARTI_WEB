@@ -1,0 +1,5 @@
+export enum ERoles {
+    DELIVERYMAN = "REPARTIDOR",
+    SELLER = "EMPRENDEDOR",
+    CUSTOMER = "COMPRADOR"
+}
