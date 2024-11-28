@@ -5,7 +5,7 @@ import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
 // Interceptor que manda el token en todas las peticiones
 AxiosClient.interceptors.request.use(
-  function (config) {
+  function (config: any) {
     const auth_token = localStorage.token;
     if (
       auth_token &&
@@ -71,7 +71,7 @@ AxiosClient.interceptors.response.use(
   }
 );
 
-function handle400Error(error) {
+function handle400Error(error: any) {
   const { message } = error.response.data;
   let titleAlert = "";
   let messageAlert = "";
@@ -196,7 +196,7 @@ function handle400Error(error) {
     });
 }
 
-function handle401Error(error) {
+function handle401Error(error: any) {
   const { message } = error.response.data;
 
   let titleAlert = "";
@@ -237,7 +237,7 @@ function handle401Error(error) {
     });
 }
 
-function handle404Error(error) {
+function handle404Error(error: any) {
   const { message } = error.response.data;
 
   let titleAlert = "";
@@ -297,19 +297,19 @@ function handle404Error(error) {
 }
 
 export default {
-  doGet(endPoint) {
+  doGet(endPoint: any) {
     return AxiosClient.get(endPoint);
   },
-  doPost(endPoint, object, config) {
+  doPost(endPoint: any, object: any, config?: any) {
     return AxiosClient.post(endPoint, object, config);
   },
-  doPut(endPoint, object, config) {
+  doPut(endPoint: any, object: any, config?: any) {
     return AxiosClient.put(endPoint, object, config);
   },
-  doPatch(endPoint, object, config) {
+  doPatch(endPoint: any, object: any, config?: any) {
     return AxiosClient.patch(endPoint, object, config);
   },
-  doDelete(endPoint, config) {
+  doDelete(endPoint: any, config?: any) {
     return AxiosClient.delete(endPoint, config);
   },
 };

@@ -1,26 +1,29 @@
+const allowedRoles = ["COMPRADOR"];
 export default [
   {
     path: "/customer",
     component: () =>  import("../views/PublicView.vue"),
-    redirect: { name: "profile" },
+    redirect: { name: "profile-customer" },
     name: "customer",
     children: [
       {
-        path: "profile",
-        name: "profile",
+        path: "profile-customer",
+        name: "profile-customer",
         component: () => import("../modules/auth/views/ProfileCustomerView.vue"),
         meta: {
           title: "Perfil",
-          requireAuth: false,
+          requireAuth: true,
+          role: allowedRoles,
         },
       },
       {
-        path: "order-list",
-        name: "order-list",
+        path: "order-list-customer",
+        name: "order-list-customer",
         component: () => import("../modules/orders/views/CustomerOrderListView.vue"),
         meta: {
           title: "Lista de pedidos",
-          requireAuth: false,
+          requireAuth: true,
+          role: allowedRoles,
         },
       },
       {
@@ -29,7 +32,8 @@ export default [
         component: () =>import("../modules/orders/views/CustomerOrderDetailsView.vue"),
         meta: {
           title: "Detalle de pedido",
-          requireAuth: false,
+          requireAuth: true,
+          role: allowedRoles,
         },
       },
       {
@@ -38,7 +42,8 @@ export default [
         component: () =>import("../modules/rates/views/CustomerCreateRateView.vue"),
         meta: {
           title: "Creación de reseña",
-          requireAuth: false,
+          requireAuth: true,
+          role: allowedRoles,
         },
       },{
         path: "buy-order",
@@ -47,7 +52,8 @@ export default [
         component: () => import("../modules/orders/views/CustomerBuyOrderView.vue"),
         meta: {
           title: "Creación de reseña",
-          requireAuth: false,
+          requireAuth: true,
+          role: allowedRoles,
         },
       }, {
         path: "cart",
