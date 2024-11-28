@@ -13,8 +13,8 @@
         <li
           v-for="(item, index) in menuItems"
           :key="index"
-          :class="{ hovered: hoveredIndex === index }"
-          @mouseover="hoveredIndex = index"
+          :class="{ active: activeIndex === index }"
+          @click="setActiveIndex(index)"
         >
           <a :href="item.link">
             <span class="icon">
@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 
 export default defineComponent({
   name: "PublicView",
@@ -60,7 +60,6 @@ export default defineComponent({
     // Reactive references
     const hoveredIndex = ref<number | null>(null);
     const isActive = ref(false);
-
 
     // Definir menús
     const menuItemsSeller = [
@@ -71,7 +70,7 @@ export default defineComponent({
     ];
 
     const menuItemsCustomer = [
-      { title: "Mi perfil", icon: "person", link: "/customer/profile" },
+      { title: "Mi perfil", icon: "person", link: "/customer/profile-customer" },
       {
         title: "Mis Compras",
         icon: "bag",
@@ -124,11 +123,11 @@ export default defineComponent({
           const decoded: any = jwtDecode(token);
           const role = decoded?.role?.[0]?.authority;
 
-          if (role === "SELLER") {
+          if (role === "EMPRENDEDOR") {
             menuItems.value = menuItemsSeller;
-          } else if (role === "CUSTOMER") {
+          } else if (role === "COMPRADOR") {
             menuItems.value = menuItemsCustomer;
-          } else if (role === "DELIVERYMAN") {
+          } else if (role === "REPARTIDOR") {
             menuItems.value = menuItemsDelivery;
           } else {
             menuItems.value = [
@@ -166,8 +165,24 @@ export default defineComponent({
       }
     };
 
+    const activeIndex = ref<number | null>(null); // Estado para el elemento activo
+
+    // Restaurar índice activo al cargar la página
+    const storedIndex = localStorage.getItem("activeIndex");
+    if (storedIndex) {
+      activeIndex.value = parseInt(storedIndex, 10);
+    }
+
+    // Guardar índice activo en localStorage
+    const setActiveIndex = (index: number) => {
+      activeIndex.value = index;
+      localStorage.setItem("activeIndex", index.toString());
+    };
+
     return {
       hoveredIndex,
+      activeIndex,
+      setActiveIndex,
       menuItems,
       toggleMenu,
     };

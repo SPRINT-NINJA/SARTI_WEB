@@ -6,8 +6,8 @@ export default [
       name: "seller",
       children: [
         {
-          path: "profile",
-          name: "profile",
+          path: "profile-seller",
+          name: "profile-seller",
           component: () => import("../modules/auth/views/ProfileSellerView.vue"),
           meta: {
             title: "Perfil de emprendedor",
