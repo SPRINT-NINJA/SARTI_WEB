@@ -74,7 +74,7 @@
                   ></b-button>
                   <br />
                   <div class="text-center mb-4">
-                    <a block to="create-account" href="" style="color: black"
+                    <a block to="create-account" href="create-account" style="color: black"
                       >Crear cuenta</a
                     >
                   </div>

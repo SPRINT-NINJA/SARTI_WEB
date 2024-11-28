@@ -85,7 +85,7 @@ export default defineComponent({
         email: {
           required: helpers.withMessage(this.errorMessagges.required, required),
           email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
-        },
+        } as any,
         password: {
           required: helpers.withMessage(this.errorMessagges.required, required),
           valid: helpers.withMessage(
@@ -102,7 +102,7 @@ export default defineComponent({
               return !/<.*?script.*\/?>/gi.test(value);
             }
           ),
-        },
+        }as any,
         name:{
           required: helpers.withMessage(this.errorMessagges.required, required),
           maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
@@ -113,7 +113,7 @@ export default defineComponent({
               return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
             }
           )
-        },
+        } as any,
         first_last_name:{
           required: helpers.withMessage(this.errorMessagges.required, required),
           maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
@@ -124,7 +124,7 @@ export default defineComponent({
               return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
             }
           )
-        },
+        }as any,
         second_last_name:{
           maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
           minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
@@ -134,7 +134,7 @@ export default defineComponent({
               return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
             }
           )
-        },
+        }as any,
         description:{
           required: helpers.withMessage(this.errorMessagges.required, required),
           maxLength: helpers.withMessage(this.errorMessagges.maxLengthTextarea,maxLength(255)),
@@ -145,7 +145,7 @@ export default defineComponent({
               return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
             }
           )
-        },
+        }as any,
         address:{
           city: {
             required: helpers.withMessage(this.errorMessagges.required, required),
@@ -157,7 +157,7 @@ export default defineComponent({
                 return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
               }
             )
-          },
+          } as any,
           colony: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(45)),
@@ -168,16 +168,16 @@ export default defineComponent({
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
             )
-          },
+          }as any,
           external_number: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(3)),
             minLength: helpers.withMessage(this.errorMessagges.minLengthNumber,minLength(1))
-          },
+          }as any,
           internal_number: {
             maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(3)),
             minLength: helpers.withMessage(this.errorMessagges.minLengthNumber,minLength(1))
-          },
+          }as any,
           locality: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
@@ -188,7 +188,7 @@ export default defineComponent({
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
             )
-          },
+          }as any,
           reference_near: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLengthReference_near,maxLength(45)),
@@ -199,7 +199,7 @@ export default defineComponent({
                 return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
               }
             )
-          },
+          }as any,
           state: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
@@ -210,7 +210,7 @@ export default defineComponent({
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
             )
-          },
+          }as any,
           street: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
@@ -221,18 +221,18 @@ export default defineComponent({
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
             )
-          },
+          }as any,
           zip_code: {
             required: helpers.withMessage(this.errorMessagges.required, required),
             maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(5)),
             minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(1))
-          },
+          }as any,
           address_type: {
             required: helpers.withMessage(this.errorMessagges.required, required),
           maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
           minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4))
 
-          },
+          }as any,
         }
 
       }

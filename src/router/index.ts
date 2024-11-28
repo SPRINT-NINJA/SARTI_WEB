@@ -88,9 +88,9 @@ const router = new VueRouter({
           },
         },
         {
-          path: "/create-account-delivery_man",
+          path: "/create-account-deliveryMan",
           props: true,
-          name: "create-account-delivery_man",
+          name: "create-account-deliveryMan",
           component: () =>
             import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
           meta: {

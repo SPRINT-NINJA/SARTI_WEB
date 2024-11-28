@@ -24,21 +24,27 @@
                     <b-card class="card-login-email">
                         <div class="card-login-email-div">
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
-                                <b-button class="button-continue mb-2" variant="orange-primary">
+                                <a href="create-account-deliveryMan">
+                                <b-button class="button-continue mb-2"  variant="orange-primary">
                                     <b>Repartidor <b-icon icon="bicycle" aria-hidden="true"></b-icon></b>
                                 </b-button>
+                                </a>
                             </div>
 
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
+                                <a href="create-account-seller">
                                 <b-button class="button-continue mb-2" variant="orange-primary">
                                     <b>Emprendedor <b-icon icon="building" aria-hidden="true"></b-icon></b>
                                 </b-button>
+                                </a>
                             </div>
 
                             <div class="text-center" style="margin-top: 25px; margin-bottom: 25px;">
+                                <a href="create-account-customer">
                                 <b-button class="button-continue mb-2" variant="orange-primary">
                                     <b>Comprador <b-icon icon="person-fill" aria-hidden="true"></b-icon></b>
                                 </b-button>
+                                </a>
                             </div>
                         </div>
                     </b-card>
