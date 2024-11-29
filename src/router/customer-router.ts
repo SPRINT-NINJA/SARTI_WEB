@@ -55,6 +55,16 @@ export default [
           requireAuth: true,
           role: allowedRoles,
         },
+      }, {
+        path: "cart",
+        props: true,
+        name: "carts",
+        component: () =>
+          import("../modules/carts/views/CartCustomerProductListView.vue"),
+        meta: {
+          title: "Carrito",
+          requireAuth: false,
+        },
       },
     ],
   },
