@@ -540,7 +540,7 @@
               >
                 Siguiente
               </b-button>
-              <b-button v-else variant="red-palete"  @click="submitAccountForm">
+              <b-button v-else variant="red-palete" :disabled="!isStepValid"  @click="submitAccountForm">
                 Crear cuenta
               </b-button>
             </b-col>

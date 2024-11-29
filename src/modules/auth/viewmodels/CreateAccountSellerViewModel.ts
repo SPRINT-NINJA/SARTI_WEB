@@ -88,10 +88,12 @@ export default defineComponent({
         return (
           !this.v$.seller.email.$error &&
           !this.v$.seller.password.$error &&
+          !this.v$.seller.confirmPassword.$error &&
           !this.v$.seller.name.$error &&
           !this.v$.seller.firstLastName.$error &&
           this.v$.seller.email.$dirty &&
           this.v$.seller.password.$dirty &&
+          this.v$.seller.confirmPassword.$dirty &&
           this.v$.seller.name.$dirty &&
           this.v$.seller.firstLastName.$dirty
         );
@@ -103,11 +105,23 @@ export default defineComponent({
           !this.v$.seller.address.state.$error &&
           !this.v$.seller.address.street.$error &&
           !this.v$.seller.address.colony.$error &&
+          !this.v$.seller.address.zipCode.$error &&
+          !this.v$.seller.address.externalNumber.$error &&
+          !this.v$.seller.address.internalNumber.$error &&
+          !this.v$.seller.address.referenceNear.$error &&
+          !this.v$.seller.address.addressType.$error &&
+          !this.v$.seller.address.locality.$error &&
           this.v$.seller.address.city.$dirty &&
           this.v$.seller.address.country.$dirty &&
           this.v$.seller.address.state.$dirty &&
           this.v$.seller.address.street.$dirty &&
-          this.v$.seller.address.colony.$dirty
+          this.v$.seller.address.colony.$dirty &&
+          this.v$.seller.address.zipCode.$dirty &&
+          this.v$.seller.address.externalNumber.$dirty &&
+          this.v$.seller.address.internalNumber.$dirty &&
+          this.v$.seller.address.referenceNear.$dirty &&
+          this.v$.seller.address.addressType.$dirty &&
+          this.v$.seller.address.locality.$dirty
         );
       }
       if (this.steps[this.currentStep - 1] === "Descripción del negocio") {
@@ -293,7 +307,7 @@ export default defineComponent({
           valid: helpers.withMessage(
             this.errorMessagges.invalidTextWithNumber,
             (value: string) => {
-              return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9.,:\-\(\)\s]+$/.test(value);
             }
           ),
         } as any,
@@ -306,6 +320,12 @@ export default defineComponent({
           minLength: helpers.withMessage(
             this.errorMessagges.minLength,
             minLength(4)
+          ),
+          valid: helpers.withMessage(
+            this.errorMessagges.invalidText,
+            (value: string) => {
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
+            }
           ),
         } as any,
         wallet: {
@@ -447,7 +467,7 @@ export default defineComponent({
               required
             ),
             maxLength: helpers.withMessage(
-              this.errorMessagges.maxLength,
+              this.errorMessagges.maxLengthNumber,
               maxLength(5)
             ),
             isPositive: helpers.withMessage(
@@ -495,11 +515,11 @@ export default defineComponent({
             ),
             maxLength: helpers.withMessage(
               this.errorMessagges.maxLengthreferenceNear,
-              maxLength(45)
+              maxLength(100)
             ),
             minLength: helpers.withMessage(
               this.errorMessagges.minLengthreferenceNear,
-              minLength(4)
+              minLength(20)
             ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
