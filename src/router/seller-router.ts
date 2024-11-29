@@ -2,7 +2,7 @@ export default [
     {
       path: "/seller",
       component: () =>  import("../views/PublicView.vue"),
-      redirect: { name: "profile-seller" },
+      redirect: { name: "profile" },
       name: "seller",
       children: [
         {
@@ -15,14 +15,41 @@ export default [
           },
         },
         {
-            path: "rate-list",
+            path: "rate-list/:id",
             name: "rate-list",
             component: () => import("../modules/rates/views/RatesListView.vue"),
             meta: {
                 title: "Lista de reseñas",
                 requireAuth: false,
             },
-        }
+        },
+        {
+          path: "create-product",
+          name: "create-product",
+          component: () => import("../modules/products/view/ProductCreateView.vue"),
+          meta: {
+              title: "Lista de reseñas",
+              requireAuth: false,
+          },
+      },
+      {
+        path: "update-product/:id",
+        name: "update-product",
+        component: () => import("../modules/products/view/ProductEditView.vue"),
+        meta: {
+            title: "Lista de reseñas",
+            requireAuth: false,
+        },
+      },
+      {
+        path: "detail-product",
+        name: "detail-product",
+        component: () => import("../modules/products/view/ProductDetailView.vue"),
+        meta: {
+            title: "Lista de reseñas",
+            requireAuth: false,
+        },
+      }
     ],
   },
 ];

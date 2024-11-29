@@ -35,17 +35,6 @@ const router = new VueRouter({
           },
         },
         {
-          path: "/cart-customer-list",
-          props: true,
-          name: "cart-customer-list",
-          component: () =>
-            import("../modules/carts/views/CartCustomerProductListView.vue"),
-          meta: {
-            title: "Carrito",
-            requireAuth: false,
-          },
-        },
-        {
           path: "/login",
           props: true,
           name: "login",
@@ -92,7 +81,7 @@ const router = new VueRouter({
           props: true,
           name: "create-account-delivery_man",
           component: () =>
-            import("../modules/auth/views/CreateAccountDelivery_Man.vue"),
+            import("../modules/auth/views/CreateAccountDeliveryMan.vue"),
           meta: {
             title: "Crear cuenta cliente",
             requireAuth: false,
