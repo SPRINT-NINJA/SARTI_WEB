@@ -4,7 +4,7 @@ export default [
     {
       path: "/seller",
       component: () =>  import("../views/PublicView.vue"),
-      redirect: { name: "profile" },
+      redirect: { name: "profile-seller" },
       name: "seller",
       children: [
         {
