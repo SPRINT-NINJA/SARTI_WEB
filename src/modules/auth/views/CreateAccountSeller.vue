@@ -16,7 +16,10 @@
           <b-row class="d-flex align-items-center justify-content-center">
             <b-row v-if="steps[currentStep - 1] === 'Datos personales'">
               <b-col cols="12" md="4">
-                <b-form-group label="Correo electrónico">
+                <b-form-group >
+                  <label>
+                    Correo electrónico: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="email"
                     placeholder="maria@gmail.com"
@@ -36,7 +39,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group label="Contraseña">
+                <b-form-group >
+                  <label>
+                    Contraseña: <span style="color: red">*</span>
+                  </label>
                   <b-input-group class="mb-2">
                     <b-input-group-prepend is-text>
                       <b-icon
@@ -56,34 +62,54 @@
                       "
                       @blur="v$.seller.password.$touch()"
                     ></b-form-input>
-                  </b-input-group>
                   <b-form-invalid-feedback
                     v-for="error in v$.seller.password.$errors"
                     :key="error.$uid"
                   >
                     {{ error.$message }}
                   </b-form-invalid-feedback>
+                  </b-input-group>
+                  
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group label="Repetir contraseña">
+                <b-form-group >
+                  <label>
+                    Confirmar Contraseña: <span style="color: red">*</span>
+                  </label>
                   <b-input-group class="mb-2">
                     <b-input-group-prepend is-text>
                       <b-icon
-                        :icon="passwordVisibleConfirm ? 'eye' : 'eye-slash'"
-                        @click="togglePasswordVisibilityConfirm"
+                        :icon="passwordVisible ? 'eye' : 'eye-slash'"
+                        @click="togglePasswordVisibility"
                         style="cursor: pointer"
                       ></b-icon>
                     </b-input-group-prepend>
                     <b-form-input
-                      :type="passwordVisibleConfirm ? 'text' : 'password'"
+                      :type="passwordVisible ? 'text' : 'password'"
                       placeholder="Ingresa tu contraseña"
+                      v-model="v$.seller.confirmPassword.$model"
+                      :state="
+                        v$.seller.confirmPassword.$dirty
+                          ? !v$.seller.confirmPassword.$error
+                          : null
+                      "
+                      @blur="v$.seller.confirmPassword.$touch()"
                     ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.seller.confirmPassword.$errors"
+                    :key="error.$uid"
+                  >
+                    {{ error.$message }}
+                  </b-form-invalid-feedback>
                   </b-input-group>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group label="Nombre(s)">
+                <b-form-group >
+                  <label>
+                    Nombre(s): <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Maria"
@@ -92,7 +118,8 @@
                       v$.seller.name.$dirty ? !v$.seller.name.$error : null
                     "
                     @blur="v$.seller.name.$touch()"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
                   <b-form-invalid-feedback
                     v-for="error in v$.seller.name.$errors"
                     :key="error.$uid"
@@ -102,7 +129,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="4">
-                <b-form-group label="Apellido Paterno">
+                <b-form-group >
+                  <label>
+                    Apellido Paterno: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Lopez"
@@ -133,7 +163,7 @@
                         ? !v$.seller.secondLastName.$error
                         : null
                     "
-                    @blur="v$.seller.secondLastName.$touch()"
+                    
                   ></b-form-input>
                   <b-form-invalid-feedback
                     v-for="error in v$.seller.secondLastName.$errors"
@@ -146,7 +176,10 @@
             </b-row>
             <b-row v-if="steps[currentStep - 1] === 'Dirección'">
               <b-col cols="12" md="6">
-                <b-form-group label="Ciudad">
+                <b-form-group>
+                <label>
+                    Ciudad: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Emiliano Zapata"
@@ -167,10 +200,13 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
-                <b-form-group label="País:">
+                <b-form-group>
+                <label>
+                    País: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
-                    type="number"
-                    placeholder="67982"
+                    type="text"
+                    placeholder="México"
                     v-model="v$.seller.address.country.$model"
                     :state="
                       v$.seller.address.country.$dirty
@@ -189,7 +225,10 @@
               </b-col>
 
               <b-col cols="12" md="6">
-                <b-form-group label="Estado">
+                <b-form-group>
+                <label>
+                    Estado: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Morelos"
@@ -210,7 +249,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
-                <b-form-group label="Calle">
+                <b-form-group>
+                <label>
+                    Calle <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Dos rosas"
@@ -231,7 +273,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
-                <b-form-group label="Colonia">
+                <b-form-group>
+                <label>
+                    Colonia <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="Palo escrito"
@@ -251,9 +296,11 @@
                   </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
-
               <b-col cols="12" md="6">
-                <b-form-group label="Localidad">
+                <b-form-group>
+                <label>
+                    Localidad <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="text"
                     placeholder="3 de Mayo"
@@ -274,7 +321,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
-                <b-form-group label="N.Exterior">
+                <b-form-group>
+                <label>
+                  N.Exterior <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="number"
                     placeholder="3"
@@ -295,7 +345,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
-                <b-form-group label="N.Interior">
+                <b-form-group>
+                <label>
+                    N.Interior <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="number"
                     placeholder="2"
@@ -316,7 +369,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
-                <b-form-group label="Código Postal:">
+                <b-form-group>
+                <label>
+                    Código Postal: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     type="number"
                     placeholder="67982"
@@ -337,10 +393,12 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="3">
-                <b-form-group label="Tipo de Residencia">
-                  <b-form-input
-                    type="text"
-                    placeholder="Local propio/Negocio"
+                <b-form-group>
+                <label>
+                    Tipo de Residencia <span style="color: red">*</span>
+                  </label>
+                  <b-form-select
+                    :options="options"
                     v-model="v$.seller.address.addressType.$model"
                     :state="
                       v$.seller.address.addressType.$dirty
@@ -348,7 +406,7 @@
                         : null
                     "
                     @blur="v$.seller.address.addressType.$touch()"
-                  ></b-form-input>
+                  ></b-form-select>
                   <b-form-invalid-feedback
                     v-for="error in v$.seller.address.addressType.$errors"
                     :key="error.$uid"
@@ -358,7 +416,10 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="12">
-                <b-form-group label="Referencia">
+                <b-form-group>
+                  <label>
+                    Referencia <span style="color: red">*</span>
+                  </label>
                   <b-form-textarea
                     id="textarea"
                     placeholder="Local pintado de rojo ,etc..."
@@ -383,12 +444,13 @@
               <b-col cols="12" md="12">
                 <b-alert show variant="warning" class="text-center">
                   <b>ALERTA:</b> Por favor, ingresa únicamente el correo
-                  asociado a PayPal, ya que será donde recibirás el dinero de
-                  las cuentas.
+                  asociado a <img src="./../../../assets/paypal.png" class="img-paypal">, ya que será donde recibirás el dinero de tus pedidos.
                 </b-alert>
               </b-col>
               <b-col cols="12" md="12">
-                <b-form-group label="Correo Paypal:" label-for="input-2">
+                <label>
+                    Correo Paypal: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     id="input-2"
                     type="text"
@@ -405,13 +467,12 @@
                   >
                     {{ error.$message }}
                   </b-form-invalid-feedback>
-                </b-form-group>
               </b-col>
               <b-col cols="12" md="12">
-                <b-form-group
-                  label="Nombre de Marca/Empresa:"
-                  label-for="input-2"
-                >
+                <b-form-group label-for="input-2">
+                  <label>
+                    Nombre de Marca/Empresa: <span style="color: red">*</span>
+                  </label>
                   <b-form-input
                     id="input-2"
                     type="text"
@@ -433,7 +494,9 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="12">
-                <b-form-group label="Descripción">
+                <label>
+                    Descripción <span style="color: red">*</span>
+                  </label>
                   <b-form-textarea
                     id="textarea"
                     placeholder="Ingresa brevemente alguna descripción de tu emprendimiento..."
@@ -453,7 +516,7 @@
                   >
                     {{ error.$message }}
                   </b-form-invalid-feedback>
-                </b-form-group>
+                
               </b-col>
             </b-row>
           </b-row>
@@ -473,10 +536,11 @@
                 v-if="currentStep < steps.length"
                 variant="orange-primary"
                 @click="nextStep"
+                :disabled="!isStepValid"
               >
                 Siguiente
               </b-button>
-              <b-button v-else variant="red-palete" @click="submitAccountForm">
+              <b-button v-else variant="red-palete"  @click="submitAccountForm">
                 Crear cuenta
               </b-button>
             </b-col>
@@ -500,3 +564,10 @@ export default {
   mixins: [CreateAccountSellerViewModel],
 };
 </script>
+
+
+<style>
+.img-paypal{
+  width: 80px;
+}
+</style>

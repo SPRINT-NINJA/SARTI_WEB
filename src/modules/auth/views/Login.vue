@@ -112,7 +112,7 @@
                     :disabled="
                       !v$.password.$dirty ||
                       v$.password.$invalid
-                    "
+                    " 
                     >Iniciar Sesión
                     <b-icon icon="arrow-right" aria-hidden="true"></b-icon
                   ></b-button>
