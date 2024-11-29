@@ -1,7 +1,12 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required,maxLength, minLength, email, helpers } from "@vuelidate/validators";
-
+import {
+  required,
+  maxLength,
+  minLength,
+  email,
+  helpers,
+} from "@vuelidate/validators";
 
 export default defineComponent({
   setup() {
@@ -14,36 +19,38 @@ export default defineComponent({
         email: "",
         password: "",
         name: "",
-        first_last_name: "",
-        second_last_name: "",
+        firstLastName: "",
+        secondLastName: "",
+        bussinessName: "",
         description: "",
         wallet: "",
         address: {
-          city: "",
-          colony: "",
-          external_number: "",
-          internal_number: "",
-          locality: "",
-          reference_near: "", // referencia del lugar
+          country: "", //ciudad
           state: "",
+          city: "",
+          locality: "",
+          colony: "",
           street: "",
-          zip_code: "", // codigo postal,
-          address_type: "",
+          zipCode: "", // codigo postal,
+          externalNumber: "",
+          internal_number: "",
+          referenceNear: "", // referencia del lugar
+          addressType: "",
         },
       },
       errorMessagges: {
         required: "Campo obligatorio",
         invalidEmail: "Correo inválido",
-        invalidTextWithNumber:"No se aceptan caracteres especiales",
-        invalidText:"No se aceptan números",
-        minLengthReference_near:"Mínimo 20 caracteres",
-        maxLengthReference_near:"Máximo 100 caracteres",
+        invalidTextWithNumber: "No se aceptan caracteres especiales",
+        invalidText: "No se aceptan números",
+        minLengthreferenceNear: "Mínimo 20 caracteres",
+        maxLengthreferenceNear: "Máximo 100 caracteres",
         minLength: "Mínimo 4 caracteres",
         maxLength: "Máximo 45 caracteres",
         minLengthNumber: "Mínimo 2 caracteres",
         maxLengthNumber: "Máximo 5 caracteres",
-        minLengthTextarea:"Mínimo 45 caracteres",
-        maxLengthTextarea:"Máximos 255 caracteres",
+        minLengthTextarea: "Mínimo 45 caracteres",
+        maxLengthTextarea: "Máximos 255 caracteres",
         noneScripts: "Campo inválido no se aceptan scripts",
         valid: "Campos inválido - caracteres inválidos",
         password: {
@@ -79,9 +86,9 @@ export default defineComponent({
       this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
     },
   },
-  validations(){
+  validations() {
     return {
-      seller:{
+      seller: {
         email: {
           required: helpers.withMessage(this.errorMessagges.required, required),
           email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
@@ -102,140 +109,299 @@ export default defineComponent({
               return !/<.*?script.*\/?>/gi.test(value);
             }
           ),
-        }as any,
-        name:{
-          required: helpers.withMessage(this.errorMessagges.required, required),
-          maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-          minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
-          valid: helpers.withMessage(
-            this.errorMessagges.invalidText,
-            (value:string)=>{
-              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
-            }
-          )
         } as any,
-        first_last_name:{
+        name: {
           required: helpers.withMessage(this.errorMessagges.required, required),
-          maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-          minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
           valid: helpers.withMessage(
             this.errorMessagges.invalidText,
-            (value:string)=>{
+            (value: string) => {
               return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
             }
-          )
-        }as any,
-        second_last_name:{
-          maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-          minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
+          ),
+        } as any,
+        firstLastName: {
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
           valid: helpers.withMessage(
             this.errorMessagges.invalidText,
-            (value:string)=>{
+            (value: string) => {
               return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
             }
-          )
-        }as any,
-        description:{
+          ),
+        } as any,
+        secondLastName: {
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
+          valid: helpers.withMessage(
+            this.errorMessagges.invalidText,
+            (value: string) => {
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
+            }
+          ),
+        } as any,
+        description: {
           required: helpers.withMessage(this.errorMessagges.required, required),
-          maxLength: helpers.withMessage(this.errorMessagges.maxLengthTextarea,maxLength(255)),
-          minLength: helpers.withMessage(this.errorMessagges.minLengthTextarea,minLength(45)),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLengthTextarea,
+            maxLength(255)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLengthTextarea,
+            minLength(45)
+          ),
           valid: helpers.withMessage(
             this.errorMessagges.invalidTextWithNumber,
-            (value:string)=>{
+            (value: string) => {
               return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
             }
-          )
-        }as any,
-        address:{
-          city: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
+          ),
+        } as any,
+        bussinessName: {
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
+        } as any,
+        wallet: {
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
+          email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
+        } as any,
+        address: {
+          country: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
+              (value: string) => {
+                return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
+              }
+            ),
+          } as any,
+          state: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
+            valid: helpers.withMessage(
+              this.errorMessagges.invalidTextWithNumber,
+              (value: string) => {
+                return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
+              }
+            ),
+          } as any,
+          city: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
+            valid: helpers.withMessage(
+              this.errorMessagges.invalidTextWithNumber,
+              (value: string) => {
                 return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
               }
-            )
+            ),
+          } as any,
+          locality: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
+            valid: helpers.withMessage(
+              this.errorMessagges.invalidTextWithNumber,
+              (value: string) => {
+                return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
+              }
+            ),
           } as any,
           colony: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLengthNumber,minLength(4)),
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLengthNumber,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLengthNumber,
+              minLength(4)
+            ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
+              (value: string) => {
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
-            )
-          }as any,
-          external_number: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(3)),
-            minLength: helpers.withMessage(this.errorMessagges.minLengthNumber,minLength(1))
-          }as any,
-          internal_number: {
-            maxLength: helpers.withMessage(this.errorMessagges.maxLengthNumber,maxLength(3)),
-            minLength: helpers.withMessage(this.errorMessagges.minLengthNumber,minLength(1))
-          }as any,
-          locality: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
+            ),
+          } as any,
+          street: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
+              (value: string) => {
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
-            )
-          }as any,
-          reference_near: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLengthReference_near,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLengthReference_near,minLength(4)),
+            ),
+          } as any,
+          zipCode: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(5)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(1)
+            ),
+          } as any,
+          externalNumber: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLengthNumber,
+              maxLength(3)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLengthNumber,
+              minLength(1)
+            ),
+          } as any,
+          internalNumber: {
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLengthNumber,
+              maxLength(3)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLengthNumber,
+              minLength(1)
+            ),
+          } as any,
+
+          referenceNear: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLengthreferenceNear,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLengthreferenceNear,
+              minLength(4)
+            ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
+              (value: string) => {
                 return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
               }
-            )
-          }as any,
-          state: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
+            ),
+          } as any,
+          addressType: {
+            required: helpers.withMessage(
+              this.errorMessagges.required,
+              required
+            ),
+            maxLength: helpers.withMessage(
+              this.errorMessagges.maxLength,
+              maxLength(45)
+            ),
+            minLength: helpers.withMessage(
+              this.errorMessagges.minLength,
+              minLength(4)
+            ),
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
+              (value: string) => {
                 return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
               }
-            )
-          }as any,
-          street: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-            minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4)),
-            valid: helpers.withMessage(
-              this.errorMessagges.invalidTextWithNumber,
-              (value:string)=>{
-                return /^(?!.*\s{2})[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/g.test(value);
-              }
-            )
-          }as any,
-          zip_code: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(5)),
-            minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(1))
-          }as any,
-          address_type: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-          maxLength: helpers.withMessage(this.errorMessagges.maxLength,maxLength(45)),
-          minLength: helpers.withMessage(this.errorMessagges.minLength,minLength(4))
-
-          }as any,
-        }
-
-      }
-    }
-  }
+            ),
+          } as any,
+        },
+      },
+    };
+  },
 });
