@@ -53,48 +53,6 @@
             </Transition>
             </b-col>
             <b-col cols="12" md="4">
-              <b-row>
-                <b-col>
-                  <b-card v-show="!profileEdit" class="text-center">
-                    <b-card-title> Recolección </b-card-title>
-                    <b-icon
-                      class="my-3"
-                      icon="shop-window"
-                      variant="red-palete"
-                      scale="3"
-                    ></b-icon>
-                    <b-card-body>
-                      <div
-                        class="d-flex justify-content-center align-items-center my-2"
-                      >
-                        <b-button variant="orange-primary">
-                          Visualizar
-                        </b-button>
-                      </div>
-                    </b-card-body>
-                  </b-card>
-                </b-col>
-                <b-col>
-                  <b-card v-show="!profileEdit" class="text-center">
-                    <b-card-title> Mis Pedidos </b-card-title>
-                    <b-icon
-                      class="my-3"
-                      icon="box-seam"
-                      variant="red-palete"
-                      scale="3"
-                    ></b-icon>
-                    <b-card-body>
-                      <div
-                        class="d-flex justify-content-center align-items-center my-2"
-                      >
-                        <b-button variant="orange-primary">
-                          Visualizar
-                        </b-button>
-                      </div>
-                    </b-card-body>
-                  </b-card>
-                </b-col>
-              </b-row>
               <Transition  name="bounce">
                 <EditAccount v-if="profileEdit" :email="profile.email" />
               </Transition>

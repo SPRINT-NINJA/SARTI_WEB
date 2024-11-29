@@ -62,6 +62,7 @@
                   @update:image="
                   newfrontIdentificationPhoto = $event
                   "
+                  :limitImages="1"
                   :progress-value="progress1" @charge-image-upload="timeCharging = $event"
                 />
               </b-col>
@@ -92,6 +93,7 @@
                   @update:image="
                   newBackIdentificationPhoto = $event
                   "
+                  :limitImages="1"
                   :progress-value="progress2" @charge-image-upload="timeCharging2 = $event"
                 />
               </b-col>
@@ -122,6 +124,7 @@
                   @update:image="
                   newPhotoProfile = $event
                   "
+                  :limitImages="1"
                   :progress-value="progress3" @charge-image-upload="timeCharging3 = $event"
                 />
               </b-col>

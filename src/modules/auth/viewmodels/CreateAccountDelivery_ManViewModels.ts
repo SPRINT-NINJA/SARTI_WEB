@@ -20,11 +20,11 @@ export default defineComponent({
         front_identification_photo: "",
         back_identification_photo: "",
       },
+      identifiactionPhoto:[],
       currentStep: 1,
       steps: [
         "Datos personales",
-        "Identificación oficial (Frontal)",
-        "Identificación oficial (Trasera)",
+        "Identificación oficial",
         "Foto Facial",
       ],
       password: "",
@@ -78,6 +78,13 @@ export default defineComponent({
     togglePasswordVisibilityConfirm() {
       this.passwordVisibleConfirm = !this.passwordVisibleConfirm;
     },
+    identifiactionPhotoCredential(){
+      console.log("Cambio?")
+      if(this.identifiactionPhoto.length > 0){
+        this.delivery_man.front_identification_photo = this.identifiactionPhoto[0];
+        this.delivery_man.back_identification_photo=  this.identifiactionPhoto[1];
+      }
+    }
   },
   validations(){
     return {
@@ -149,5 +156,8 @@ export default defineComponent({
 
       }
     }
-  }
+  },
+  mounted() {
+    this.identifiactionPhotoCredential();
+  },
 });
