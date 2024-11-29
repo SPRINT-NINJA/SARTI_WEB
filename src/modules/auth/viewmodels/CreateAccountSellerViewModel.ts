@@ -44,7 +44,7 @@ export default defineComponent({
           externalNumber: "",
           internalNumber: "",
           referenceNear: "", // referencia del lugar
-          addressType: null,
+          addressType: "DOMICILIO",
         },
       },
       errorMessagges: {
@@ -504,7 +504,7 @@ export default defineComponent({
             valid: helpers.withMessage(
               this.errorMessagges.invalidTextWithNumber,
               (value: string) => {
-                return /^[a-zA-Z0-9 .\-\(\)]+$/g.test(value);
+                return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9.,:\-\(\)\s]+$/.test(value);
               }
             ),
           } as any,
