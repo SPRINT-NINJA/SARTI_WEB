@@ -1,3 +1,5 @@
+const allowedRoles = ["EMPRENDEDOR"];
+
 export default [
     {
       path: "/seller",
@@ -11,7 +13,8 @@ export default [
           component: () => import("../modules/auth/views/ProfileSellerView.vue"),
           meta: {
             title: "Perfil de emprendedor",
-            requireAuth: false,
+            requireAuth: true,
+            role: allowedRoles,
           },
         },
         {
@@ -20,7 +23,8 @@ export default [
             component: () => import("../modules/rates/views/RatesListView.vue"),
             meta: {
                 title: "Lista de reseñas",
-                requireAuth: false,
+                requireAuth: true,
+                role: allowedRoles,
             },
         },
         {
@@ -29,7 +33,8 @@ export default [
           component: () => import("../modules/products/view/ProductCreateView.vue"),
           meta: {
               title: "Lista de reseñas",
-              requireAuth: false,
+              requireAuth: true,
+              role: allowedRoles,
           },
       },
       {
@@ -38,7 +43,8 @@ export default [
         component: () => import("../modules/products/view/ProductEditView.vue"),
         meta: {
             title: "Lista de reseñas",
-            requireAuth: false,
+            requireAuth: true,
+            role: allowedRoles,
         },
       },
       {
@@ -47,10 +53,10 @@ export default [
         component: () => import("../modules/products/view/ProductDetailView.vue"),
         meta: {
             title: "Lista de reseñas",
-            requireAuth: false,
+            requireAuth: true,
+            role: allowedRoles,
         },
       }
     ],
   },
 ];
-

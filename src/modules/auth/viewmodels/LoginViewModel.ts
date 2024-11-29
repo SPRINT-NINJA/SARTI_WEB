@@ -6,7 +6,6 @@ import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { jwtDecode } from "jwt-decode";
 import { ERoles } from "@/kernel/types";
 
-
 interface CustomJwtPayload {
   role: { authority: string }[];
 }
@@ -23,9 +22,6 @@ export default defineComponent({
       email: "",
       verifiedEmail: "",
       password: "",
-      recoveryPassword: {
-        password: "",
-      },
       isVerifiedAccount: false,
       errorMessagges: {
         required: "Campo obligatorio",
@@ -48,51 +44,72 @@ export default defineComponent({
         const resp = await AuthService.getUser({ email: this.email });
         const { error } = resp;
         if (!error) {
+          // guardar en el storage si es verificado
+          localStorage.setItem("verifiedEmail", this.email);
           this.verifiedEmail = this.email;
           this.isVerifiedAccount = !this.isVerifiedAccount;
         }
-        console.log("response correo",resp);
+        console.log("response correo", resp);
         this.userData = resp;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async sigin() {
+      try {
+        this.isLoading = true;
+        const resp = await AuthService.sigin({
+          email: this.verifiedEmail,
+          password: this.password,
+        });
+        console.log("response login", resp);
+        if (!resp.error) {
+          localStorage.setItem("token", JSON.stringify(resp));
+          localStorage.removeItem("verifiedEmail");
+          if (await this.checkNextRedirect()) SweetAlertCustom.welcomeMessage();
+        }
       } catch (error) {
         console.log(error);
       }finally{
         this.isLoading = false;
       }
     },
-    async sigin() {
-      try {
-        const resp = await AuthService.sigin({
-          email: this.verifiedEmail,
-          password: this.password,
-        });
-        console.log("response login",resp);
-        if (!resp.error) {
-          localStorage.setItem('token', JSON.stringify(resp));
-          if (await this.checkNextRedirect())
-            SweetAlertCustom.welcomeMessage();
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async checkNextRedirect() {
       if (localStorage.token) {
-        if (jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.SELLER) {
+        if (
+          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority ===
+          ERoles.SELLER
+        ) {
           await this.$router.replace("/seller");
           return true;
         } else if (
-          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.CUSTOMER
+          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority ===
+          ERoles.CUSTOMER
         ) {
           await this.$router.replace("/customer");
           return true;
         } else if (
-          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority === ERoles.DELIVERYMAN
+          jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority ===
+          ERoles.DELIVERYMAN
         ) {
           await this.$router.replace("/delivery");
           return true;
         }
       }
     },
+    checkVerifiedEmail() {
+      const state = localStorage.getItem("verifiedEmail");
+      console.log("state", state);
+      if (state) {
+        this.email = state;
+        this.verifyEmail();
+      }
+    },
+  },
+  created() {
+    this.checkVerifiedEmail();
   },
   validations() {
     return {
@@ -100,26 +117,23 @@ export default defineComponent({
         required: helpers.withMessage(this.errorMessagges.required, required),
         email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
       } as any,
-      recoveryPassword: {
-        password: {
-          required: helpers.withMessage(this.errorMessagges.required, required),
-          valid: helpers.withMessage(
-            this.errorMessagges.password.valid,
-            (value: string) => {
-              return /^(?=.*[A-Z]+)(?=.*[._#]+)(?=.*[0-9]+)[a-zA-Z0-9._#]{3,16}$/g.test(
-                value
-              );
-            }
-          ),
-          notScript: helpers.withMessage(
-            this.errorMessagges.noneScripts,
-            (value: string) => {
-              return !/<.*?script.*\/?>/gi.test(value);
-            }
-          ),
-        },
+      password: {
+        required: helpers.withMessage(this.errorMessagges.required, required),
+        // valid: helpers.withMessage(
+        //   this.errorMessagges.password.valid,
+        //   (value: string) => {
+        //     return /^(?=.*[A-Z]+)(?=.*[._#]+)(?=.*[0-9]+)[a-zA-Z0-9._#]{3,16}$/g.test(
+        //       value
+        //     );
+        //   }
+        // ),
+        notScript: helpers.withMessage(
+          this.errorMessagges.noneScripts,
+          (value: string) => {
+            return !/<.*?script.*\/?>/gi.test(value);
+          }
+        ),
       } as any,
-      password: {} as any,
     };
   },
 });

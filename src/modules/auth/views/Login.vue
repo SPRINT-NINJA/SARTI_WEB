@@ -1,5 +1,6 @@
 <template>
   <div>
+    <b-overlay :show="isLoading" no-wrap />
     <navbar />
     <b-container fluid class="vh-100">
       <b-row no-gutters class="w-100 mt-5">
@@ -20,11 +21,12 @@
             <div class="d-flex justify-content-center">
               <b-list-group class="w-100" style="max-width: 300px">
                 <b-list-group-item
-                  class="d-flex align-items-center justify-content-start"
+                class="d-flex align-items-center justify-content-start"
                 >
-                  <b-avatar class="mr-3" size="60px"></b-avatar>
-                  <span class="text-white">
-                    <b style="color: black">{{ userData.customer.name }}</b>
+                <b-avatar class="mr-3" size="60px"></b-avatar>
+                <span class="text-white">
+                    <b-overlay :show="isLoading" no-wrap />
+                    <b style="color: black">{{ userData.customer  ? userData.customer.name : userData.deliveryMan ? userData.deliveryMan.name: userData.seller ? userData.seller.name: "" }}</b>
                   </span>
                 </b-list-group-item>
               </b-list-group>
@@ -40,7 +42,7 @@
         >
           <b-card class="w-100 h-100 shadow">
             <b-overlay :show="isLoading" no-wrap />
-            <b-form>
+            <b-form @submit.prevent>
               <div class="p-5">
                 <section v-if="!isVerifiedAccount">
                   <b-form-group
@@ -91,11 +93,7 @@
                       placeholder="********"
                       required
                       v-model="v$.password.$model"
-                      :state="
-                        v$.password.$dirty
-                          ? !v$.password.$error
-                          : null
-                      "
+                      :state="v$.password.$dirty ? !v$.password.$error : null"
                       @blur="v$.password.$touch()"
                     ></b-form-input>
                     <b-form-invalid-feedback
@@ -109,10 +107,7 @@
                     block
                     variant="orange-primary"
                     @click="sigin"
-                    :disabled="
-                      !v$.password.$dirty ||
-                      v$.password.$invalid
-                    "
+                    :disabled="!v$.password.$dirty || v$.password.$invalid"
                     >Iniciar Sesión
                     <b-icon icon="arrow-right" aria-hidden="true"></b-icon
                   ></b-button>
