@@ -281,6 +281,10 @@ function handle404Error(error: any) {
       titleAlert = "No se encontró";
       messageAlert = "No se encontró el doctor";
       break;
+      case "ADDRESS_INCOMPLETE":
+      titleAlert = "Dirección Incompleta";
+      messageAlert = "Revisa el formulario nuevamente y corregir los errores";
+      break;
     default:
       titleAlert = "No encontrado";
       messageAlert = "No se encontró el recurso";

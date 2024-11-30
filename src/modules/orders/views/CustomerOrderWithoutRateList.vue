@@ -5,43 +5,6 @@
       :imgSrc="require('../../../assets/banner-pedido.svg')"
       :content="'MIS PEDIDOS'"
     />
-    <div class="d-flex align-items-center justify-content-center">
-      <b-card bg-variant="orange-soft" class="card-preview-order my-2">
-        <b-container>
-          <!-- Producto en espera de una opinión -->
-          <b-row>
-            <b-col cols="12" md="9">
-              <b-row>
-                <b-col cols="12" md="3">
-                  <b-avatar
-                    size="60px"
-                    src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-                    badge="3"
-                    variant="warning"
-                    badge-variant="danger"
-                  >
-                  </b-avatar>
-                </b-col>
-                <b-col
-                  cols="12"
-                  md="9"
-                  class="d-flex justify-content-right align-items-center"
-                >
-                  <b-card-text>Un producto espera tu opinión</b-card-text>
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col
-              cols="12"
-              md="3"
-              class="d-flex justify-content-end align-items-center"
-            >
-              <b-button size="sm" variant="red-palete" @click="goToOrderWithoutRate" > Crear reseña </b-button>
-            </b-col>
-          </b-row>
-        </b-container>
-      </b-card>
-    </div>
     <!-- pedido preview -->
     <div
       class="d-flex align-items-center justify-content-center my-2"
@@ -74,19 +37,17 @@
                   }}</b-badge>
                   <br />
                   {{ order.order.product.name }}<br />
-                  <p class="date-text">
-                    ${{ order.order.product.price }} | unidades:
-                    {{ order.order.amount }}
-                  </p>
                 </b-col>
               </b-row>
             </b-col>
             <b-col cols="12" md="4">
-              <b-button class="my-2 mx-2" size="sm" variant="orange-secundary" @click="goToOrderDetails(order.order.id)" >
-                Ver compra
-              </b-button>
-              <b-button variant="orange-primary" size="sm">
-                Volver a comprar
+              <b-button
+                class="my-2 mx-2 w-100"
+                size="sm"
+                variant="orange-secundary"
+                @click="goToOrderCreateRate(order.order.id)"
+              >
+                crear reseña
               </b-button>
             </b-col>
           </b-row>
@@ -110,16 +71,16 @@
 
 <script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
-import CustomerOrderListViewModel from "../viewmodels/CustomerOrderListViewModel";
+import CustomerOrderWithoutRateListViewModel from "../viewmodels/CustomerOrderWithoutRateListViewModel";
 import BannerComponent from "@/modules/public/components/BannerComponent.vue";
 import BannerOverlay from "@/modules/public/components/BannerOverlay.vue";
 export default {
-  name: "CustomerOrderListView",
+  name: "CustomerOrderListWithoutRate",
   components: {
     BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay
+    BannerOverlay: BannerOverlay,
   },
-  mixins: [CustomerOrderListViewModel],
+  mixins: [CustomerOrderWithoutRateListViewModel],
 };
 </script>
 

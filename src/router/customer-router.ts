@@ -27,7 +27,7 @@ export default [
         },
       },
       {
-        path: "order-detail",
+        path: "order-detail/:id",
         name: "order-detail",
         component: () =>import("../modules/orders/views/CustomerOrderDetailsView.vue"),
         meta: {
@@ -37,7 +37,7 @@ export default [
         },
       },
       {
-        path: "create-rate",
+        path: "create-rate/:id",
         name: "create-rate",
         component: () =>import("../modules/rates/views/CustomerCreateRateView.vue"),
         meta: {
@@ -57,7 +57,6 @@ export default [
         },
       }, {
         path: "cart",
-        props: true,
         name: "carts",
         component: () =>
           import("../modules/carts/views/CartCustomerProductListView.vue"),
@@ -65,7 +64,16 @@ export default [
           title: "Carrito",
           requireAuth: false,
         },
-      },
+      },{
+        path: "order-without-rate",
+        name: "order-without-rate",
+        component: () =>
+          import("../modules/orders/views/CustomerOrderWithoutRateList.vue"),
+        meta: {
+          title: "Carrito",
+          requireAuth: false,
+        },
+      }
     ],
   },
 ];
