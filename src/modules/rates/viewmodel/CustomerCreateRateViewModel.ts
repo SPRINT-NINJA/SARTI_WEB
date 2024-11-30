@@ -36,7 +36,7 @@ export default defineComponent({
             review:{
                 comment:"",
                 rate:0,
-                image:{}
+                image:""
             },
             imagesUpload: {},
             showConfirmImage: false,
@@ -91,13 +91,13 @@ export default defineComponent({
                 reverseButtons: true
               }).then((result) => {
                 if (result.isConfirmed) {
-                    this.review.image = this.imagesUpload;
+                    // this.review.image = this.imagesUpload;
                     this.showConfirmImage = true;
                 }
               });
         },
         fillFormAprove(){
-            if(this.review.comment != null  && this.review.image.length > 0 && this.review.rate > 0 ) 
+            if(this.review.comment != null  && this.review.image != null  && this.review.rate > 0 ) 
                 return true;
         }
     },
@@ -117,7 +117,7 @@ export default defineComponent({
                         return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
                       }
                     )
-                }
+                } as any
             }
         }
     }

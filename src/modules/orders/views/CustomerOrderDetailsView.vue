@@ -4,60 +4,51 @@
     <b-row>
       <b-col cols="12" md="6">
         <h2 class="text-center">Peluche de Stitch</h2>
-        <b-row >
-          <b-col cols="12" md="12">
-            <img
-              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-              alt="producto"
-              class="img-main-product"
-            />
-          </b-col>
-          <b-col cols="4" md="4">
-            <img
-              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-              alt="producto"
-              class="my-2 img-main-miniature"
-            />
-          </b-col>
-          <b-col cols="4" md="4">
-            <img
-              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-              alt="producto"
-              class="my-2 img-main-miniature"
-            />
-          </b-col>
-          <b-col cols="4" md="4">
-            <img
-              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-              alt="producto"
-              class="my-2 img-main-miniature"
-            />
-          </b-col>
-        </b-row>
+        <simple-gallery
+                :images="deatilOrder.product.imagesProduct"
+                galleryID="my-test-gallery"
+                :mainImage="deatilOrder.product.mainImage"
+              ></simple-gallery>
       </b-col>
       <b-col cols="12" md="6">
         <h3 class="text-center">Detalles de la Compra</h3>
         <h5 class="text-center">15 de octubre del 2024</h5>
-        <b-row class="my-5">
-          <b-col cols="12" md="6">
-            <p><b>Número de orden:</b> 155</p>
-            <p><b>Tipo de entrega:</b> Envío</p>
-            <p><b>Cantidad de Unidades:</b> 2</p>
-            <p><b>ENTREGADO</b></p>
-          </b-col>
-          <b-col cols="12" md="6">
-            <p><b>Producto:</b> Peluche de Stitch</p>
-            <p><b>Precio:</b> $250</p>
-            <p><b>Total:</b> $250</p>
-          </b-col>
-          <hr />
-          <b-col cols="12" md="6">
-            <h5>Detalles del pago</h5>
-            <p>Visa Débito *****42423</p>
-            <p><b>Pago aprobado</b></p>
+        <b-card  >
+        <b-row>
+          <b-col cols="12" md="12">
+            <b-badge :variant="assignColorBystatus('Entregado')">
+              {{deatilOrder.status}}
+            </b-badge>
+            <b-badge class="mx-2" :variant="assignColorBystatus('Entregado')">
+              {{deatilOrder.cardPay.statusPay}}
+            </b-badge>
+            <p>
+              Tipo de entrega,
+              <b>{{ deatilOrder.orderDeliveryType }}
+                </b>, Número de order # {{ deatilOrder.orderNumber }}, 
+              Método de pago <b>{{ deatilOrder.cardPay.typeCard }}</b>
+            </p>
+            
+              <b-row
+                class="d-flex justify-content-between align-items-center w-100 mt-2"
+              > 
+                <b-col cols="auto" class="text-left text-by-price">
+                  <p>Cantidad</p>
+                  <p>Costo de Envío</p>
+                  <p>Total</p>
+                </b-col>
+                <b-col cols="auto" class="text-right text-by-price">
+                  <p>{{ deatilOrder.product.amount }}</p>
+                  <p>$30</p>
+                  <p> 
+                    <b>${{ deatilOrder.product.price }}</b>
+                  </p>
+                </b-col>  
+              </b-row>
           </b-col>
         </b-row>
-        <b-row class="d-flex align-items-center justify-content-center">
+        </b-card>
+        <b-row class="d-flex align-items-center justify-content-center my-2">
           <b-col cols="auto">
             <b-button variant="orange-primary" class="btn-centered"
               >Crear reseña</b-button
@@ -76,9 +67,15 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
 import CustomerOrderDetailsViewModel from "../viewmodels/CustomerOrderDetailsViewModel";
 export default {
   name: "CustomerOrderDetail",
+  components:{
+    SimpleGallery: defineAsyncComponent(() =>
+      import("../../public/components/SimpleGallery.vue")
+    ),
+  },
   mixins: [CustomerOrderDetailsViewModel],
 };
 </script>

@@ -95,17 +95,14 @@ export default defineComponent({
                 return 'brown-chocolate';
         }
     },
-    async goToOrderDetails(item:string){
+    async goToOrderCreateRate(item:string){
       try {
         console.log(item)
         const encryptParam = encryptParamsId(item.toString());
-        await this.$router.push({ name: "order-detail", params: { id: encryptParam} });
+        await this.$router.push({ name: "create-rate", params: { id: encryptParam} });
       } catch (error) {
         console.error(error);
       }
-    },
-    async goToOrderWithoutRate(){
-        await this.$router.push({ name: "order-without-rate"} );
     }
 
   },
