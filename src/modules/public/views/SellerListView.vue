@@ -16,7 +16,7 @@
             md="4"
             lg="4"
             class="mt-2 mb-2 h-100"
-            v-for="seller in sellers"
+            v-for="seller in paginatedOrders"
             :key="seller.id"
 
           >
@@ -47,6 +47,16 @@
           </b-col>
         </b-row>
       </section>
+      <div class="d-flex align-items-center justify-content-center my-2">
+      <b-pagination
+        v-model="currentPage"
+        :total-rows="totalRows"
+        :per-page="pageSize"
+        size="sm"
+        pills
+        @input="updatePaginatedOrders"
+      ></b-pagination>
+      </div>
     </b-container>
   </div>
 </template>

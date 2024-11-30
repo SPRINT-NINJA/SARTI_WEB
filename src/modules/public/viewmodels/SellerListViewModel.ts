@@ -42,9 +42,18 @@ export default defineComponent({
           },
        
       ],
+      currentPage: 1, // Página actual
+      pageSize: 3, // Número de elementos por página
+      totalRows: 6, // Total de elementos
+      paginatedOrders: [] as any, // Pedidos a mostrar en la página actual
     };
   },
   methods: {
+    updatePaginatedOrders() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      this.paginatedOrders = this.sellers.slice(start, end);
+    },
     async getsellerProduct(item: any) {
       try {
         const encryptParam = encryptParamsId(item.toString());
@@ -54,5 +63,8 @@ export default defineComponent({
       }
     },
     
+  },
+  mounted() {
+    this.updatePaginatedOrders();
   },
 });
