@@ -77,6 +77,7 @@ export default defineComponent({
         { value: "NEGOCIO", text: "Negocio" },
         { value: "OTRO", text: "Otro" },
       ],
+      createLoading:false,
       steps: ["Datos personales", "Dirección", "Descripción del negocio"],
       passwordVisible: false,
       passwordVisibleConfirm: false,
@@ -140,7 +141,7 @@ export default defineComponent({
   methods: {
     async submitAccountForm() {
       try {
-        console.log(this.seller, "Objecto");
+        this.createLoading = true;
         const resp = await AuthService.createAccountSeller({
           email: this.seller.email,
           password: this.seller.password,
@@ -164,8 +165,8 @@ export default defineComponent({
             addressType: this.seller.address.addressType,
           },
         });
-        console.log("response-create-account-seller", resp);
         if (!resp.error) {
+          this.createLoading = false;
           localStorage.setItem('token', JSON.stringify(resp));
           if (await this.checkNextRedirect())
           SweetAlertCustom.successMessage();

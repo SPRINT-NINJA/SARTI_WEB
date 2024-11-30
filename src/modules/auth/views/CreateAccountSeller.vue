@@ -536,12 +536,13 @@
                 v-if="currentStep < steps.length"
                 variant="orange-primary"
                 @click="nextStep"
-                :disabled="!isStepValid"
+                :disabled="!isStepValid || createLoading"
               >
                 Siguiente
               </b-button>
-              <b-button v-else variant="red-palete" :disabled="!isStepValid"  @click="submitAccountForm">
-                Crear cuenta
+              <b-button v-else variant="red-palete" :disabled="!isStepValid || createLoading"  @click="submitAccountForm">
+                {{ createLoading ? "En proceso":"Crear Cuenta"}}
+                <b-icon icon="three-dots" animation="fade" v-show="createLoading" ></b-icon>
               </b-button>
             </b-col>
           </b-row>
