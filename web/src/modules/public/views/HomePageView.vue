@@ -54,7 +54,7 @@
           >
             <b-card no-body class="custom-card w-100 shadow">
               <b-card-img
-                :src="product.image"
+                :src="product.mainImage"
                 :alt="product.name"
                 class="custom-img"
                 role="button"
