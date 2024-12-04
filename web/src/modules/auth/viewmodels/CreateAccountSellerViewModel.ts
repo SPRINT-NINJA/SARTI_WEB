@@ -142,6 +142,7 @@ export default defineComponent({
     async submitAccountForm() {
       try {
         this.createLoading = true;
+        SweetAlertCustom.loading("Cargando","Espera estamos en proceso de tu información",6000);
         const resp = await AuthService.createAccountSeller({
           email: this.seller.email,
           password: this.seller.password,
@@ -165,6 +166,7 @@ export default defineComponent({
             addressType: this.seller.address.addressType,
           },
         });
+       
         if (!resp.error) {
           this.createLoading = false;
           localStorage.setItem('token', JSON.stringify(resp));

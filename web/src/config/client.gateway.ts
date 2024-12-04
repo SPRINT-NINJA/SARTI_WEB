@@ -316,4 +316,18 @@ export default {
   doDelete(endPoint: any, config?: any) {
     return AxiosClient.delete(endPoint, config);
   },
+  doPostFile(endPoint: any,object: any){
+    return AxiosClient.post(endPoint,object,{
+      headers: {
+          'Content-Type': 'multipart/form-data',
+          }
+      });
+  },
+  doPutFile(endPoint: any,object: any){
+    return AxiosClient.put(endPoint,object,{
+      headers: {
+          'Content-Type': 'multipart/form-data',
+          }
+      });
+  }
 };

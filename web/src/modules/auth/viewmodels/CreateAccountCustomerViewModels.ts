@@ -98,7 +98,7 @@ export default defineComponent({
           this.v$.customer.firstLastName.$dirty
         );
       }
-      if (this.steps[this.currentStep - 1] === "Dirección") {
+      if (this.steps[this.currentStep - 1] === "Dirección" && this.goTocreate) {
         return (
           !this.v$.customer.address.city.$error &&
           !this.v$.customer.address.country.$error &&
@@ -152,7 +152,7 @@ export default defineComponent({
             },
           };
         }
-
+        SweetAlertCustom.loading("Cargando","Espera estamos en proceso de tu información",6000)
         const resp = await AuthService.createAccountCustomer({
           email: this.customer.email,
           password: this.customer.password,

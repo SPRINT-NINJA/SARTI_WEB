@@ -47,7 +47,6 @@ export default defineComponent({
       this.stopCamera();  // Apaga la cámara después de tomar la foto
     },
     stopCamera() {
-    console.log(this.stream)
       if (this.stream) {
         this.stream.getTracks().forEach(track => track.stop());
         this.stream = null;

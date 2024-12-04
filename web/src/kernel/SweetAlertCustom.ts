@@ -1,4 +1,5 @@
 import Swal from "sweetalert2";
+import charge from "../assets/loading.gif";
 
 class SweetAlertCustom {
   static questionMessage(
@@ -128,6 +129,27 @@ class SweetAlertCustom {
       allowEscapeKey: false,
     });
   }
+
+  static loading(title = "Cargando", text = "Espera estamos en proceso de tu información", timer?: any, ) {
+    if (!timer) timer = 1500;
+    Swal.fire({
+      title: title,
+      text: text,
+      imageUrl: charge,
+      imageWidth: 200,
+      imageHeight: 100,
+      timer: timer,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,   
+    });
+  }
+
+
+
+
 }
+
+
 
 export default SweetAlertCustom;

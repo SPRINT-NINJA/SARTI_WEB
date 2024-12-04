@@ -103,7 +103,6 @@ export default defineComponent({
       this.imagesUpload = images;
       if (images.length > 0) {
         this.temporaryImage = images;
-        
      }
     },
     showLoading() {
