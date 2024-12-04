@@ -83,7 +83,7 @@ const router = new VueRouter({
           component: () =>
             import("../modules/auth/views/CreateAccountDeliveryMan.vue"),
           meta: {
-            title: "Crear cuenta cliente",
+            title: "Crear cuenta repartidor",
             requireAuth: false,
           },
         },
