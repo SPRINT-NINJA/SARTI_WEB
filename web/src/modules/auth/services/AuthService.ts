@@ -79,6 +79,31 @@ export default class AuthService {
     }
   }
 
+  static async getProfileCustomer():Promise<any>{
+    try {
+      const response = await axios.doGet('/customer');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+  
+  static async getProfileSeller():Promise<any>{
+    try {
+      const response = await axios.doGet('/seller');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
 
   
 }

@@ -66,7 +66,7 @@ export default defineComponent({
         });
         console.log("response login", resp);
         if (!resp.error) {
-          localStorage.setItem("token", JSON.stringify(resp));
+          localStorage.setItem("token", resp);
           localStorage.removeItem("verifiedEmail");
           if (await this.checkNextRedirect()) SweetAlertCustom.welcomeMessage();
         }

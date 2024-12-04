@@ -1,4 +1,5 @@
 import { defineComponent } from "vue";
+import AuthService from "../services/AuthService";
 
 export default defineComponent({
     data(){
@@ -25,6 +26,15 @@ export default defineComponent({
         }
     },
     methods:{
+        async getProfile(){
+            try {
+                const resp = await AuthService.getProfileCustomer();
+                console.log(resp)
+            } catch (error) {
+                console.log(error)
+            }
+
+        },
         editProfile(){
             if(this.profileEdit){
                 this.profileEdit = false;
@@ -32,5 +42,8 @@ export default defineComponent({
                 this.profileEdit = true;
             }
         }
+    },
+    mounted(){
+        this.getProfile();
     }
 })

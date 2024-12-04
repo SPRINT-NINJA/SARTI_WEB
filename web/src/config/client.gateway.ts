@@ -12,6 +12,8 @@ AxiosClient.interceptors.request.use(
       (!config.url.includes("auth") || !config.url.includes("open"))
     ) {
       config.headers.Authorization = `Bearer ${auth_token}`;
+      console.log("AYUYA", config.headers.Authorization)
+      console.log("AYUYA 2", auth_token)
     }
     return config;
   },
