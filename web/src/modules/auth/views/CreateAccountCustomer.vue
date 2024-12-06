@@ -479,10 +479,11 @@
                 v-if="currentStep < steps.length"
                 variant="orange-primary"
                 @click="nextStep"
+                :disabled="!isStepValid"
               >
                 Siguiente
               </b-button>
-              <b-button v-else v-show="addAdress" variant="red-palete" @click="submitAccountForm">
+              <b-button v-else v-show="addAdress" variant="red-palete" :disabled="!isStepValid" @click="submitAccountForm">
                 Crear cuenta
               </b-button>
             </b-col>
@@ -494,7 +495,6 @@
 </template>
 
 <script lang="ts">
-import Vue, { defineAsyncComponent } from "vue";
 import StepProgress from "@/components/StepProgress.vue";
 import CreateAccountCustomerViewModels from "../viewmodels/CreateAccountCustomerViewModels";
 

@@ -59,7 +59,16 @@ export default class AuthService {
 
   static async createAccountDeliveryMan(payload: any): Promise<any>{
     try{
-      const response = await axios.doPost(`/delivery-man/signup`,payload);
+      const formData = new FormData();
+      formData.append('email',payload.email);
+      formData.append('password',payload.password);
+      formData.append('name',payload.name);
+      formData.append('firstLastName',payload.firstLastName);
+      formData.append('secondLastName',payload.secondLastName);
+      formData.append('profilePicture',payload.profilePicture);
+      formData.append('backIdentification',payload.backIdentification);
+      formData.append('frontIdentification',payload.frontIdentification); 
+      const response = await axios.doPostFile(`/delivery-man/signup`,formData);
       return response.data.data;
     }catch(e:any){
       return {

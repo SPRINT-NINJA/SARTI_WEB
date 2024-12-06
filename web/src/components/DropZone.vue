@@ -97,7 +97,7 @@ export default defineComponent({
   },
   data() {
     return {
-      images: [] as Array<{ name: string; url: string; base64: string }>, // Asegúrate de usar 'Array<...>'
+      images: [] as Array<{ name: string; url: string; target: File }>, // Eliminamos 'base64'
       isDragging: false,
       takePhoto: false,
       showimageTaked: false,
@@ -116,7 +116,7 @@ export default defineComponent({
           this.images.push({
             name: `photo-${Date.now()}.png`, // Nombre único basado en timestamp
             url: url, // Asignar directamente la URL
-            base64: "", 
+            target: [],
           });
         });
         // Emitir evento con las imágenes actualizadas
@@ -161,18 +161,24 @@ export default defineComponent({
     },
     pushImagesByCamera() {
       if (this.imageTakePhoto) {
-        const imageName = `photo-${Date.now()}.png`;
-        this.images.push({
-          name: imageName,
-          url: this.imageTakePhoto,
-          base64: this.imageTakePhoto,
+        // Crear un archivo a partir de la imagen capturada
+        const blob = this.dataURLtoBlob(this.imageTakePhoto);
+        const file = new File([blob], `photo-${Date.now()}.png`, {
+          type: "image/png",
         });
+
+        this.images.push({
+          name: file.name,
+          url: URL.createObjectURL(file),
+          target: file, // Asignar el objeto File aquí
+        });
+
         this.showimageTaked = true;
 
         // Emitir las imágenes actualizadas
         this.$emit(
           "images-uploaded",
-          this.images.map((img) => img.base64)
+          this.images.map((img) => img)
         );
 
         // Limpiar estados
@@ -184,7 +190,17 @@ export default defineComponent({
         this.$bvModal.hide("modal-1");
       }
     },
-
+    dataURLtoBlob(dataURL: string) {
+      const arr = dataURL.split(",");
+      const mime = arr[0].match(/:(.*?);/)![1];
+      const bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
     selectFiles() {
       (this.$refs.fileInput as HTMLInputElement).click();
     },
@@ -197,32 +213,28 @@ export default defineComponent({
         const file = files[i];
         if (file.type.split("/")[0] !== "image") {
           this.$swal.fire({
-            icon: "error", // Cambia el icono a "error" o el que prefieras
+            icon: "error",
             title: "Solo se permiten archivos de imagen",
             toast: true,
-            position: "top-end", // Puedes cambiar la posición a "top-start", "bottom-start", "bottom-end", etc.
+            position: "top-end",
             showConfirmButton: false,
-            timer: 3000, // La duración de la alerta en milisegundos
+            timer: 3000,
             timerProgressBar: true,
           });
           continue;
         }
 
         if (!this.images.some((e) => e.name === file.name)) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const base64 = e.target?.result as string;
-            this.images.push({
-              name: file.name,
-              url: URL.createObjectURL(file), // Para previsualización
-              base64, // Imagen en formato Base64
-            });
-            this.$emit(
-              "images-uploaded",
-              this.images.map((img) => img.base64)
-            ); // Emitir evento con imágenes en Base64
-          };
-          reader.readAsDataURL(file); // Convertir a Base64
+          this.images.push({
+            name: file.name,
+            url: URL.createObjectURL(file),
+            target: file,
+          });
+          // Emitimos la lista actualizada de URLs
+          this.$emit(
+            "images-uploaded",
+            this.images.map((img) => img)
+          );
         }
       }
     },
@@ -234,28 +246,23 @@ export default defineComponent({
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        // Verificar si el archivo es una imagen
         if (file.type.split("/")[0] !== "image") {
           alert("Solo se permiten archivos de imagen.");
           continue;
         }
 
-        // Evitar agregar imágenes duplicadas
         if (!this.images.some((e) => e.name === file.name)) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const base64 = e.target?.result as string;
-            this.images.push({
-              name: file.name,
-              url: URL.createObjectURL(file), // Para previsualización
-              base64, // Imagen en formato Base64
-            });
-            this.$emit(
-              "images-uploaded",
-              this.images.map((img) => img.base64)
-            ); // Emitir evento con imágenes en Base64
-          };
-          reader.readAsDataURL(file); // Convertir a Base64
+          this.images.push({
+            name: file.name,
+            url: URL.createObjectURL(file),
+            target: file, // Asegúrate de que estás asignando el objeto completo aquí
+          });
+
+          // Emitimos la lista actualizada de URLs
+          this.$emit(
+            "images-uploaded",
+            this.images.map((img) => img)
+          );
         }
       }
     },
@@ -263,7 +270,7 @@ export default defineComponent({
       this.images.splice(index, 1);
       this.$emit(
         "images-uploaded",
-        this.images.map((img) => img.base64)
+        this.images.map((img) => img.url)
       );
     },
     onDragOver(event: DragEvent) {
