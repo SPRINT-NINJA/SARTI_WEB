@@ -49,7 +49,6 @@ export default defineComponent({
           this.verifiedEmail = this.email;
           this.isVerifiedAccount = !this.isVerifiedAccount;
         }
-        console.log("response correo", resp);
         this.userData = resp;
       } catch (error) {
         console.log(error);

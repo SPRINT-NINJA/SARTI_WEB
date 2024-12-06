@@ -96,7 +96,7 @@ import BannerComponent from "../../public/components/BannerComponent.vue";
 import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileSellerViewModel from "../viewmodels/ProfileSellerViewModel";
 import EditSellerAccount from "@/components/EditSellerAccount.vue";
-import EditAccount from "@/components/EditAccount.vue";
+import EditAccount from "@/modules/auth/components/EditAccount.vue";
 
 export default {
   name: "ProfileSeller",

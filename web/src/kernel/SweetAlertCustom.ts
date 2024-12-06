@@ -31,6 +31,16 @@ class SweetAlertCustom {
     });
   }
 
+  static warningMessage(title: string, text:string){
+    Swal.fire({
+      title: title,
+      text: text,
+      icon: "warning",
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
+
   static successMessage(title = "Éxito", text = "Acción realizada", timer?: any, ) {
     if (!timer) timer = 1500;
     Swal.fire({

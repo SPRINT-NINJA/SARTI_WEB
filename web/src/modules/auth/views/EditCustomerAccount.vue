@@ -21,7 +21,7 @@
               <b-form-input
                 id="input-firstLastName"
                 type="text"
-                v-model="profile.firstLastName"
+                v-model="profile.fistLastName"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -30,7 +30,7 @@
               <b-form-input
                 id="input-secondName"
                 type="text"
-                v-model="profile.secondName"
+                v-model="profile.secondLastName"
               ></b-form-input>
             </b-form-group>
           </b-col>
@@ -134,32 +134,15 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "EditAccountSeller",
-  props: {
-    profile: {
-      type: Object,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      // Puedes copiar el perfil aquí si necesitas editarlo localmente
-      editedProfile: { ...this.profile },
-    };
-  },
-  methods: {
-    getProfileSeller() {
-      console.log(this.profile);
-    },
-  },
-  mounted() {
-    this.getProfileSeller();
-  },
-});
+import EditCustomerViewModel from '../viewmodels/EditCustomerViewModel';
+export default {
+  name: "EditProfileCustomer",
+  mixins: [EditCustomerViewModel],
+};
 </script>
+
+
+
 
 <style scoped>
 hr {

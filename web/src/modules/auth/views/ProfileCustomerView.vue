@@ -18,10 +18,10 @@
           <div class="my-5 mx-2">
             <section v-show="!profileEdit">
               <h1>
-                {{ profile.name }} {{ profile.firstLastName }}
-                {{ profile.secondName ? profile.secondName : "" }}
+                {{ profile.name }} {{ profile.fistLastName }}
+                {{ profile.secondLastName ? profile.secondLastName : "" }}
               </h1>
-              <h5>{{ profile.email }}</h5>
+              <h5>{{ profile.user.email }}</h5>
             </section>
           </div>
           <b-row>
@@ -29,7 +29,7 @@
               <EditCustomerAccount :profile="profile" />
 
             </b-col>
-            <b-col cols="12" md="8" v-show="!profileEdit">
+            <b-col cols="12" md="8" v-show="!profileEdit && profile.address != null">
               <section>
                 <b-card class="my-3">
                   <b-card-title> Dirección</b-card-title>
@@ -52,7 +52,7 @@
               </section>
             </b-col>
             <b-col cols="12" md="4">
-              <EditAccount v-show="profileEdit" :email="profile.email" />
+              <EditAccount v-show="profileEdit" :email="profile.user.email" />
          
                   <div
                     class="d-flex justify-content-center align-items-center my-3"
@@ -84,8 +84,8 @@
 import BannerComponent from "../../public/components/BannerComponent.vue";
 import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileCustomerViewModel from "../viewmodels/ProfileCustomerViewModel";
-import EditCustomerAccount from "@/components/EditCustomerAccount.vue";
-import EditAccount from "@/components/EditAccount.vue";
+import EditCustomerAccount from "@/modules/auth/views/EditCustomerAccount.vue";
+import EditAccount from "@/modules/auth/components/EditAccount.vue";
 
 export default {
   name: "ProfileCustomer",

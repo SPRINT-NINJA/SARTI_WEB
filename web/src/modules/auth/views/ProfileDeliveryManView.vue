@@ -84,7 +84,7 @@
 import BannerComponent from "../../public/components/BannerComponent.vue";
 import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileDeliveryManViewModel from "../viewmodels/ProfileDeliveryManViewModel";
-import EditAccount from "@/components/EditAccount.vue";
+import EditAccount from "@/modules/auth/components/EditAccount.vue";
 import EditDeliveryMan from "@/components/EditDeliveryMan.vue";
 
 export default {

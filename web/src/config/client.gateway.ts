@@ -12,8 +12,6 @@ AxiosClient.interceptors.request.use(
       (!config.url.includes("auth") || !config.url.includes("open"))
     ) {
       config.headers.Authorization = `Bearer ${auth_token}`;
-      console.log("AYUYA", config.headers.Authorization)
-      console.log("AYUYA 2", auth_token)
     }
     return config;
   },
@@ -24,18 +22,18 @@ AxiosClient.interceptors.request.use(
 
 // Interceptor para manejo de errores
 AxiosClient.interceptors.response.use(
-    (response) => {
-        const { status } = response;
-        if (status === 200 || status === 201) {
-            return Promise.resolve(response);
-        } else {
-            return Promise.reject(response);
-        }
-    },
-    async (error) => {
-        if (!error.response) {
-            await SweetAlertCustom.ErrorServer();
-            return Promise.reject(error);
+  (response) => {
+    const { status } = response;
+    if (status === 200 || status === 201 || status === 202) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(response);
+    }
+  },
+  async (error) => {
+    if (!error.response) {
+      await SweetAlertCustom.ErrorServer();
+      return Promise.reject(error);
     }
 
     const { status } = error.response;
@@ -93,6 +91,14 @@ function handle400Error(error: any) {
       titleAlert = "Campos faltantes";
       messageAlert = "Por favor completa todos los campos";
       break;
+    case "PASSWORDS_ARE_THE_SAME":
+      titleAlert = "Contraseña sin cambios";
+      messageAlert = "La nueva contraseña no puede ser igual a la anterior. Por favor, ingresa una contraseña diferente.";
+      break;
+    case "OLD_PASSWORDS_INCORRECT":
+        titleAlert = "Contraseña incorrecta";
+        messageAlert = "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
+    break;
     case "RECORD_NOT_REGISTERED":
       titleAlert = "Registro no guardado";
       messageAlert = "El registro no ha sido guardado";
@@ -255,6 +261,12 @@ function handle404Error(error: any) {
       messageAlert = "No se encontró la especialidad";
 
       break;
+    case "NO_VERIFICATION_CODE_FOUND":
+      titleAlert = "Código inválido";
+      messageAlert =
+        "El código no esta bien escrito, por favor intenta nuevamente";
+
+      break;
     case "NO_DATA_FOUND":
       titleAlert = "No hay datos";
       messageAlert = "No se encontraron datos";
@@ -283,7 +295,7 @@ function handle404Error(error: any) {
       titleAlert = "No se encontró";
       messageAlert = "No se encontró el doctor";
       break;
-      case "ADDRESS_INCOMPLETE":
+    case "ADDRESS_INCOMPLETE":
       titleAlert = "Dirección Incompleta";
       messageAlert = "Revisa el formulario nuevamente y corregir los errores";
       break;
@@ -318,18 +330,18 @@ export default {
   doDelete(endPoint: any, config?: any) {
     return AxiosClient.delete(endPoint, config);
   },
-  doPostFile(endPoint: any,object: any){
-    return AxiosClient.post(endPoint,object,{
+  doPostFile(endPoint: any, object: any) {
+    return AxiosClient.post(endPoint, object, {
       headers: {
-          'Content-Type': 'multipart/form-data',
-          }
-      });
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
-  doPutFile(endPoint: any,object: any){
-    return AxiosClient.put(endPoint,object,{
+  doPutFile(endPoint: any, object: any) {
+    return AxiosClient.put(endPoint, object, {
       headers: {
-          'Content-Type': 'multipart/form-data',
-          }
-      });
-  }
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
