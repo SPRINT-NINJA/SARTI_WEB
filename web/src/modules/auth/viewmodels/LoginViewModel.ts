@@ -5,6 +5,7 @@ import AuthService from "../services/AuthService";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { jwtDecode } from "jwt-decode";
 import { ERoles } from "@/kernel/types";
+import { ISignIn } from "../models/LoginModel";
 
 interface CustomJwtPayload {
   role: { authority: string }[];
@@ -60,13 +61,11 @@ export default defineComponent({
     async sigin() {
       try {
         this.isLoading = true;
-        const resp = await AuthService.sigin({
-          email: this.verifiedEmail,
-          password: this.password,
-        });
+        const signIn: ISignIn = {email: this.verifiedEmail, password: this.password}
+        const resp = await AuthService.signIn(signIn);
         console.log("response login", resp);
         if (!resp.error) {
-          localStorage.setItem("token", JSON.stringify(resp));
+          localStorage.setItem("token", resp.data!);
           localStorage.removeItem("verifiedEmail");
           if (await this.checkNextRedirect()) SweetAlertCustom.welcomeMessage();
         }
@@ -77,6 +76,8 @@ export default defineComponent({
       }
     },
     async checkNextRedirect() {
+      console.log("QUE PASA TOKEN", localStorage.token);
+      console.log("QUE PASA TOKEN2",   jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority);
       if (localStorage.token) {
         if (
           jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority ===

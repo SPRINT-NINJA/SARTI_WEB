@@ -3,7 +3,7 @@ import charge from "../assets/loading.gif";
 
 class SweetAlertCustom {
   static questionMessage(
-    text: string,
+    text?: string,
     title = "¿Está seguro de realizar esta acción?"
   ) {
     return Swal.fire({

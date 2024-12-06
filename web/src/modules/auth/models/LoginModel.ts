@@ -6,6 +6,11 @@ export interface IVerifyPassword {
     password: string;
 }
 
+export interface ISignIn {
+    email: string;
+    password: string;
+}
+
 export interface IUserInfo {
     name: string;
     email: string;
