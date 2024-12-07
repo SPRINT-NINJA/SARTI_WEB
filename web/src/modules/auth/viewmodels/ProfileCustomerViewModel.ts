@@ -4,7 +4,9 @@ import AuthService from "../services/AuthService";
 export default defineComponent({
     data(){
         return{
-            profile:{} as any,
+            profile:{
+                
+            } as any,
             profileEdit:false
         }
     },
@@ -12,6 +14,7 @@ export default defineComponent({
         async getProfile(){
             try {
                 const resp = await AuthService.getProfileCustomer();
+                console.log(resp)
                 if(!resp.error){
                     this.profile = resp;
                 }

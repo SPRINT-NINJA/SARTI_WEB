@@ -146,6 +146,19 @@ export default class AuthService {
     }
   }
 
+  static async updateProfileCustomer(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/customer',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
 
   
 

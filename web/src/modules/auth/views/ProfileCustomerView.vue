@@ -24,12 +24,22 @@
               <h5>{{ profile.user.email }}</h5>
             </section>
           </div>
-          <b-row>
+          <div class="text-center" v-if="profile.address === null || profile.address === '' ">
+              <section   class="text-center">
+                  <img src="../../../assets/location.svg" class="img-address"  >
+                  <h5>¿Deseas agregar tu dirección?</h5>
+                  <p>
+                    Por favor, proporciónanos tu dirección para completar la compra. 
+                  </p>
+
+                  <b-button variant="orange-primary" @click="editProfile()" >Editar información</b-button>
+              </section>
+          </div>
+          <b-row v-else>
             <b-col cols="12" md="8" v-show="profileEdit">
               <EditCustomerAccount :profile="profile" />
-
             </b-col>
-            <b-col cols="12" md="8" v-show="!profileEdit && profile.address != null">
+            <b-col cols="12" md="8" v-show="!profileEdit">
               <section>
                 <b-card class="my-3">
                   <b-card-title> Dirección</b-card-title>
@@ -51,6 +61,7 @@
                 </b-card>
               </section>
             </b-col>
+        
             <b-col cols="12" md="4">
               <EditAccount v-show="profileEdit" :email="profile.user.email" />
          
@@ -109,5 +120,9 @@ export default {
   top: 110px; /* Ajusta según lo necesario */
   left: 60px; /* Ajusta según lo necesario */
   z-index: 1; /* Asegura que el avatar esté por encima del banner */
+}
+
+.img-address {
+  width: 20%;
 }
 </style>
