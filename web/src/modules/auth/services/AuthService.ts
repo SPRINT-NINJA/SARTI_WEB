@@ -1,20 +1,23 @@
+import { RequestHandler } from "@/kernel/RequestHandler";
+import { CustomResponse } from "../../../kernel/types";
+// import { test } from "@/kernel/types";
 import axios from "../../../config/client.gateway";
+import { ISignIn } from "../models/LoginModel";
+import { IRecoveryPassword, IVerifyEmail } from "../models/RecoveryPasswordModel";
 export default class AuthService {
   private static baseUrl = "/auth";
-  
 
-  static async sigin(payload: any): Promise<any> {
-    try {
-      const response = await axios.doPost(`${this.baseUrl}/sign-in`, payload);
-      console.log("respuesta gateway", response);
-      return response.data.data;
-    } catch (e: any) {
-      return {
-        code: e.data?.code,
-        error: true,
-        message: e.data?.message,
-      };
-    }
+
+  static async signIn(payload: ISignIn) : Promise<CustomResponse<string>>{
+    return await RequestHandler.handleRequest(axios.doPost(`${this.baseUrl}/sign-in`, payload));
+  }
+
+  static async sendCode(payload: IVerifyEmail): Promise<CustomResponse<any>>{
+    return await RequestHandler.handleRequest(axios.doPost(`${this.baseUrl}/send-code`, payload));
+  }
+
+  static async recoveryPassword(payload: IRecoveryPassword): Promise<CustomResponse<any>>{
+    return await RequestHandler.handleRequest(axios.doPost(`${this.baseUrl}/recovery-password`, payload));
   }
 
   static async getUser(payload: any): Promise<any> {
@@ -55,7 +58,6 @@ export default class AuthService {
       }
     }
   }
-
 
   static async createAccountDeliveryMan(payload: any): Promise<any>{
     try{
@@ -163,4 +165,5 @@ export default class AuthService {
   
 
   
+
 }

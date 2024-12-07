@@ -39,20 +39,24 @@
                     <b-form-input
                       id="input-1"
                       type="email"
-                      v-model="v$.email.$model"
+                      v-model="v$.verifiedEmail.email.$model"
                       placeholder="example@gmail.com"
                       required
-                      :state="v$.email.$dirty ? !v$.email.$error : null"
-                      @blur="v$.email.$touch()"
+                      :state="
+                        v$.verifiedEmail.email.$dirty
+                          ? !v$.verifiedEmail.email.$error
+                          : null
+                      "
+                      @blur="v$.verifiedEmail.email.$touch()"
                     ></b-form-input>
                     <b-form-invalid-feedback
-                      v-for="error in v$.email.$errors"
+                      v-for="error in v$.verifiedEmail.email.$errors"
                       :key="error.$uid"
                     >
                       {{ error.$message }}
                     </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="orange-primary" @click="verifyEmail"
+                  <b-button block variant="orange-primary" @click="sendCode"
                     >Verificar correo</b-button
                   >
                 </section>
@@ -65,18 +69,20 @@
                     <b-form-input
                       id="input-1"
                       type="text"
+                      maxLength="5"
                       placeholder="*****"
                       required
-                      v-model="v$.recoveryPassword.code.$model"
+                      v-model="v$.recoveryPasswordPayload.code.$model"
                       :state="
-                        v$.recoveryPassword.code.$dirty
-                          ? !v$.recoveryPassword.code.$error
+                        v$.recoveryPasswordPayload.code.$dirty
+                          ? !v$.recoveryPasswordPayload.code.$error
                           : null
                       "
-                      @blur="v$.recoveryPassword.code.$touch()"
+                      @blur="v$.recoveryPasswordPayload.code.$touch()"
+                      @keydown="enterOnlyNumbers"
                     ></b-form-input>
                     <b-form-invalid-feedback
-                      v-for="error in v$.recoveryPassword.code.$errors"
+                      v-for="error in v$.recoveryPasswordPayload.code.$errors"
                       :key="error.$uid"
                     >
                       {{ error.$message }}
@@ -89,25 +95,25 @@
                   >
                     <b-form-input
                       id="input-1"
-                      type="email"
+                      type="text"
                       placeholder="********"
                       required
-                      v-model="v$.recoveryPassword.password.$model"
+                      v-model="v$.recoveryPasswordPayload.password.$model"
                       :state="
-                        v$.recoveryPassword.password.$dirty
-                          ? !v$.recoveryPassword.password.$error
+                        v$.recoveryPasswordPayload.password.$dirty
+                          ? !v$.recoveryPasswordPayload.password.$error
                           : null
                       "
-                      @blur="v$.recoveryPassword.password.$touch()"
+                      @blur="v$.recoveryPasswordPayload.password.$touch()"
                     ></b-form-input>
                     <b-form-invalid-feedback
-                      v-for="error in v$.recoveryPassword.password.$errors"
+                      v-for="error in v$.recoveryPasswordPayload.password.$errors"
                       :key="error.$uid"
                     >
                       {{ error.$message }}
                     </b-form-invalid-feedback>
                   </b-form-group>
-                  <b-button block variant="orange-primary" @click="changePassword"
+                  <b-button block variant="orange-primary" @click="recoveryPassword"
                     >Cambiar contraseña</b-button
                   >
                 </section>
@@ -120,7 +126,6 @@
   </div>
 </template>
 <script lang="ts">
-import Vue, { defineAsyncComponent } from "vue";
 import RecoveryPasswordViewModel from "@/modules/auth/viewmodels/RecoveryPasswordViewModel";
 export default {
   name: "RecoveryPassword",

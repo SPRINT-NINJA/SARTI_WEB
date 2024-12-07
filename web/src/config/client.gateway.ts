@@ -78,6 +78,10 @@ function handle400Error(error: any) {
 
   switch (message.trim()) {
     // AUTH
+    case "CREDENTIALS_MISMATCH": //TODO pedir el ajuste del servicio para que sea 401
+      titleAlert = "Credenciales incorrectas";
+      messageAlert = "Usuario y/o contraseña erróneos";
+      break;
     case "USER_IS_BLOCKED":
       titleAlert = "Credenciales incorrectas";
       messageAlert = "Usuario y/o contraseña erróneos";
