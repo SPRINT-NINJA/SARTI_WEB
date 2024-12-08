@@ -150,7 +150,7 @@ export default class AuthService {
 
   static async updateProfileCustomer(payload:any):Promise<any>{
     try {
-      const response = await axios.doPost('/customer',payload);
+      const response = await axios.doPut('/customer',payload);
       return response.data;
     } catch (e:any) {
       return {

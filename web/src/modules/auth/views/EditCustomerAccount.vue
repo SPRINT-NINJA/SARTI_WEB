@@ -336,7 +336,6 @@
                     ? !v$.editedProfile.address.referenceNear.$error
                     : null
                 "
-                @blur="v$.editedProfile.address.referenceNear.$touch()"
               >
               </b-form-textarea>
               <b-form-invalid-feedback
@@ -351,7 +350,7 @@
       </section>
       <div class="d-flex justify-content-end align-items-center mx-2 my-2">
         
-        <b-button variant="red-palete" @click="updateProfile" >
+        <b-button variant="red-palete" :disabled="!isStepValid" @click="updateProfile" >
           Editar información
         </b-button>
       </div>
@@ -359,10 +358,10 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import EditCustomerViewModel from "../viewmodels/EditCustomerViewModel";
 export default {
-  name: "EditProfileCustomer",
+  name: "EditCustomerAccount",
   mixins: [EditCustomerViewModel],
 };
 </script>

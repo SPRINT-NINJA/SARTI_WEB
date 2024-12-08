@@ -27,7 +27,7 @@ export default defineComponent({
             email:"",
             role:""
         }
-      },
+      } as any,
       profileEdit: false,
     };
   },

@@ -90,7 +90,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import EditAccountViewModel from '../viewmodels/EditAccountViewModel';
 export default {
   name: "EditAccount",

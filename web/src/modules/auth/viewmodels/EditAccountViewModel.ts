@@ -112,9 +112,6 @@ export default defineComponent({
       }
     },
   },
-  mounted(){
-      console.log(this.newEmail,"DEsde account")
-  },
   validations() {
     return {
       confirmPassword: {

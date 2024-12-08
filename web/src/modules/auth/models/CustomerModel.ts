@@ -21,6 +21,7 @@ export interface ICustomer {
   id: number;
   name: string;
   firstLastName: string;
+  fistLastName:string;//Deja este se equivocaron en el back xd
   secondLastName: string;
   address: IAddress;
 }
@@ -29,7 +30,7 @@ export interface ICustomer {
 export interface ICustomerProfile {
   id: number;
   name: string;
-  firstLastName: string;
+  fistLastName: string;
   secondLastName: string;
   address: IAddress;
   user:Iuser

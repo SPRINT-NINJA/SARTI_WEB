@@ -30,7 +30,7 @@
           ></div>
           <b-row>
             <b-col cols="12" md="8" v-show="profileEdit">
-              <EditCustomerAccount :profile="profile" />
+              <EditCustomerAccount  />
             </b-col>
             <b-col cols="12" md="8" v-show="!profileEdit">
               <section>
@@ -96,19 +96,15 @@
 </template>
 
 <script lang="ts">
-import BannerComponent from "../../public/components/BannerComponent.vue";
-import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileCustomerViewModel from "../viewmodels/ProfileCustomerViewModel";
-import EditCustomerAccount from "@/modules/auth/views/EditCustomerAccount.vue";
-import EditAccount from "@/modules/auth/components/EditAccount.vue";
 
 export default {
   name: "ProfileCustomer",
   components: {
-    BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay,
-    EditCustomerAccount,
-    EditAccount,
+    BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
+    BannerOverlay: ()=> import("@/modules/public/components/BannerOverlay.vue"),
+    EditCustomerAccount: ()=> import("@/modules/auth/views/EditCustomerAccount.vue"),
+    EditAccount: ()=> import("@/modules/auth/components/EditAccount.vue")
   },
   mixins: [ProfileCustomerViewModel],
 };

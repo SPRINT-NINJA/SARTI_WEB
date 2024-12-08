@@ -16,15 +16,28 @@ export default defineComponent({
     const v$ = useVuelidate();
     return { v$ };
   },
-  props: {
-    profile: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
-      editedProfile:{...this.profile},
+      editedProfile:{
+        id: 0,
+        name: "",
+        firstLastName: "",
+        fistLastName:"",
+        secondLastName: "",
+        address: {
+          country: "",
+          state: "",
+          city: "",
+          locality: "",
+          colony: "",
+          street: "",
+          zipCode: 0,
+          externalNumber: "",
+          internalNumber: "",
+          referenceNear: "",
+          addressType: "",
+        }
+      } as ICustomer,
       options: [
         { value: null, text: "--Seleccione--" },
         { value: "DOMICILIO", text: "Domicilio" },
@@ -58,47 +71,76 @@ export default defineComponent({
     };
   },
   methods: {
-    getProfileeditedProfile() {
-      console.log(this.editedProfile)
-      this.editedProfile = this.profile
-    },
-    async updateProfile() {
+    async getUpdateCustomer() {
       try {
-        this.editedProfile.firstLastName = this.editedProfile.fistLastName;
-        this.editedProfile as ICustomer
-        const resp = await AuthService.updateProfileCustomer(this.editedProfile);
-        console.log(resp)
+        const resp = await AuthService.getProfileCustomer();
         if (!resp.error) {
-          SweetAlertCustom.successMessage(
-            "Tus datos se han actualizado correctamente",
-            "Tus datos ingresados han sido actualizados"
-          );
+          // Si address es null, asignar una dirección vacía
+          this.editedProfile = {
+            ...resp,
+            address: resp.address || {
+              country: "",
+              state: "",
+              city: "",
+              locality: "",
+              colony: "",
+              street: "",
+              zipCode: 0,
+              externalNumber: "",
+              internalNumber: "",
+              referenceNear: "",
+              addressType: "",
+            },
+          };
         }
       } catch (error) {
         console.log(error);
       }
     },
+    async updateProfile() {
+      try {
+        this.editedProfile.firstLastName = this.editedProfile.fistLastName;
+        const resp = await AuthService.updateProfileCustomer(this.editedProfile);
+        if (!resp.error) {
+          SweetAlertCustom.successMessage(
+            "Tus datos se han actualizado correctamente",
+            "Tus datos ingresados han sido actualizados"
+          );
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    touchAllFields() {
+      this.v$.editedProfile.$touch();
+    },
   },
   mounted() {
-    this.getProfileeditedProfile();
+    this.getUpdateCustomer();
+    this.touchAllFields();
   },
   computed: {
     isStepValid() {
-      return (
-        this.v$.editedProfile.name.$dirty && !this.v$.editedProfile.name.$error &&
-        this.v$.editedProfile.fistLastName.$dirty && !this.v$.editedProfile.fistLastName.$error &&
-        this.v$.editedProfile.address.city.$dirty && !this.v$.editedProfile.address.city.$error &&
-        this.v$.editedProfile.address.colony.$dirty && !this.v$.editedProfile.address.colony.$error &&
-        this.v$.editedProfile.address.street.$dirty && !this.v$.editedProfile.address.street.$error &&
-        this.v$.editedProfile.address.state.$dirty && !this.v$.editedProfile.address.state.$error &&
-        this.v$.editedProfile.address.country.$dirty && !this.v$.editedProfile.address.country.$error &&
-        this.v$.editedProfile.address.locality.$dirty && !this.v$.editedProfile.address.locality.$error &&
-        this.v$.editedProfile.address.externalNumber.$dirty && !this.v$.editedProfile.address.externalNumber.$error &&
-        this.v$.editedProfile.address.zipCode.$dirty && !this.v$.editedProfile.address.zipCode.$error &&
-        this.v$.editedProfile.address.addressType.$dirty && !this.v$.editedProfile.address.addressType.$error &&
-        this.v$.editedProfile.address.referenceNear.$dirty && !this.v$.editedProfile.address.referenceNear.$error
-      );
+      const fieldsToValidate = [
+        this.v$.editedProfile.name,
+        this.v$.editedProfile.fistLastName,
+        this.v$.editedProfile.address.city,
+        this.v$.editedProfile.address.colony,
+        this.v$.editedProfile.address.street,
+        this.v$.editedProfile.address.state,
+        this.v$.editedProfile.address.country,
+        this.v$.editedProfile.address.locality,
+        this.v$.editedProfile.address.externalNumber,
+        this.v$.editedProfile.address.zipCode,
+        this.v$.editedProfile.address.addressType,
+        this.v$.editedProfile.address.referenceNear,
+      ] as any;
+    
+      // Validar que todos los campos estén "tocados" y sin errores
+      return fieldsToValidate.every((field: { $dirty: boolean; $error: boolean }) => field.$dirty && !field.$error);
     },
+    
   },
   validations() {
     return {

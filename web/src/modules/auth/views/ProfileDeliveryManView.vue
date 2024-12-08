@@ -91,7 +91,7 @@ export default {
   components: {
     BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
     BannerOverlay: () =>  import("@/modules/public/components/BannerOverlay.vue"),
-    EditAccount: () => import("@/components/EditAccount.vue"), 
+    EditAccount: () => import("@/modules/auth/components/EditAccount.vue"), 
     EditDeliveryMan: () => import("@/components/EditDeliveryMan.vue"),
   },
   mixins: [ProfileDeliveryManViewModel],
