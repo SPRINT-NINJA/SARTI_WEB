@@ -1,8 +1,13 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, email, helpers } from "@vuelidate/validators";
-import Swal from "sweetalert2";
-import axios from "./../../../config/axios";
+import {
+  IRecoveryPassword,
+  IVerifyEmail,
+} from "../models/RecoveryPasswordModel";
+import AuthService from "../services/AuthService";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { enterOnlyNumbers } from "@/kernel/funcions";
 
 export default defineComponent({
   setup() {
@@ -11,20 +16,22 @@ export default defineComponent({
   },
   data() {
     return {
-      email: "",
-      verifiedEmail: "",
-      recoveryPassword: {
+      isLoading: false,
+      verifiedEmail: {
+        email: "",
+      } as IVerifyEmail,
+      recoveryPasswordPayload: {
+        email: "",
         code: "",
         password: "",
-      },
+      } as IRecoveryPassword,
       isVerifiedAccount: false,
-      errorMessagges: {
+      errorMessages: {
         required: "Campo obligatorio",
         invalidEmail: "Correo inválido",
-        minLength: "Mínimo 6 caracteres",
-        maxLength: "Máximo 45 caracteres",
+        allowedLength: "Mínimo 5 - Máximo 5 caracteres",
         noneScripts: "Campo inválido no se aceptan scripts",
-        valid: "Campos inválido - caracteres inválidos",
+        valid: "Campos inválido - Solo se permiten números del 0 al 9",
         password: {
           valid:
             "La contraseña debe tener mínimo una mayúscula, un caracter especial (# . _) y un número (longitud de 3 a 16 car.)",
@@ -33,149 +40,94 @@ export default defineComponent({
     };
   },
   methods: {
-    async verifyEmail() {
-      this.verifiedEmail = this.email;
+    enterOnlyNumbers,
+    async sendCode() {
       try {
-        this.loading = true;
-
-        const response = await axios.post("/auth/send-recovery-code", {
-          email: this.email,
-        });
-        console.log(response.data);
-
-        Swal.fire({
-          title: "¡Código enviado!",
-          text: "Hemos enviado un código de verificación a tu correo electrónico.",
-          icon: "success",
-          confirmButtonText: "Aceptar",
-        });
-      } catch (error) {
-        // Manejo de errores mejorado
-        if (error.response) {
-          console.error("Error en la respuesta:", error.response.data);
-          Swal.fire({
-            title: "Error de recuperación",
-            text:
-              error.response.data.message ||
-              "Ocurrió un problema al enviar el código de verificación.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
-        } else if (error.request) {
-          console.error("Error en la solicitud:", error.request);
-          Swal.fire({
-            title: "Error de conexión",
-            text: "No se pudo conectar al servidor. Inténtalo de nuevo más tarde.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
-        } else {
-          console.error("Error:", error.message);
-          Swal.fire({
-            title: "Error inesperado",
-            text: "Ocurrió un error inesperado. Por favor, intenta nuevamente.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
+        this.isLoading = true;
+        const resp = await AuthService.sendCode(this.verifiedEmail);
+        const { error } = resp;
+        if (!error) {
+          this.isVerifiedAccount = true;
         }
+      } catch (error) {
+        console.log(error);
       } finally {
-        this.loading = false; // Ocultar la pantalla de carga
+        this.isLoading = false;
       }
-
-      this.isVerifiedAccount = !this.isVerifiedAccount;
     },
-
-    async changePassword() {
-      const recoveryData = {
-        email: this.verifiedEmail,
-        code: this.recoveryPassword.code,
-        password: this.recoveryPassword.password,
-      };
-
+    async recoveryPassword() {
       try {
-        this.loading = true;
-
-        const response = await axios.post(
-          "/auth/change-password",
-          recoveryData
-        );
-
-        console.log(response.data);
-
-        Swal.fire({
-          title: "¡Se cambió la contraseña!",
-          text: "La contraseña de cambió correctamente.",
-          icon: "success",
-          confirmButtonText: "Aceptar",
+        SweetAlertCustom.questionMessage().then(async (result: any) => {
+          if (result.isConfirmed) {
+            this.isLoading = true;
+            this.recoveryPasswordPayload.email = this.verifiedEmail.email;
+            const resp = await AuthService.recoveryPassword(
+              this.recoveryPasswordPayload
+            );
+            const { error } = resp;
+            if (!error) {
+              this.isVerifiedAccount = false;
+              SweetAlertCustom.successMessage();
+              this.$router.push({ name: "login" });
+            }
+          }
         });
-
-        this.$router.push("/login");
       } catch (error) {
-        // Manejo de errores mejorado
-        if (error.response) {
-          console.error("Error en la respuesta:", error.response.data);
-          Swal.fire({
-            title: "Error de recuperación",
-            text:
-              error.response.data.message ||
-              "Ocurrió un problema al cambiar la contraseña.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
-        } else if (error.request) {
-          console.error("Error en la solicitud:", error.request);
-          Swal.fire({
-            title: "Error de conexión",
-            text: "No se pudo conectar al servidor. Inténtalo de nuevo más tarde.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
-        } else {
-          console.error("Error:", error.message);
-          Swal.fire({
-            title: "Error inesperado",
-            text: "Ocurrió un error inesperado. Por favor, intenta nuevamente.",
-            icon: "error",
-            confirmButtonText: "Aceptar",
-          });
-        }
+        console.log(error);
       } finally {
-        this.loading = false; 
+        this.isLoading = false;
       }
     },
   },
   validations() {
     return {
-      email: {
-        required: helpers.withMessage(this.errorMessagges.required, required),
-        email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
-      },
-      recoveryPassword: {
+      recoveryPasswordPayload: {
         code: {
-          required: helpers.withMessage(this.errorMessagges.required, required),
-          minLength: helpers.withMessage(
-            this.errorMessagges.minLength,
-            minLength(5)
-          ),
-        },
-        password: {
-          required: helpers.withMessage(this.errorMessagges.required, required),
+          required: helpers.withMessage(this.errorMessages.required, required),
           valid: helpers.withMessage(
-            this.errorMessagges.password.valid,
+            this.errorMessages.valid,
+            (value: string) => /^[0-9]*$/.test(value)
+          ),
+          allowedLength: helpers.withMessage(
+            this.errorMessages.allowedLength,
             (value: string) => {
+              if (!value) return true;
+              return value.length >= 1 && value.length == 5;
+            }
+          ),
+          notScript: helpers.withMessage(
+            this.errorMessages.noneScripts,
+            (value: string) => {
+              return !/<.*?script.*\/?>/gi.test(value);
+            }
+          ),
+        } as any,
+        password: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+          valid: helpers.withMessage(
+            this.errorMessages.password.valid,
+            (value: string) => {
+              if (!value) return true;
               return /^(?=.*[A-Z]+)(?=.*[._#]+)(?=.*[0-9]+)[a-zA-Z0-9._#]{3,16}$/g.test(
                 value
               );
             }
           ),
           notScript: helpers.withMessage(
-            this.errorMessagges.noneScripts,
+            this.errorMessages.noneScripts,
             (value: string) => {
+              if (!value) return true;
               return !/<.*?script.*\/?>/gi.test(value);
             }
           ),
-        },
-      },
+        } as any,
+      } as any,
+      verifiedEmail: {
+        email: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+          email: helpers.withMessage(this.errorMessages.invalidEmail, email),
+        } as any,
+      } as any,
     };
   },
 });

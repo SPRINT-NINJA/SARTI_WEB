@@ -55,7 +55,7 @@ export default defineComponent({
       default: 0,
     },
     image: {
-      type: Array,
+      type: String,
       default: [],
     },
     limitImages:{
@@ -103,7 +103,6 @@ export default defineComponent({
       this.imagesUpload = images;
       if (images.length > 0) {
         this.temporaryImage = images;
-        
      }
     },
     showLoading() {

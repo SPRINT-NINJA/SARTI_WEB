@@ -35,12 +35,13 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "EditAccount",
   props:{
     email:{
-      type:String,
+      type: String,
       required: true
     }
   },
@@ -52,7 +53,7 @@ export default {
       confirmParssword:""
     }
   }
-};
+});
 </script>
 
 <style scoped>

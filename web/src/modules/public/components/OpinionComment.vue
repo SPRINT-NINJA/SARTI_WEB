@@ -42,13 +42,16 @@
     </div>
   </div>
 </template>
-<script>
-import { defineAsyncComponent } from "vue";
-export default {
+<script lang="ts">
+import { defineAsyncComponent, defineComponent } from "vue";
+export default defineComponent( {
   name: "OpinionComment",
   props: {
     images: Array,
-    comments: Array,
+    comments: {
+      type: Array as () => Array<{ username: string; rating: number; comment: string; images?: Array<string> }>,
+      required: true,
+    },
   },
   components: {
     GalleryComments: defineAsyncComponent(() =>
@@ -57,7 +60,7 @@ export default {
   },
   data() {
     return {
-      allImages: [],
+      allImages: [] as any[],
     };
   },
   methods: {
@@ -69,5 +72,5 @@ export default {
     this.mapImages();
     console.log(this.comments);
   },
-};
+});
 </script>

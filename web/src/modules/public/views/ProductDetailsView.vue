@@ -115,7 +115,7 @@
           <b-col cols="12" md="6">
             <section class="py-3 px-5 overflow-auto" style="max-height: 400px;">
               <h3>Opiniones con fotos</h3>
-              <opinion-comment :comments="this.productSelected.comments"></opinion-comment>
+              <opinion-comment :comments="productSelected.comments"></opinion-comment>
             </section>
           </b-col>
         </b-row>
@@ -123,7 +123,7 @@
     </b-container>
   </div>
 </template>
-<script>
+<script lang="ts">
 import { defineAsyncComponent } from "vue";
 import ProductDetailsViewModel from "../viewmodels/ProductDetailsViewModel";
 

@@ -22,18 +22,18 @@ AxiosClient.interceptors.request.use(
 
 // Interceptor para manejo de errores
 AxiosClient.interceptors.response.use(
-    (response) => {
-        const { status } = response;
-        if (status === 200 || status === 201) {
-            return Promise.resolve(response);
-        } else {
-            return Promise.reject(response);
-        }
-    },
-    async (error) => {
-        if (!error.response) {
-            await SweetAlertCustom.ErrorServer();
-            return Promise.reject(error);
+  (response) => {
+    const { status } = response;
+    if (status === 200 || status === 201) {
+      return Promise.resolve(response);
+    } else {
+      return Promise.reject(response);
+    }
+  },
+  async (error) => {
+    if (!error.response) {
+      await SweetAlertCustom.ErrorServer();
+      return Promise.reject(error);
     }
 
     const { status } = error.response;
@@ -78,6 +78,10 @@ function handle400Error(error: any) {
 
   switch (message.trim()) {
     // AUTH
+    case "CREDENTIALS_MISMATCH": //TODO pedir el ajuste del servicio para que sea 401
+      titleAlert = "Credenciales incorrectas";
+      messageAlert = "Usuario y/o contraseña erróneos";
+      break;
     case "USER_IS_BLOCKED":
       titleAlert = "Credenciales incorrectas";
       messageAlert = "Usuario y/o contraseña erróneos";
@@ -181,10 +185,6 @@ function handle400Error(error: any) {
       messageAlert =
         "La nueva contraseña no puede ser la misma que ya has utilizado";
       break;
-    case "DUPLICATED_PATIENT":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Este paciente ya existe";
-      break;
   }
   if (message !== "Review request")
     Vue.swal({
@@ -281,7 +281,7 @@ function handle404Error(error: any) {
       titleAlert = "No se encontró";
       messageAlert = "No se encontró el doctor";
       break;
-      case "ADDRESS_INCOMPLETE":
+    case "ADDRESS_INCOMPLETE":
       titleAlert = "Dirección Incompleta";
       messageAlert = "Revisa el formulario nuevamente y corregir los errores";
       break;
@@ -315,5 +315,19 @@ export default {
   },
   doDelete(endPoint: any, config?: any) {
     return AxiosClient.delete(endPoint, config);
+  },
+  doPostFile(endPoint: any, object: any) {
+    return AxiosClient.post(endPoint, object, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+  doPutFile(endPoint: any, object: any) {
+    return AxiosClient.put(endPoint, object, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   },
 };

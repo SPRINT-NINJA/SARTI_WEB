@@ -133,7 +133,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -152,8 +152,6 @@ export default defineComponent({
   },
   methods: {
     getProfileSeller() {
-      console.log("¿Lleno?");
-      console.log(this.profile ? "Sí trae" : "No");
       console.log(this.profile);
     },
   },
