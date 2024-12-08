@@ -101,7 +101,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ProductBySellerViewModel from "../viewmodels/ProductBySellerViewModel";
 export default {
   name: "seller-products",

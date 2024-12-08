@@ -80,20 +80,19 @@
   </div>
 </template>
 
-<script>
-import BannerComponent from "../../public/components/BannerComponent.vue";
-import BannerOverlay from "../../public/components/BannerOverlay.vue";
+<script lang="ts">
+// import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileDeliveryManViewModel from "../viewmodels/ProfileDeliveryManViewModel";
-import EditAccount from "@/modules/auth/components/EditAccount.vue";
-import EditDeliveryMan from "@/components/EditDeliveryMan.vue";
+// import EditAccount from "@/modules/auth/components/EditAccount.vue";
+// import EditDeliveryMan from "@/components/EditDeliveryMan.vue";
 
 export default {
   name: "ProfileCustomer",
   components: {
-    BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay,
-    EditAccount,
-    EditDeliveryMan
+    BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
+    BannerOverlay: () =>  import("@/modules/public/components/BannerOverlay.vue"),
+    EditAccount: () => import("@/components/EditAccount.vue"), 
+    EditDeliveryMan: () => import("@/components/EditDeliveryMan.vue"),
   },
   mixins: [ProfileDeliveryManViewModel],
 };

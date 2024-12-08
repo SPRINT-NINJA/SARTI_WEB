@@ -38,28 +38,6 @@
       </section>
       <hr />
       <section>
-        <h5>Información tienda</h5>
-        <b-row>
-          <b-col>
-            <b-form-group label="Nombre Tienda" label-for="input-1">
-              <b-form-input
-                id="input-1"
-                type="text"
-                v-model="profile.store.name"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group label="Descripción de la tienda" label-for="input-1">
-              <b-form-textarea
-                id="input-1"
-                type="text"
-                v-model="profile.store.description"
-              ></b-form-textarea>
-            </b-form-group>
-          </b-col>
-        </b-row>
-      </section>
-      <hr />
-      <section>
         <h5>Dirección</h5>
         <b-row>
           <b-col cols="12" md="4">
@@ -73,62 +51,89 @@
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Colonia" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.colony"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.colony"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Calle" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.street"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.street"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Estado" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.state"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.state"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Localidad" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.locality"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.locality"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Tipo residencia" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.addressType"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.addressType"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="N.Exterior" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.externalNumber"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.externalNumber"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="N.Interior" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.internalNumber"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.internalNumber"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="4">
             <b-form-group label="Código postal" label-for="input-1">
-              <b-form-input type="text" v-model="profile.address.zipCode"></b-form-input>
+              <b-form-input
+                type="text"
+                v-model="profile.address.zipCode"
+              ></b-form-input>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="12">
             <b-form-group label="Referencia" label-for="input-1">
-              <b-form-textarea type="text" v-model="profile.address.referenceNear"></b-form-textarea>
+              <b-form-textarea
+                type="text"
+                v-model="profile.address.referenceNear"
+              ></b-form-textarea>
             </b-form-group>
           </b-col>
         </b-row>
       </section>
       <div class="d-flex justify-content-end align-items-center mx-2 my-2">
-        <b-button variant="red-palete" >
-            Editar 
-            <b-icon icon="pencil"></b-icon>
+        <b-button variant="red-palete">
+          Editar
+          <b-icon icon="pencil"></b-icon>
         </b-button>
       </div>
     </b-container>
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -147,8 +152,6 @@ export default defineComponent({
   },
   methods: {
     getProfileSeller() {
-      console.log("¿Lleno?");
-      console.log(this.profile ? "Sí trae" : "No");
       console.log(this.profile);
     },
   },
@@ -164,11 +167,11 @@ hr {
   height: 0.3px;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in versions below Vue 2.1.8 */ {
-    opacity: 0;
+  opacity: 0;
 }
-
 </style>
