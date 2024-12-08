@@ -9,8 +9,8 @@ export default class PublicService {
 
     static async getSellers(payload: SellerListDto): Promise<CustomResponse<any>> {
         let pathParams = `?page=${payload.page}&size=${payload.size}&sort=${payload.sort},${payload.direction}`;
-        if (payload.bussinesName)
-            pathParams += `&bussinesName=${payload.bussinesName}`
+        if (payload.businessName)
+            pathParams += `&bussinesName=${payload.businessName}`
         return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrl}/all${pathParams}`));
     }
 }
