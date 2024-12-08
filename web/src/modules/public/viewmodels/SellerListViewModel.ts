@@ -1,37 +1,43 @@
 import { defineComponent } from "vue";
 import { encryptParamsId } from "@/kernel/utils/cryptojs";
 import PublicService from "../service/PublicService";
+import { SellerListDto } from "../models/SellerListDto";
+import { SellerListModel } from "../models/SellerListModel";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
 export default defineComponent({
   data() {
     return {
-      sellers: [] as Array<any>, // Inicializamos vacío, ya no es estático
+      sellers: [] as Array<SellerListModel>, // Inicializamos vacío, ya no es estático
       isLoading: false,
-      currentPage: 1, // Página actual
-      pageSize: 3, // Número de elementos por página
-      totalRows: 0, // Total de elementos, ahora dinámico
-      paginatedOrders: [] as Array<any>, // Pedidos a mostrar en la página actual
+      pagination: {
+        page: 1,
+        size: 10,
+        sort: "id",
+        direction: "DESC",
+        businessName: ""
+      },
+      totalRows: 0,
     };
   },
   methods: {
     async fetchSellers() {
       try {
         this.isLoading = true;
-        // Consumimos los datos desde el servicio
-        const response = await PublicService.getSellers(null);
-        this.sellers = response.data; // Suponiendo que `data` contiene la lista de vendedores
-        this.totalRows = this.sellers.length; // Total dinámico basado en los datos obtenidos
-        this.updatePaginatedOrders(); // Actualizamos la paginación
+        const response = await PublicService.getSellers(this.pagination as SellerListDto);
+        this.sellers = response.data.content as Array<SellerListModel>; // Suponiendo que `data` contiene la lista de vendedores
+        this.totalRows = response.data.totalElements; // Total dinámico basado en los datos obtenidos
       } catch (error) {
         console.error("Error al cargar los vendedores:", error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al obtener los vendedores"
+        );
+        this.sellers = [];
+        this.pagination.page = 1;
       } finally {
         this.isLoading = false;
       }
-    },
-    updatePaginatedOrders() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      this.paginatedOrders = this.sellers.slice(start, end);
     },
     async getsellerProduct(item: any) {
       try {
@@ -41,12 +47,16 @@ export default defineComponent({
         console.error(error);
       }
     },
-    handlePageChange(newPage: number) {
-      this.currentPage = newPage;
-      this.updatePaginatedOrders(); // Cambiamos los elementos de la página actual
+    async handlePageChange(page: number) {
+      this.pagination.page = page;
+      await this.fetchSellers();
+    },
+    async handleResetPage() {
+      this.pagination.page = 1;
+      await this.fetchSellers();
     },
   },
   async mounted() {
-    await this.fetchSellers(); // Cargar datos al montar el componente
+    await this.fetchSellers();
   },
 });
