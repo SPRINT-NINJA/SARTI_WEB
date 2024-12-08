@@ -1,6 +1,7 @@
 <template>
   <div>
-    <b-overlay :show="isLoading" no-wrap />
+    <!-- <b-overlay :show="isLoading" no-wrap /> -->
+    <custom-overlay :isLoading="isLoading" />
     <navbar />
     <b-container fluid class="vh-100">
       <b-row no-gutters class="w-100 mt-5">
@@ -21,12 +22,19 @@
             <div class="d-flex justify-content-center">
               <b-list-group class="w-100" style="max-width: 300px">
                 <b-list-group-item
-                class="d-flex align-items-center justify-content-start"
+                  class="d-flex align-items-center justify-content-start"
                 >
-                <b-avatar class="mr-3" size="60px"></b-avatar>
-                <span class="text-white">
-                    <b-overlay :show="isLoading" no-wrap />
-                    <b style="color: black">{{ userData.customer  ? userData.customer.name : userData.deliveryMan ? userData.deliveryMan.name: userData.seller ? userData.seller.name: "" }}</b>
+                  <b-avatar class="mr-3" size="60px"></b-avatar>
+                  <span class="text-white">
+                    <b style="color: black">{{
+                      userData.customer
+                        ? userData.customer.name
+                        : userData.deliveryMan
+                        ? userData.deliveryMan.name
+                        : userData.seller
+                        ? userData.seller.name
+                        : ""
+                    }}</b>
                   </span>
                 </b-list-group-item>
               </b-list-group>
@@ -41,7 +49,6 @@
           class="d-flex flex-column align-items-center section-right p-4"
         >
           <b-card class="w-100 h-100 shadow">
-            <b-overlay :show="isLoading" no-wrap />
             <b-form @submit.prevent>
               <div class="p-5">
                 <section v-if="!isVerifiedAccount">
@@ -76,7 +83,11 @@
                   ></b-button>
                   <br />
                   <div class="text-center mb-4">
-                    <a block to="create-account" href="create-account" style="color: black"
+                    <a
+                      block
+                      to="create-account"
+                      href="create-account"
+                      style="color: black"
                       >Crear cuenta</a
                     >
                   </div>
@@ -133,10 +144,13 @@
 <script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
 import LoginViewModel from "../viewmodels/LoginViewModel";
+import CustomOverlay from "@/modules/public/components/CustomOverlay.vue";
 export default {
   name: "Login",
   components: {
     Navbar: () => import("@/modules/public/components/Navbar.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [LoginViewModel],
 };
