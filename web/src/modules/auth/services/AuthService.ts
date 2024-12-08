@@ -79,6 +79,90 @@ export default class AuthService {
       }
     }
   }
+
+
+  static async getProfileSeller():Promise<any>{
+    try {
+      const response = await axios.doGet('/seller');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+
+  static async getProfileCustomer():Promise<any>{
+    try {
+      const response = await axios.doGet('/customer');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async senCode(email:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/send-code',email);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async confirmAccount(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/confirm',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async changePassword(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/change-password',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async updateProfileCustomer(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPut('/customer',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+
+  
+
   
 
 }

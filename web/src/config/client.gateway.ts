@@ -24,7 +24,7 @@ AxiosClient.interceptors.request.use(
 AxiosClient.interceptors.response.use(
   (response) => {
     const { status } = response;
-    if (status === 200 || status === 201) {
+    if (status === 200 || status === 201 || status === 202) {
       return Promise.resolve(response);
     } else {
       return Promise.reject(response);
@@ -95,6 +95,14 @@ function handle400Error(error: any) {
       titleAlert = "Campos faltantes";
       messageAlert = "Por favor completa todos los campos";
       break;
+    case "PASSWORDS_ARE_THE_SAME":
+      titleAlert = "Contraseña sin cambios";
+      messageAlert = "La nueva contraseña no puede ser igual a la anterior. Por favor, ingresa una contraseña diferente.";
+      break;
+    case "OLD_PASSWORDS_INCORRECT":
+        titleAlert = "Contraseña incorrecta";
+        messageAlert = "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
+    break;
     case "RECORD_NOT_REGISTERED":
       titleAlert = "Registro no guardado";
       messageAlert = "El registro no ha sido guardado";
@@ -251,6 +259,12 @@ function handle404Error(error: any) {
     case "NO_SPECIALITY_FOUND":
       titleAlert = "No se encontró";
       messageAlert = "No se encontró la especialidad";
+
+      break;
+    case "NO_VERIFICATION_CODE_FOUND":
+      titleAlert = "Código inválido";
+      messageAlert =
+        "El código no esta bien escrito, por favor intenta nuevamente";
 
       break;
     case "NO_DATA_FOUND":
