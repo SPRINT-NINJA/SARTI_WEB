@@ -1,54 +1,33 @@
 import { defineComponent } from "vue";
 import { encryptParamsId } from "@/kernel/utils/cryptojs";
+import PublicService from "../service/PublicService";
 
 export default defineComponent({
   data() {
     return {
-      sellers: [
-        {
-          id: 1,
-          mainImage:"https://picsum.photos/1000/1000",
-          name:"TIENDA 1",
-          description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-        },{
-            id: 2,
-            mainImage:"https://picsum.photos/1000/1000",
-            name:"TIENDA 2",
-            description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-          },
-          {
-            id: 3,
-            mainImage:"https://picsum.photos/1000/1000",
-            name:"TIENDA 3",
-            description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-          },
-          {
-            id: 4,
-            mainImage:"https://picsum.photos/1000/1000",
-            name:"TIENDA 4",
-            description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-          },
-          {
-            id: 5,
-            mainImage:"https://picsum.photos/1000/1000",
-            name:"TIENDA 5",
-            description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-          },
-          {
-            id: 6,
-            mainImage:"https://picsum.photos/1000/1000",
-            name:"TIENDA 6",
-            description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-          },
-       
-      ],
+      sellers: [] as Array<any>, // Inicializamos vacío, ya no es estático
+      isLoading: false,
       currentPage: 1, // Página actual
       pageSize: 3, // Número de elementos por página
-      totalRows: 6, // Total de elementos
-      paginatedOrders: [] as any, // Pedidos a mostrar en la página actual
+      totalRows: 0, // Total de elementos, ahora dinámico
+      paginatedOrders: [] as Array<any>, // Pedidos a mostrar en la página actual
     };
   },
   methods: {
+    async fetchSellers() {
+      try {
+        this.isLoading = true;
+        // Consumimos los datos desde el servicio
+        const response = await PublicService.getSellers(null);
+        this.sellers = response.data; // Suponiendo que `data` contiene la lista de vendedores
+        this.totalRows = this.sellers.length; // Total dinámico basado en los datos obtenidos
+        this.updatePaginatedOrders(); // Actualizamos la paginación
+      } catch (error) {
+        console.error("Error al cargar los vendedores:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     updatePaginatedOrders() {
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + this.pageSize;
@@ -57,14 +36,17 @@ export default defineComponent({
     async getsellerProduct(item: any) {
       try {
         const encryptParam = encryptParamsId(item.toString());
-        await this.$router.push({ name: "seller-products", params: { id: encryptParam} });
+        await this.$router.push({ name: "seller-products", params: { id: encryptParam } });
       } catch (error) {
         console.error(error);
       }
     },
-    
+    handlePageChange(newPage: number) {
+      this.currentPage = newPage;
+      this.updatePaginatedOrders(); // Cambiamos los elementos de la página actual
+    },
   },
-  mounted() {
-    this.updatePaginatedOrders();
+  async mounted() {
+    await this.fetchSellers(); // Cargar datos al montar el componente
   },
 });
