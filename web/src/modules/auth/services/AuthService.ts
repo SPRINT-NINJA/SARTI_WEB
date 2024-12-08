@@ -1,6 +1,5 @@
 import { RequestHandler } from "@/kernel/RequestHandler";
 import { CustomResponse } from "../../../kernel/types";
-// import { test } from "@/kernel/types";
 import axios from "../../../config/client.gateway";
 import { ISignIn } from "../models/LoginModel";
 import { IRecoveryPassword, IVerifyEmail } from "../models/RecoveryPasswordModel";
