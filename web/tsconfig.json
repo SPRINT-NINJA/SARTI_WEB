@@ -14,9 +14,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env",
-      "jest",
-      "vue-sweetalert2"
+      // "webpack-env",
+      // "jest",
+      "node",
+      "vue-sweetalert2",
+      "vite/client",
       // Remove "vue-quill-editor" from here since we're declaring it manually
     ],
     "paths": {

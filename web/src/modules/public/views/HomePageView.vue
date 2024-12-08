@@ -87,7 +87,7 @@
     </b-container>
   </div>
 </template>
-<script>
+<script lang="ts">
 import Vue, { defineAsyncComponent } from "vue";
 import ProductListViewModel from "../viewmodels/ProductListViewModel";
 import BannerComponent from "../components/BannerComponent.vue";

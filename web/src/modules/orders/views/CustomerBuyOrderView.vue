@@ -193,7 +193,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CustomerBuyOrderViewModel from "../viewmodels/CustomerBuyOrderViewModel";
 export default {
   name: "CustomerOrderBuy",

@@ -147,7 +147,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import ProductTopRatedViewModel from "../viewmodels/ProductTopRatedViewModel";
 export default {
   name: "ProductTopRated",

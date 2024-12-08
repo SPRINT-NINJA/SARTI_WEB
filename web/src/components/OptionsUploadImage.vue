@@ -55,7 +55,7 @@ export default defineComponent({
       default: 0,
     },
     image: {
-      type: Array,
+      type: String,
       default: [],
     },
     limitImages:{
