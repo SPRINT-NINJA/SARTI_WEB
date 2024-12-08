@@ -30,21 +30,30 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import {defineComponent} from "vue";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 
-export default {
+export default defineComponent({
   name: "SimpleGallery",
   props: {
     galleryID: String,
-    images: Array,
+    images: {
+      type: Array as () => Array<{ largeURL: string; thumbnailURL: string; width: number; height: number }>,
+      required: true,
+    },
     mainImage: String,
   },
   setup(props) {
     return {
       imagesData: props.images,
       main: props.mainImage,
+    };
+  },
+  data() {
+    return {
+      lightbox: null as any,
     };
   },
   mounted() {
@@ -63,8 +72,7 @@ export default {
       this.lightbox = null;
     }
   },
-  methods: {},
-};
+});
 </script>
 <style scoped>
 .gallery-container {
