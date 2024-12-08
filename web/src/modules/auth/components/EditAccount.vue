@@ -7,7 +7,7 @@
               <b-form-input
                 
                 type="text"
-                v-model="newEmail"
+                v-model="email"
                 disabled 
               ></b-form-input>
             </b-form-group>

@@ -351,7 +351,7 @@
       </section>
       <div class="d-flex justify-content-end align-items-center mx-2 my-2">
         
-        <b-button variant="red-palete" :disabled="!isStepValid " >
+        <b-button variant="red-palete" @click="updateProfile" >
           Editar información
         </b-button>
       </div>

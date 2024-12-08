@@ -9,6 +9,7 @@ import {
   email,
   helpers,
 } from "@vuelidate/validators";
+import { ICustomer } from './../models/CustomerModel';
 
 export default defineComponent({
   setup() {
@@ -23,7 +24,7 @@ export default defineComponent({
   },
   data() {
     return {
-      editedProfile: { ...this.profile },
+      editedProfile:{...this.profile},
       options: [
         { value: null, text: "--Seleccione--" },
         { value: "DOMICILIO", text: "Domicilio" },
@@ -58,15 +59,19 @@ export default defineComponent({
   },
   methods: {
     getProfileeditedProfile() {
-      console.log(this.profile);
+      console.log(this.editedProfile)
+      this.editedProfile = this.profile
     },
     async updateProfile() {
       try {
+        this.editedProfile.firstLastName = this.editedProfile.fistLastName;
+        this.editedProfile as ICustomer
         const resp = await AuthService.updateProfileCustomer(this.editedProfile);
+        console.log(resp)
         if (!resp.error) {
           SweetAlertCustom.successMessage(
-            "Cuenta activada",
-            "Tu cuenta ha sido activada correctamente"
+            "Tus datos se han actualizado correctamente",
+            "Tus datos ingresados han sido actualizados"
           );
         }
       } catch (error) {
@@ -79,7 +84,6 @@ export default defineComponent({
   },
   computed: {
     isStepValid() {
-      console.log("Holi")
       return (
         this.v$.editedProfile.name.$dirty && !this.v$.editedProfile.name.$error &&
         this.v$.editedProfile.fistLastName.$dirty && !this.v$.editedProfile.fistLastName.$error &&
