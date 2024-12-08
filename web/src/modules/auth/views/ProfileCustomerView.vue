@@ -1,5 +1,6 @@
 <template>
   <div class="w-100">
+    <custom-overlay :isLoading="isLoading" />
     <b-container fluid class="mt-4 mb-4">
       <div class="my-2">
         <div class="banner-container">
@@ -104,7 +105,9 @@ export default {
     BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
     BannerOverlay: ()=> import("@/modules/public/components/BannerOverlay.vue"),
     EditCustomerAccount: ()=> import("@/modules/auth/views/EditCustomerAccount.vue"),
-    EditAccount: ()=> import("@/modules/auth/components/EditAccount.vue")
+    EditAccount: ()=> import("@/modules/auth/components/EditAccount.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [ProfileCustomerViewModel],
 };

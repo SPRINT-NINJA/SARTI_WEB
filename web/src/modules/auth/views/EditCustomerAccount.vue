@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-container class="my-3">
+      <custom-overlay :isLoading="isLoading" />
       <section>
         <h5>Información personal</h5>
         <b-row>
@@ -362,7 +363,12 @@
 import EditCustomerViewModel from "../viewmodels/EditCustomerViewModel";
 export default {
   name: "EditCustomerAccount",
+  components:{
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
+  },
   mixins: [EditCustomerViewModel],
+
 };
 </script>
 

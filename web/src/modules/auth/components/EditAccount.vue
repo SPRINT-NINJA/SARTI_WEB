@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-container>
+    <custom-overlay :isLoading="isLoading" />
       <section>
         <h5>Cuenta</h5>
             <b-form-group label="Correo" label-for="input-name">
@@ -94,6 +95,10 @@
 import EditAccountViewModel from '../viewmodels/EditAccountViewModel';
 export default {
   name: "EditAccount",
+  components:{
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
+  },
   mixins:[EditAccountViewModel],
 };
 </script>

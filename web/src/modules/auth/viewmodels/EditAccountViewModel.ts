@@ -58,11 +58,13 @@ export default defineComponent({
             "La contraseña debe tener mínimo una mayúscula, un caracter especial (# . _) y un número (longitud de 3 a 16 car.)",
         },
       },
+      isLoading: false,
     };
   },
   methods: {
     async sendCode(sendemail: any) {
       try {
+        this.isLoading = true;
         const resp = await AuthService.senCode({
           email: sendemail,
         });
@@ -72,6 +74,8 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.isLoading = false;
       }
     },
     async confirmAccount() {
@@ -85,6 +89,7 @@ export default defineComponent({
         }
         this.validateEmail.email = this.newEmail;
         this.validateEmail.code = fullCode;
+        this.isLoading = true;
         const resp = await AuthService.confirmAccount(this.validateEmail);
         if (!resp.error) {
           this.codeArray = ["", "", "", "", ""];
@@ -96,10 +101,13 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.isLoading = false;
       }
     },
     async changePasswordAccount() {
       try {
+        this.isLoading = true; 
         const resp = await AuthService.changePassword(this.changePassword);
         if (!resp.error) {
           SweetAlertCustom.successMessage(
@@ -109,6 +117,8 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.isLoading = false;
       }
     },
   },

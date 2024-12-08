@@ -29,25 +29,24 @@ export default defineComponent({
         }
       } as any,
       profileEdit: false,
+      isLoading: false
     };
   },
   methods: {
     async getProfile() {
       try {
+        this.isLoading = true;
         const resp = await AuthService.getProfileCustomer();
         if (!resp.error) {
           this.profile = resp;
+          this.isLoading = false;
         }
       } catch (error) {
         console.log(error);
       }
     },
     editProfile() {
-      if (this.profileEdit) {
-        this.profileEdit = false;
-      } else {
-        this.profileEdit = true;
-      }
+      this.profileEdit =  !this.profileEdit;
     },
   },
   mounted() {

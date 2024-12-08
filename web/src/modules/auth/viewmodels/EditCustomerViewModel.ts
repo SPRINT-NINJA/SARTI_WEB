@@ -66,13 +66,14 @@ export default defineComponent({
           valid:
             "La contraseña debe tener mínimo una mayúscula, un caracter especial (# . _) y un número (longitud de 3 a 16 car.)",
         },
-        
       },
+      isLoading: false,
     };
   },
   methods: {
     async getUpdateCustomer() {
       try {
+        this.isLoading = true;
         const resp = await AuthService.getProfileCustomer();
         if (!resp.error) {
           // Si address es null, asignar una dirección vacía
@@ -95,10 +96,13 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.isLoading = false;
       }
     },
     async updateProfile() {
       try {
+        this.isLoading = true;
         this.editedProfile.firstLastName = this.editedProfile.fistLastName;
         const resp = await AuthService.updateProfileCustomer(this.editedProfile);
         if (!resp.error) {
@@ -110,6 +114,8 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
+      }finally{
+        this.isLoading = false;
       }
     },
     touchAllFields() {
