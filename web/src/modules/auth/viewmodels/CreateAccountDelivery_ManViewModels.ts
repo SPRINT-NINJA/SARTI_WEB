@@ -37,9 +37,9 @@ export default defineComponent({
       },
       profilePhoto:[
 
-      ],
+      ] as any[],
       identifiactionPhoto: [
-      ],
+      ] as any[],
       currentStep: 1,
       steps: ["Datos personales", "Identificación oficial", "Foto Facial"],
       password: "",
@@ -133,7 +133,7 @@ export default defineComponent({
       if (localStorage.token) {
         if (
           jwtDecode<CustomJwtPayload>(localStorage.token).role[0].authority ===
-          ERoles.delivery_man
+          ERoles.DELIVERYMAN
         ) {
           await this.$router.replace("/delivery_man");
           return true;

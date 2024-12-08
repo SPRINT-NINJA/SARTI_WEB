@@ -12,9 +12,10 @@
       </b-container>
     </div>
   </template>
-  <script>
-  export default {
-    name: "Encabezado",
+  <script lang="ts">
+  import { defineComponent } from "vue";
+  export default defineComponent({
+    name: "BannerComponent",
     props: {
       color: {
         type: String,
@@ -29,15 +30,8 @@
         default: null,
       },
     },
-    computed: {
-      textColor() {
-        // Lógica para determinar el color del texto basado en el color de fondo
-        // Puedes personalizar esta lógica según tus necesidades
-        return this.color && this.isColorDark(this.color) ? "#FFFFFF" : "#000000";
-      },
-    },
     methods: {
-      isColorDark(hexColor) {
+      isColorDark(hexColor: any): boolean {
         // Lógica para determinar si el color de fondo es oscuro o claro
         // Puedes personalizar esta lógica según tus necesidades
         const rgb = parseInt(hexColor.slice(1), 16);
@@ -48,7 +42,14 @@
         return luma < 128; // Valor de referencia para decidir si es oscuro o claro
       },
     },
-  };
+    computed: {
+      textColor(): string {
+        // Lógica para determinar el color del texto basado en el color de fondo
+        // Puedes personalizar esta lógica según tus necesidades
+        return this.color && this.isColorDark(this.color) ? "#FFFFFF" : "#000000";
+      },
+    },
+  });
   </script>
   <style scoped>
   .contenedor {

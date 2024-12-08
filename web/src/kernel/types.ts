@@ -16,4 +16,11 @@ export type CustomResponse<T> ={
     statusMessage?: string,
 }
 
-export const test = "test"
+export type Pagination<T> = {
+    page: number;
+    size: number;
+    sort: string;
+    direction: string;
+    data?: T;
+    param?: string;
+}

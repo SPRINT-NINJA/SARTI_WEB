@@ -185,10 +185,6 @@ function handle400Error(error: any) {
       messageAlert =
         "La nueva contraseña no puede ser la misma que ya has utilizado";
       break;
-    case "DUPLICATED_PATIENT":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Este paciente ya existe";
-      break;
   }
   if (message !== "Review request")
     Vue.swal({

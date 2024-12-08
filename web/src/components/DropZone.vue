@@ -97,7 +97,7 @@ export default defineComponent({
   },
   data() {
     return {
-      images: [] as Array<{ name: string; url: string; target: File }>, // Eliminamos 'base64'
+      images: [] as Array<{ name: string; url: string; target: any }>, // Eliminamos 'base64'
       isDragging: false,
       takePhoto: false,
       showimageTaked: false,
