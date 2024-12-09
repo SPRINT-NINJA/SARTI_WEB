@@ -44,19 +44,35 @@ export default defineComponent({
       }
     },
 
-    acceptOrder(orderToTake: any) {
-      console.log("Pedido aceptado")
-    },
+    takeOrder(orderToTake: any) {
+      try {
+        SweetAlertCustom.questionMessage(
+          `¿Tomar el pedido ${orderToTake.orderNumber}?`
+        ).then(async (result: any) => {
+          if (result.isConfirmed) {
+            const resp = await OrderDeliveryService.takeOrderDelivery(orderToTake.id);
+            const { error } = resp;
+            if (!error) {
+              SweetAlertCustom.successMessage();
+              this.fetchOrderDeliveriesToTake();
+            }
+          }
+        })
 
-    declineOrder(orderToTake: any) {
-      console.log("Pedido rechazado")
+      } catch (error) {
+        console.error(error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al tomar el pedido"
+        );
+      }
     },
 
     async handlePageChange(page: number) {
       this.pagination.page = page;
       await this.fetchOrderDeliveriesToTake();
     },
-    
+
     async handleResetPage() {
       this.pagination.page = 1;
       await this.fetchOrderDeliveriesToTake();

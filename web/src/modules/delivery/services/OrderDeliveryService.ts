@@ -33,10 +33,10 @@ export default class OrderDeliveryService {
   }
 
   static async takeOrderDelivery(payload: number): Promise<CustomResponse<any>> {
-    return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrl}/take/${payload}`));
+    return await RequestHandler.handleRequest(axios.doPatch(`${this.baseUrl}/take/${payload}`, payload));
   }
 
-  static async changeOrderDeliveryStep(payload: number, newStep: string): Promise<CustomResponse<any>> {
-    return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrl}/change-step/${payload}?step=${newStep}`));
+  static async changeOrderDeliveryStep(payload: any): Promise<CustomResponse<any>> {
+    return await RequestHandler.handleRequest(axios.doPatch(`${this.baseUrl}/change-step/${payload.orderId}?step=${payload.step}`, payload));
   }
 }

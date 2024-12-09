@@ -12,8 +12,9 @@ export default defineComponent({
     data() {
         return {
             orderDeliveriesHistory: [] as any,
+            takenOrderDelivery: null as any,
             isLoading: false,
-            isShowProducts: false,
+            isShowProducts: {} as any,
             pagination: {
                 page: 1,
                 size: 10,
@@ -26,11 +27,14 @@ export default defineComponent({
     },
 
     methods: {
+        toggleProducts(index: any) {
+            // Alterna el estado del índice específico
+            this.$set(this.isShowProducts, index, !this.isShowProducts[index]);
+        },
         async fetchOrderDeliveriesHistory() {
             try {
                 this.isLoading = true;
                 const response = await OrderDeliveryService.getOrderDeliveriesHistory(this.pagination as GetOrderDeliveriesDto);
-                console.log(response);
                 this.orderDeliveriesHistory = response.data.content as Array<any>;
                 this.totalRows = response.data.totalElements;
             } catch (error) {
@@ -42,9 +46,61 @@ export default defineComponent({
                 this.orderDeliveriesHistory = [];
                 this.pagination.page = 1;
             } finally {
-                this.isLoading = false;
+                this.isLoading = false
             }
         },
+
+        async fetchTakenOrderDelivery() {
+            try {
+                this.isLoading = true
+                const response = await OrderDeliveryService.getTakenOrderDeliveries();
+                console.log(response);
+                this.takenOrderDelivery = response.data[0]
+            } catch (error) {
+                console.error(error);
+                SweetAlertCustom.errorMessage(
+                    "Error",
+                    "Ocurrió un error al obtener el pedido asignado"
+                );
+            } finally {
+                this.isLoading = false
+            }
+        },
+
+        async initView() {
+            this.fetchOrderDeliveriesHistory();
+            this.fetchTakenOrderDelivery();
+        },
+
+        async handleChangeStep(order: any) {
+            try {
+                let newStatus = "";
+                if (order.orderDeliveryStep === "Pendiente de envío")
+                    newStatus = 'ENVIADO';
+                if (
+                    order.orderDeliveryStep === "Enviado"
+                )
+                    newStatus = "ENTREGADO";
+                SweetAlertCustom.questionMessage(
+                    `Cambiar el estado a ${newStatus}`
+                ).then(async (result: any) => {
+                    if (result.isConfirmed) {
+                        const resp = await OrderDeliveryService.changeOrderDeliveryStep({
+                            orderId: order.id,
+                            step: newStatus,
+                        });
+                        const { error } = resp;
+                        if (!error) {
+                            SweetAlertCustom.successMessage();
+                            this.initView();
+                        }
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
         async handlePageChange(page: number) {
             this.pagination.page = page;
             await this.fetchOrderDeliveriesHistory();
@@ -56,6 +112,6 @@ export default defineComponent({
         },
     },
     mounted() {
-        this.fetchOrderDeliveriesHistory();
+        this.initView();
     }
 });

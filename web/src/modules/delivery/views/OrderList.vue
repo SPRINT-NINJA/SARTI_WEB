@@ -1,7 +1,6 @@
 <template>
   <div>
     <custom-overlay :isLoading="isLoading" />
-    <navbar />
     <div class="container-fluid card-container">
       <!-- Título de la sección -->
       <h2 class="section-title">Pedidos disponibles</h2>
@@ -70,8 +69,8 @@
             <div class="d-flex justify-content-end mt-3">
               <b-button
                 variant="orange-primary"
-                @click="acceptOrder(orderToTake)"
-                >Aceptar Pedido</b-button
+                @click="takeOrder(orderToTake)"
+                >Tomar Pedido</b-button
               >
             </div>
           </b-card>
@@ -97,7 +96,6 @@ import OrderListViewModel from "../viewmodels/OrderListViewModel";
 export default {
   name: "DeliveryOrderList",
   components: {
-    Navbar: () => import("@/modules/public/components/Navbar.vue"),
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
   },
