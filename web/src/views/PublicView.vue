@@ -16,7 +16,7 @@
           :class="{ active: activeIndex === index }"
           @click="setActiveIndex(index)"
         >
-          <a :href="item.link">
+          <a :href="item.link" @click.prevent="handleMenuClick(item, index)">
             <span class="icon">
               <b-icon font-scale="1" :icon="item.icon"></b-icon>
             </span>
@@ -70,7 +70,11 @@ export default defineComponent({
     ];
 
     const menuItemsCustomer = [
-      { title: "Mi perfil", icon: "person", link: "/customer/profile-customer" },
+      {
+        title: "Mi perfil",
+        icon: "person",
+        link: "/customer/profile-customer",
+      },
       {
         title: "Mis Compras",
         icon: "bag",
@@ -186,6 +190,23 @@ export default defineComponent({
       menuItems,
       toggleMenu,
     };
+  },
+  methods: {
+    logout() {
+      // Elimina los datos del usuario almacenados localmente
+      localStorage.removeItem("token");
+      localStorage.removeItem("activeIndex");
+    },
+    handleMenuClick(item: { title: string; link: string }, index: number) {
+      if (item.title === "Cerrar sesión") {
+        this.logout(); // Llamar al método logout
+      }
+      this.setActiveIndex(index); // Establece el índice activo
+      if (item.link) {
+        // Redirigir a la ruta si tiene un enlace
+        window.location.href = item.link;
+      }
+    },
   },
 });
 </script>
