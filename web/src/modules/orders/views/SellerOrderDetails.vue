@@ -81,7 +81,7 @@
                     rounded
                     class="w-100"
                     style="height: auto"
-                    ::src="
+                    :src="
                       order.deliveryMan?.facePhoto
                         ? order.deliveryMan.facePhoto
                         : 'https://via.placeholder.com/150'
