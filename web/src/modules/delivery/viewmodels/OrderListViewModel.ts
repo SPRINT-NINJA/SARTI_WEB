@@ -1,6 +1,8 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, email, helpers } from "@vuelidate/validators";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import OrderDeliveryService from "../services/OrderDeliveryService";
+import { GetOrderDeliveriesToTakeDto } from "../models/GetOrderDeliveriesToTakeDto";
 export default defineComponent({
   setup() {
     const v$ = useVuelidate();
@@ -8,8 +10,8 @@ export default defineComponent({
   },
   data() {
     return {
-      currentPage: 1, 
-      itemsPerPage: 4, 
+      currentPage: 1,
+      itemsPerPage: 4,
       selectedOrder: null as any,
       orders: [
         {
@@ -65,35 +67,63 @@ export default defineComponent({
           image: "https://via.placeholder.com/150",
         },
       ],
+      ordersToTake: [] as any,
+      isLoading: false,
+      pagination: {
+        page: 1,
+        size: 10,
+        sort: "id",
+        direction: "DESC",
+        searchValue: ""
+      },
+      totalRows: 0,
     };
   },
 
   methods: {
-    getOrders() {
-      console.log("Aqui seran los pedidos");
+    async fetchOrderDeliveriesToTake() {
+      try {
+        this.isLoading = true;
+        const response = await OrderDeliveryService.getOrderDeliveriesToTake(this.pagination as GetOrderDeliveriesToTakeDto);
+        console.log(response);
+        this.ordersToTake = response.data.content as Array<any>;
+        this.totalRows = response.data.totalElements;
+      } catch (e: any) {
+        console.error(e);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al obtener los pedidos disponibles."
+        );
+        this.ordersToTake = [];
+        this.pagination.page = 1;
+      } finally {
+        this.isLoading = false;
+      }
     },
-    
-    acceptOrder() {
+
+    acceptOrder(orderToTake: any) {
       console.log("Pedido aceptado")
     },
 
-    declineOrder() {
+    declineOrder(orderToTake: any) {
       console.log("Pedido rechazado")
     },
-    
+
     openOrderModal(orderId: any) {
-      this.selectedOrder = this.orders.find(order => order.id === orderId);
-      this.$bvModal.show("order-modal");
+      this.selectedOrder = this.ordersToTake.find((order: any) => order.id === orderId);
+      console.log(this.selectedOrder);
+      this.$bvModal.show("order-to-take-modal");
+    },
+    async handlePageChange(page: number) {
+      this.pagination.page = page;
+      await this.fetchOrderDeliveriesToTake();
+    },
+    async handleResetPage() {
+      this.pagination.page = 1;
+      await this.fetchOrderDeliveriesToTake();
     },
   },
-  computed: {
-    paginatedOrders() {
-        const start = (this.currentPage - 1) * this.itemsPerPage;
-        const end = start + this.itemsPerPage;
-        return this.orders.slice(start, end);
-    },
-},
-  validations() {
-    return {};
-  },
+  mounted() {
+    this.fetchOrderDeliveriesToTake();
+  }
 });
