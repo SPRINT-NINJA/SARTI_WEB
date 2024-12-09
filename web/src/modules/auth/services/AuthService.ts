@@ -160,6 +160,20 @@ export default class AuthService {
     }
   }
 
+  
+  static async updateProfileSeller(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPut('/seller',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
 
   
 
