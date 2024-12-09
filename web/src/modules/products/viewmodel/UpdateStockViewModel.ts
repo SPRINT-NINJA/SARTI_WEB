@@ -26,15 +26,6 @@ export default defineComponent({
       isLoading: false,
       errorMessagges: {
         required: "Campo obligatorio",
-        invalidEmail: "Correo inválido",
-        minLength: "Mínimo 6 caracteres",
-        maxLength: "Máximo 45 caracteres",
-        noneScripts: "Campo inválido no se aceptan scripts",
-        valid: "Campos inválido - caracteres inválidos",
-        password: {
-          valid:
-            "La contraseña debe tener mínimo una mayúscula, un caracter especial (# . _) y un número (longitud de 3 a 16 car.)",
-        },
       },
     };
   },
