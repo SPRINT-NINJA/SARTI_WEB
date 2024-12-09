@@ -56,6 +56,16 @@ export default [
             requireAuth: true,
             role: allowedRoles,
         },
+      },
+      {
+        path: "product-list",
+        name: "product-list",
+        component: () => import("../modules/products/view/ProductListView.vue"),
+        meta: {
+            title: "Lista de productos",
+            requireAuth: true,
+            role: allowedRoles,
+        },
       }
     ],
   },

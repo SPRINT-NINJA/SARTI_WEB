@@ -1,4 +1,4 @@
-import { CustomResponse } from "@/kernel/types";
+import { CustomResponse, CustomResponsePageable } from "@/kernel/types";
 
 export class RequestHandler {
   /**
@@ -15,6 +15,21 @@ export class RequestHandler {
       return {
         status: e.status,
         statusMessage: e.data.status,
+        data: e.data?.data,
+        error: e.data?.error,
+        message: e.data?.message,
+      }
+    }
+  }
+
+  public static async handleRequestPageable<T>(promise: Promise<any>): Promise<CustomResponsePageable<T>>{
+    try {
+      const response = await promise;
+      return response.data;
+    } catch (e:any) {
+      console.log("error", e);
+      return {
+        status: e.status,
         data: e.data?.data,
         error: e.data?.error,
         message: e.data?.message,
