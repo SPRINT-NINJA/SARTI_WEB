@@ -55,8 +55,8 @@ export default defineComponent({
       default: 0,
     },
     image: {
-      type: String,
-      default: [],
+      type: Array,
+      default: () => [], 
     },
     limitImages:{
       type: Number,
@@ -67,7 +67,7 @@ export default defineComponent({
     return {
       showUploadImage: false,
       takePhoto: false,
-      imageTakePhoto: this.image as any, // Inicializar con el valor pasado por la propiedad image
+      imageTakePhoto: this.image || [] as any, // Inicializar con el valor pasado por la propiedad image
       loading: false,
       valueProgress: this.progressValue,
       showimageTaked: false,
