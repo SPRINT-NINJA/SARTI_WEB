@@ -62,11 +62,11 @@ export default defineComponent({
     };
   },
   methods: {
-    async sendCode(sendemail: any) {
+    async sendCode() {
       try {
         this.isLoading = true;
         const resp = await AuthService.senCode({
-          email: sendemail,
+          email: this.email,
         });
         if (!resp.error) {
           this.codeArray = ["", "", "", "", ""];
@@ -107,6 +107,9 @@ export default defineComponent({
     },
     async changePasswordAccount() {
       try {
+        if(this.changePassword.newPassword === "" && this.changePassword.oldPassword === "" && this.confirmPassword === ""){
+          return SweetAlertCustom.warningMessage("Campos vacíos","Por favor llena los campos correspondientes para realizar tu cambio de contraseña")
+        }
         this.isLoading = true; 
         const resp = await AuthService.changePassword(this.changePassword);
         if (!resp.error) {

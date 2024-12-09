@@ -1,26 +1,35 @@
-export interface Address {
-    city: string;
-    colony: string;
-    externalNumber: string;
-    internalNumber: string;
-    locality: string;
-    referenceNear: string;
-    state: string;
-    street: string;
-    zipCode: string;
-    addressType: string;
+export interface IUser {
+  email: string;
+  role: string;
 }
 
-export interface Store {
-    name: string;
-    description: string;
+export interface IAddress {
+  id: number;
+  country: string;
+  state: string;
+  city: string;
+  locality: string;
+  colony: string;
+  street: string;
+  zipCode: number;
+  externalNumber: string;
+  internalNumber: string;
+  referenceNear: string;
+  addressType: string;
 }
 
-export interface ProfileSeller {
-    name: string;
-    firstLastName: string;
-    secondName: string;
-    email: string;
-    address: Address;
-    store: Store;
+export interface ISellerProfile {
+  id: number;
+  sellerNumber: string;
+  name: string;
+  fistLastName: string;
+  secondLastName: string;
+  bussinessName: string;
+  description: string;
+  wallet: string;
+  createdAt: string;
+  updatedAt: string | null;
+  user: IUser;
+  address: IAddress;
+  products: any[]; // Cambia `any[]` a un tipo más específico si tienes el modelo de producto.
 }
