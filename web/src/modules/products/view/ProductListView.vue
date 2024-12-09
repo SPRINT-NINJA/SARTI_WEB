@@ -32,7 +32,7 @@
                 <b-badge
                   v-else
                   variant="danger"
-                  class="position-absolute w-100 text-center"
+                  class="position-absolute text-center"
                   style="top: 0; left: 0"
                   >Inactivo</b-badge
                 >
@@ -72,6 +72,7 @@
                           variant="orange-secundary"
                           size="sm"
                           class="mr-2"
+                          @click="handleUpdateStock(product)"
                           v-b-tooltip.hover
                           title="Actualizar stock"
                         >
@@ -82,6 +83,7 @@
                           size="sm"
                           class="mr-2"
                           v-b-tooltip.hover
+                          @click="changeStatus(product)"
                           title="Cambiar estado"
                         >
                           <b-icon icon="arrow-down-up"></b-icon>
@@ -91,6 +93,7 @@
                           size="sm"
                           class="mr-2"
                           v-b-tooltip.hover
+                          @click="deleteProduct(product)"
                           title="Eliminar"
                         >
                           <b-icon icon="trash"></b-icon>
@@ -160,10 +163,14 @@
         </section>
       </div>
     </b-container>
+    <update-stock
+      :updateStockProp="updateStockProp"
+      @reloadProducts="getAllProducts"
+    />
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 import ProductListViewModel from "../viewmodel/ProductListViewModel";
 
 export default defineComponent({
@@ -171,6 +178,9 @@ export default defineComponent({
   components: {
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
+    UpdateStock: defineAsyncComponent(
+      () => import("@/modules/products/view/components/UpdateStock.vue")
+    ),
   },
   setup() {
     return {

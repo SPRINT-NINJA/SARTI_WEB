@@ -2,6 +2,7 @@ import CustomOverlay from "@/modules/public/components/CustomOverlay.vue";
 import { defineComponent } from "vue";
 import { IProduct } from "../models/ProductModel";
 import ProductService from "../services/ProductService";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
 export default defineComponent({
   data() {
@@ -33,6 +34,7 @@ export default defineComponent({
           hotelId: 0,
         },
       },
+      updateStockProp: {} as any,
     };
   },
   methods: {
@@ -61,6 +63,41 @@ export default defineComponent({
     async handleResetPage() {
       this.pagination.page = 1;
       await this.getAllProducts();
+    },
+    handleUpdateStock(item: any) {
+      console.log("item", item);
+      this.updateStockProp = { ...item };
+      this.$bvModal.show("update-stock");
+    },
+    async changeStatus(item: any) {
+      try {
+        SweetAlertCustom.questionMessage().then(async (result: any) => {
+          if (result.isConfirmed) {
+            const resp = await ProductService.changeStatus(item);
+            const { error } = resp;
+            if (!error) {
+              this.getAllProducts();
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async deleteProduct(item: any) {
+      try {
+        SweetAlertCustom.questionMessage().then(async (result: any) => {
+          if (result.isConfirmed) {
+            const resp = await ProductService.deteleProduct(item);
+            const { error } = resp;
+            if (!error) {
+              this.getAllProducts();
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   created() {
