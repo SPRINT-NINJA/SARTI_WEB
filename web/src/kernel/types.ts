@@ -24,3 +24,43 @@ export type Pagination<T> = {
     data?: T;
     param?: string;
 }
+
+
+
+interface Pageable {
+    pageNumber: number;
+    pageSize: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+}
+
+interface PageResponse<T> {
+    content: T[];
+    pageable: Pageable;
+    last: boolean;
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+    sort: {
+        empty: boolean;
+        sorted: boolean;
+        unsorted: boolean;
+    };
+    first: boolean;
+    numberOfElements: number;
+    empty: boolean;
+}
+
+export interface CustomResponsePageable<T> {
+    data: PageResponse<T>;
+    status: string;
+    error: boolean;
+    message: string;
+}

@@ -64,7 +64,7 @@ export default defineComponent({
     // Definir menús
     const menuItemsSeller = [
       { title: "Mi perfil", icon: "person", link: "/seller/profile-seller" },
-      { title: "Mis Productos", icon: "inboxes", link: "/seller/" },
+      { title: "Mis Productos", icon: "inboxes", link: "/seller/product-list" },
       { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
       { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
     ];
