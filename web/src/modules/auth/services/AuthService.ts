@@ -108,6 +108,19 @@ export default class AuthService {
     }
   }
 
+  static async getProfileDeliveryMan():Promise<any>{
+    try {
+      const response = await axios.doGet('/delivery-man');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
   static async senCode(email:any):Promise<any>{
     try {
       const response = await axios.doPost('/auth/send-code',email);
@@ -173,6 +186,21 @@ export default class AuthService {
       } 
     }
   }
+
+
+  static async updateProfileDeliveryMan(payload: any): Promise<CustomResponse<any>> {
+    const formData = new FormData();
+  
+    formData.append('id', payload.id);
+    formData.append('name', payload.name );
+    formData.append('firstLastName', payload.fistLastName );
+    formData.append('secondLastName', payload.secondLastName );
+    if(payload.facePhoto !== undefined && payload.facePhoto !== null) formData.append('profilePicture',payload.facePhoto);    
+    if(payload.frontIdentificationPhoto !== undefined && payload.frontIdentificationPhoto !== null) formData.append('frontIdentification',payload.frontIdentificationPhoto);    
+    if(payload.backIdentificationPhoto !== undefined && payload.backIdentificationPhoto !== null) formData.append('backIdentification',payload.backIdentificationPhoto);    
+    return await RequestHandler.handleRequest(axios.doPutFile('/delivery-man', formData));
+  }
+  
 
 
   
