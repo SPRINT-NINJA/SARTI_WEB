@@ -100,9 +100,9 @@ function handle400Error(error: any) {
       messageAlert = "La nueva contraseña no puede ser igual a la anterior. Por favor, ingresa una contraseña diferente.";
       break;
     case "OLD_PASSWORDS_INCORRECT":
-        titleAlert = "Contraseña incorrecta";
-        messageAlert = "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
-    break;
+      titleAlert = "Contraseña incorrecta";
+      messageAlert = "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
+      break;
     case "RECORD_NOT_REGISTERED":
       titleAlert = "Registro no guardado";
       messageAlert = "El registro no ha sido guardado";
@@ -192,6 +192,10 @@ function handle400Error(error: any) {
       titleAlert = "Coincidencia de contraseña";
       messageAlert =
         "La nueva contraseña no puede ser la misma que ya has utilizado";
+      break;
+    case "DELIVERY_MAN_IS_BUSY":
+      titleAlert = "Repartidor ocupado";
+      messageAlert = "Ya cuentas con pedido activo";
       break;
   }
   if (message !== "Review request")
