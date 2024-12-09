@@ -67,7 +67,7 @@
           </b-col>
           <b-col cols="12" md="4">
             
-            <EditAccount v-show="profileEdit" :email="profile.email"/>
+            <EditAccount v-show="profileEdit" :email="profile.user.email"/>
   
                 <div
                   class="d-flex justify-content-center align-items-center my-2"
@@ -92,19 +92,18 @@
 </template>
 
 <script lang="ts">
-import BannerComponent from "../../public/components/BannerComponent.vue";
-import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileSellerViewModel from "../viewmodels/ProfileSellerViewModel";
-import EditSellerAccount from "@/components/EditSellerAccount.vue";
-import EditAccount from "@/modules/auth/components/EditAccount.vue";
+
 
 export default {
   name: "ProfileSeller",
   components: {
-    BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay,
-    EditSellerAccount,
-    EditAccount
+    BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
+    BannerOverlay: ()=> import("@/modules/public/components/BannerOverlay.vue"),
+    EditSellerAccount: ()=> import("@/modules/auth/views/EditSellerAccount.vue"),
+    EditAccount: ()=> import("@/modules/auth/components/EditAccount.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins:[ProfileSellerViewModel]
 };

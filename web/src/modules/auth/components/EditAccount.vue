@@ -13,7 +13,7 @@
               ></b-form-input>
             </b-form-group>
         <div class="d-flex justify-content-end align-items-center mx-2 my-2">
-          <b-button variant="orange-primary" class="mx-2" @click="sendCode(newEmail)" >Verificar</b-button>
+          <b-button variant="orange-primary" class="mx-2" @click="sendCode" >Verificar</b-button>
         </div>
       </section>
       <hr>
