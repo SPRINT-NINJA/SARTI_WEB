@@ -1,18 +1,21 @@
 <template>
   <div :id="galleryID" class="gallery-container">
-    <div class="main-image mb-4">
+    <div
+      class="main-image mb-4"
+      :class="{ 'full-width': !imagesData || imagesData.length === 0 }"
+    >
       <a
-        :href="main"
+        :href="'https://firebasestorage.googleapis.com/v0/b/cruzstay-6b04e.appspot.com/o/main_product_image%2FPlayera-6%2Fc7cf03cc-3fbe-4b5a-ba4d-92ef3f42f9c0.jpg?alt=media'"
         :data-pswp-width="'1000'"
         :data-pswp-height="'500'"
         target="_blank"
         rel="noreferrer"
         class="thumbnail"
       >
-        <img :src="main" alt="" />
+        <img :src="'https://firebasestorage.googleapis.com/v0/b/cruzstay-6b04e.appspot.com/o/main_product_image%2FPlayera-6%2Fc7cf03cc-3fbe-4b5a-ba4d-92ef3f42f9c0.jpg?alt=media'" alt="" />
       </a>
     </div>
-    <div class="thumbnails">
+    <div class="thumbnails" v-if="imagesData && imagesData.length > 0">
       <a
         v-for="(image, key) in imagesData"
         :key="key"
@@ -26,9 +29,9 @@
         <img :src="image.thumbnailURL" alt="" />
       </a>
     </div>
-   
   </div>
 </template>
+
 
 <script lang="ts">
 import {defineComponent} from "vue";
@@ -41,11 +44,14 @@ export default defineComponent({
     galleryID: String,
     images: {
       type: Array as () => Array<{ largeURL: string; thumbnailURL: string; width: number; height: number }>,
-      required: true,
+      required: false,
+      default: () => [],
     },
     mainImage: String,
   },
   setup(props) {
+    console.log(props,"ayuya2")
+    console.log(props?.mainImage,"ayuya3")
     return {
       imagesData: props.images,
       main: props.mainImage,
@@ -57,12 +63,14 @@ export default defineComponent({
     };
   },
   mounted() {
+    console.log(this.mainImage, "ayuya")
     if (!this.lightbox) {
       this.lightbox = new PhotoSwipeLightbox({
         gallery: "#" + this.$props.galleryID,
         children: "a",
         pswpModule: () => import("photoswipe"),
       });
+
       this.lightbox.init();
     }
   },
