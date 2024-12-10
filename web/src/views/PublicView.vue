@@ -3,7 +3,7 @@
     <div class="navigation">
       <ul>
         <li>
-          <a href="#">
+          <a href="/sarti/home-page">
             <span class="icon">
               <img src="../assets/SARTI-LOGO.svg" alt="SARTI" />
             </span>
@@ -194,6 +194,7 @@ export default defineComponent({
     logout() {
       localStorage.removeItem("token");
       localStorage.removeItem("activeIndex");
+      location.reload(); 
     },
   },
   mounted() {

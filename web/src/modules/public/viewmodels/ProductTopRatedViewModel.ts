@@ -1,3 +1,6 @@
+import { decryptParamsId, encryptParamsId } from "@/kernel/utils/cryptojs";
+import { IProduct } from "@/modules/products/models/ProductModel";
+import ProductService from "@/modules/products/services/ProductService";
 import { defineComponent } from "vue";
 
 export interface product{
@@ -11,81 +14,38 @@ export interface product{
 export default defineComponent({
   data() {
     return {
-      products: [
-        {
-          id: 1,
-          name: "Product 1",
-          price: 100,
-          image: "https://picsum.photos/1000/1000",
-          rating: 4,
-        },
-        {
-          id: 2,
-          name: "Product 2",
-          price: 200,
-          image: "https://picsum.photos/1000/1000",
-          rating: 6,
-        },
-        {
-          id: 3,
-          name: "Product 3",
-          price: 300,
-          image: "https://picsum.photos/1000/1000",
-          rating: 9,
-        },
-        {
-          id: 4,
-          name: "Product 4",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },
-        {
-          id: 5,
-          name: "Product 5",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },
-        {
-          id: 6,
-          name: "Product 6",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },
-        {
-          id: 7,
-          name: "Product 7",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },
-        {
-          id: 8,
-          name: "Product 8",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },{
-          id: 9,
-          name: "Product 9",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },{
-          id: 10,
-          name: "Product 10",
-          price: 400,
-          image: "https://picsum.photos/1000/1000",
-          rating: 8.5,
-        },
-      ] as product [],
-      productPart1:[] as product[],
-      productPart2:[] as product[],
-      productPart3:[] as product[],
+      productPart1:[] as IProduct[],
+      productPart2:[] as IProduct[],
+      productPart3:[] as IProduct[],
       ratingTaste:9,
-      imageUrl: "https://0.soompi.io/wp-content/uploads/sites/8/2024/08/02212515/20240803010318_Jimin.jpg"
+      imageUrl: "https://0.soompi.io/wp-content/uploads/sites/8/2024/08/02212515/20240803010318_Jimin.jpg",
+      optionsFieldToPage: [
+        { text: "5", value: 5 },
+        { text: "10", value: 10 },
+        { text: "20", value: 20 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 },
+      ],
+      products: [] as IProduct[],
+      pagedPayload: {
+        productName: "",
+        sellerId: "",
+        page: 1,
+        size: 10  ,
+        sort: "ASC",
+      },
+      isLoading: false,
+      pagination: {
+        page: 1,
+        sort: "rating",
+        size: 10,
+        direction: "ASC",
+        totalRows: 0,
+        data: {
+          name: "",
+          hotelId: 0,
+        },
+      },
     };
   },
   methods: {
@@ -95,10 +55,55 @@ export default defineComponent({
         this.productPart2 = this.products.slice(4,6);
         this.productPart3 = this.products.slice(6,10);
       }
-    }
+
+      if(this.products.length === 6){
+        this.productPart1 =  this.products.slice(0, 4);
+        this.productPart2 = this.products.slice(4,6);
+      }      
+
+      if(this.products.length <= 5){
+        this.productPart1 = this.products;
+      }
+    },
+    async getProductPerDetails(item: any) {
+      try {
+        const { id } = item;
+        const encryptParam = encryptParamsId(id.toString());
+        await this.$router.push({ name: "product-details", params: { id: encryptParam} });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getAllProducts() {
+      try {
+        this.isLoading = true;
+        this.pagedPayload.page = this.pagination.page;
+        this.pagedPayload.size = this.pagination.size;
+        this.pagedPayload.sort = this.pagination.direction;
+        const resp = await ProductService.getAllProducts(this.pagedPayload);
+        const { error } = resp;
+        if (!error) {
+          this.products = resp.data.content;
+          this.getProdcutRated();
+          this.pagination.totalRows = resp.data.totalElements;
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async handlePageChange(page: number) {
+      this.pagination.page = page;
+      await this.getAllProducts();
+    },
+    async handleResetPage() {
+      this.pagination.page = 1;
+      await this.getAllProducts();
+    },
    
   },
   mounted() {
-    this.getProdcutRated();
+    this.getAllProducts();
   },
 });

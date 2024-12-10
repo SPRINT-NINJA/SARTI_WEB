@@ -20,7 +20,6 @@ export default defineComponent({
       this.selectedProduct = decryptParamsId(
         this.$route.params.id.toString()
       ) as { id: "" };
-      console.log(this.selectedProduct, "Producto escogido");
     } catch (e) {
       console.log(e);
     }
@@ -37,7 +36,6 @@ export default defineComponent({
         const resp = await ProductService.getDetailProduct(
           this.selectedProduct
         );
-        console.log(resp, "Producto seleccionado");
         this.productSelected = resp.data;
         console.log(this.productSelected, "Producto seleccionado2");
       } catch (error) {
@@ -64,7 +62,7 @@ export default defineComponent({
     async getListRating() {
       try {
         this.isLoading = true;
-        console.log("Rsume id", this.productSelected.id);
+        console.log("list", this.productSelected.id);
         const resp = await PublicService.getRateListByProduct(
           this.selectedProduct
         );
