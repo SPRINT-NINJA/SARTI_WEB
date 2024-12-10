@@ -1,18 +1,19 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
+import legacy from '@vitejs/plugin-legacy'
 import vue2 from '@vitejs/plugin-vue2'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/assets/', // Asegura que los archivos se sirvan desde /assets/
+  base: '/',
   plugins: [vue2()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
   },
   build: {
-    outDir: 'dist/assets', // Opcional: organiza el output dentro de una subcarpeta assets
+    chunkSizeWarningLimit: 1600,
   },
-});
+})
