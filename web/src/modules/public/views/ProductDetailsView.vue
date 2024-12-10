@@ -8,7 +8,7 @@
           <b-col cols="12" md="6">
             <section class="m-2 p-4">
               <simple-gallery
-                :images="productSelected.productImages"
+                :images="images"
                 galleryID="my-test-gallery"
                 :mainImage="productSelected.mainImage"
               ></simple-gallery>

@@ -11,6 +11,12 @@ export default defineComponent({
       selectedProduct: {} as { id: "" },
       resumeRating: [] as any,
       ratingList: [] as any,
+      images: [] as Array<{
+        largeURL: string;
+        thumbnailURL: string;
+        width: number;
+        height: number;
+      }>,
       quantity: 1,
       isLoading: false,
     };
@@ -20,7 +26,6 @@ export default defineComponent({
       this.selectedProduct = decryptParamsId(
         this.$route.params.id.toString()
       ) as { id: "" };
-      console.log(this.selectedProduct, "Producto escogido");
     } catch (e) {
       console.log(e);
     }
@@ -31,18 +36,31 @@ export default defineComponent({
     this.getListRating();
   },
   methods: {
+    filterGallery() {
+      if (Array.isArray(this.productSelected.productImages) && this.productSelected.productImages.length > 0) {
+        this.images = this.productSelected.productImages.map((img: any) => ({
+          largeURL: img.image,
+          thumbnailURL: img.image,
+          width: 800,
+          height: 600,
+        }));
+      } else {
+        this.images = []; // Limpia las imágenes si no hay datos válidos
+      }
+      console.log(this.images,"Imagenes");
+    },    
     async getDeatilproduct() {
       try {
         this.isLoading = true;
         const resp = await ProductService.getDetailProduct(
           this.selectedProduct
         );
-        console.log(resp, "Producto seleccionado");
         this.productSelected = resp.data;
         console.log(this.productSelected, "Producto seleccionado2");
       } catch (error) {
         console.log(error);
       } finally {
+        this.filterGallery();
         this.isLoading = false;
       }
     },
@@ -64,7 +82,7 @@ export default defineComponent({
     async getListRating() {
       try {
         this.isLoading = true;
-        console.log("Rsume id", this.productSelected.id);
+        console.log("list", this.productSelected.id);
         const resp = await PublicService.getRateListByProduct(
           this.selectedProduct
         );
