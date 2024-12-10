@@ -5,14 +5,17 @@
       :class="{ 'full-width': !imagesData || imagesData.length === 0 }"
     >
       <a
-        :href="'https://firebasestorage.googleapis.com/v0/b/cruzstay-6b04e.appspot.com/o/main_product_image%2FPlayera-6%2Fc7cf03cc-3fbe-4b5a-ba4d-92ef3f42f9c0.jpg?alt=media'"
+        :href="main"
         :data-pswp-width="'1000'"
         :data-pswp-height="'500'"
         target="_blank"
         rel="noreferrer"
         class="thumbnail"
       >
-        <img :src="'https://firebasestorage.googleapis.com/v0/b/cruzstay-6b04e.appspot.com/o/main_product_image%2FPlayera-6%2Fc7cf03cc-3fbe-4b5a-ba4d-92ef3f42f9c0.jpg?alt=media'" alt="" />
+        <img
+          :src="main"
+          alt=""
+        />
       </a>
     </div>
     <div class="thumbnails" v-if="imagesData && imagesData.length > 0">
@@ -32,9 +35,8 @@
   </div>
 </template>
 
-
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent  } from "vue";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 
@@ -43,27 +45,34 @@ export default defineComponent({
   props: {
     galleryID: String,
     images: {
-      type: Array as () => Array<{ largeURL: string; thumbnailURL: string; width: number; height: number }>,
+      type: Array as () => Array<{
+        largeURL: string;
+        thumbnailURL: string;
+        width: number;
+        height: number;
+      }>,
       required: false,
       default: () => [],
     },
     mainImage: String,
   },
-  setup(props) {
-    console.log(props,"ayuya2")
-    console.log(props?.mainImage,"ayuya3")
-    return {
-      imagesData: props.images,
-      main: props.mainImage,
-    };
+  watch: {
+    mainImage() {
+      this.main = this.mainImage;
+      console.log("Entro", this.main)
+    },
+    images() {
+      this.imagesData = this.images;
+    },
   },
   data() {
     return {
       lightbox: null as any,
+      main: null as any,
+      imagesData: [] as any[]
     };
   },
   mounted() {
-    console.log(this.mainImage, "ayuya")
     if (!this.lightbox) {
       this.lightbox = new PhotoSwipeLightbox({
         gallery: "#" + this.$props.galleryID,
