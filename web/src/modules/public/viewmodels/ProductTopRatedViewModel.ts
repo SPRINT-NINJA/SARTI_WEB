@@ -1,4 +1,5 @@
 import { defineComponent } from "vue";
+import PublicService from "../service/PublicService";
 
 export interface product{
   id:number,
@@ -11,6 +12,8 @@ export interface product{
 export default defineComponent({
   data() {
     return {
+      isLoading: false,
+      productos: [] as product[],
       products: [
         {
           id: 1,
@@ -89,6 +92,41 @@ export default defineComponent({
     };
   },
   methods: {
+
+    async getAllProducts() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          productName: "",
+          sellerId: "",
+          page: 1,
+          size: 10, // Cambia si necesitas otro tamaño de página
+          sort: "DESC",
+        };
+    
+        const response = await PublicService.getAllProducts(payload);
+        console.log("Response:", response);
+    
+        if (response && response.data && response.data.content) {
+          // Mapear los productos para que coincidan con el template
+          this.productos = response.data.content.map((product) => ({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            image: product.mainImage,
+            price: product.price,
+            rating: product.rating,
+          }));
+          this.getProdcutRated(); // Divide los productos según la lógica
+        } else {
+          console.error("No se encontraron productos.");
+        }
+      } catch (error) {
+        console.error("Error al obtener productos:", error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     getProdcutRated(){
       if(this.products.length === 10){
         this.productPart1 =  this.products.slice(0, 4);
