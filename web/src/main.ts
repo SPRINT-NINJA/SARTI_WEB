@@ -4,6 +4,8 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/main.css'
+import './assets/progressBar.css'
+import './assets/styleSideBar.css'
 // Import Bootstrap and BootstrapVue CSS files (order is important)
 import './assets/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
