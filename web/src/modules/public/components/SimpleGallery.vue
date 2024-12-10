@@ -1,6 +1,9 @@
 <template>
   <div :id="galleryID" class="gallery-container">
-    <div class="main-image mb-4">
+    <div
+      class="main-image mb-4"
+      :class="{ 'full-width': !imagesData || imagesData.length === 0 }"
+    >
       <a
         :href="main"
         :data-pswp-width="'1000'"
@@ -9,10 +12,13 @@
         rel="noreferrer"
         class="thumbnail"
       >
-        <img :src="main" alt="" />
+        <img
+          :src="main"
+          alt=""
+        />
       </a>
     </div>
-    <div class="thumbnails">
+    <div class="thumbnails" v-if="imagesData && imagesData.length > 0">
       <a
         v-for="(image, key) in imagesData"
         :key="key"
@@ -26,12 +32,11 @@
         <img :src="image.thumbnailURL" alt="" />
       </a>
     </div>
-   
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent  } from "vue";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 
@@ -40,20 +45,31 @@ export default defineComponent({
   props: {
     galleryID: String,
     images: {
-      type: Array as () => Array<{ largeURL: string; thumbnailURL: string; width: number; height: number }>,
-      required: true,
+      type: Array as () => Array<{
+        largeURL: string;
+        thumbnailURL: string;
+        width: number;
+        height: number;
+      }>,
+      required: false,
+      default: () => [],
     },
     mainImage: String,
   },
-  setup(props) {
-    return {
-      imagesData: props.images,
-      main: props.mainImage,
-    };
+  watch: {
+    mainImage() {
+      this.main = this.mainImage;
+      console.log("Entro", this.main)
+    },
+    images() {
+      this.imagesData = this.images;
+    },
   },
   data() {
     return {
       lightbox: null as any,
+      main: null as any,
+      imagesData: [] as any[]
     };
   },
   mounted() {
@@ -63,6 +79,7 @@ export default defineComponent({
         children: "a",
         pswpModule: () => import("photoswipe"),
       });
+
       this.lightbox.init();
     }
   },

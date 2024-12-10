@@ -33,4 +33,10 @@ export default class ProductService {
       axios.doDelete(`${this.baseUrl}/${payload.id}`)
     );
   }
+
+  static async getDetailProduct(payload: any): Promise<CustomResponse<any>> {
+    return await RequestHandler.handleRequest(
+      axios.doGet(`${this.baseUrl}/${payload.id}`)
+    );
+  }
 }
