@@ -56,7 +56,7 @@
               class="card-by-image"
               footer-tag="footer"
               @click="getProductPerDetails(productPart2[0])"
-              :style="{ backgroundImage: `url(${productPart2[0].mainImage || imageUrl   })`, position: 'relative', height: '300px' }"
+              :style="{ backgroundImage: `url(${productPart2[0].mainImage})`, position: 'relative', height: '300px' }"
             >
               <template #footer>
                 <h2>{{ productPart2[0].name }}</h2>
@@ -82,7 +82,7 @@
               class="card-by-image-little"
               footer-tag="footer"
               @click="getProductPerDetails(productPart2[1])"
-              :style="{ backgroundImage: `url(${productPart2[1].mainImage || imageUrl   })`, position: 'relative', height: '300px' }"
+              :style="{ backgroundImage: `url(${productPart2[1].mainImage})`, position: 'relative', height: '300px' }"
             >
               <template #footer>
                 <h3>{{ productPart2[1].name }}</h3>

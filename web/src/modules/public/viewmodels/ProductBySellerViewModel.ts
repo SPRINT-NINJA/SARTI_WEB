@@ -63,12 +63,6 @@ export default defineComponent({
           rating: 8.5,
         }
       ],
-      seller: {
-        id: 1,
-        mainImage:"https://picsum.photos/1000/1000",
-        name:"TIENDA 1",
-        description:"¡Dale un toque único a tu fiesta! Pintamos y elaboramos cerámica personalizada para que cada detalle sea especial."
-      }, 
       sellerSelected: {} as { id: "" },
       topRated:false,
       recentlyProduct:false,

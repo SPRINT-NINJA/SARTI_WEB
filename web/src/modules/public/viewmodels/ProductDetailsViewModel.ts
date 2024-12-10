@@ -11,6 +11,12 @@ export default defineComponent({
       selectedProduct: {} as { id: "" },
       resumeRating: [] as any,
       ratingList: [] as any,
+      images: [] as Array<{
+        largeURL: string;
+        thumbnailURL: string;
+        width: number;
+        height: number;
+      }>,
       quantity: 1,
       isLoading: false,
     };
@@ -30,6 +36,19 @@ export default defineComponent({
     this.getListRating();
   },
   methods: {
+    filterGallery() {
+      if (Array.isArray(this.productSelected.productImages) && this.productSelected.productImages.length > 0) {
+        this.images = this.productSelected.productImages.map((img: any) => ({
+          largeURL: img.image,
+          thumbnailURL: img.image,
+          width: 800,
+          height: 600,
+        }));
+      } else {
+        this.images = []; // Limpia las imágenes si no hay datos válidos
+      }
+      console.log(this.images,"Imagenes");
+    },    
     async getDeatilproduct() {
       try {
         this.isLoading = true;
@@ -41,6 +60,7 @@ export default defineComponent({
       } catch (error) {
         console.log(error);
       } finally {
+        this.filterGallery();
         this.isLoading = false;
       }
     },

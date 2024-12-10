@@ -14,11 +14,38 @@ export interface product{
 export default defineComponent({
   data() {
     return {
-      productPart1:[] as IProduct[],
-      productPart2:[] as IProduct[],
-      productPart3:[] as IProduct[],
+      productPart1: [
+        {
+          id: 0,
+          name: "",
+          description: "",
+          mainImage: "",
+          price: 0,
+        },
+      ] as IProduct[],      
+      productPart2:[
+        {
+          id: 0,
+          name: "",
+          description: "",
+          mainImage: "",
+          price: 0,
+        },
+
+      ] as IProduct[
+
+      ],
+      productPart3:[
+        {
+          id: 0,
+          name: "",
+          description: "",
+          mainImage: "",
+          price: 0,
+        },
+
+      ] as IProduct[],
       ratingTaste:9,
-      imageUrl: "https://0.soompi.io/wp-content/uploads/sites/8/2024/08/02212515/20240803010318_Jimin.jpg",
       optionsFieldToPage: [
         { text: "5", value: 5 },
         { text: "10", value: 10 },
@@ -26,7 +53,15 @@ export default defineComponent({
         { text: "50", value: 50 },
         { text: "100", value: 100 },
       ],
-      products: [] as IProduct[],
+      products: [
+        {
+          id: 0,
+          name: "",
+          description: "",
+          mainImage: "",
+          price: 0,
+        },
+      ] as IProduct[],
       pagedPayload: {
         productName: "",
         sellerId: "",
@@ -50,7 +85,7 @@ export default defineComponent({
   },
   methods: {
     getProdcutRated(){
-      if(this.products.length === 10){
+      if(this.products.length >= 7 && this.products.length <=10){
         this.productPart1 =  this.products.slice(0, 4);
         this.productPart2 = this.products.slice(4,6);
         this.productPart3 = this.products.slice(6,10);
@@ -64,6 +99,9 @@ export default defineComponent({
       if(this.products.length <= 5){
         this.productPart1 = this.products;
       }
+      console.log(this.productPart1.length, "Holi 1")
+      console.log(this.productPart2.length,"Holi 2")
+      console.log(this.productPart3.length,"Holi 3")
     },
     async getProductPerDetails(item: any) {
       try {
