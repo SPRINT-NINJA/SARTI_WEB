@@ -12,6 +12,7 @@ services:
             - sarti-network
         environment:
             - VITE_API_BASE_URL=http://3.211.99.137:8081/api/sarti
+        restart: always
 networks:
     sarti-network:
         driver: bridge
