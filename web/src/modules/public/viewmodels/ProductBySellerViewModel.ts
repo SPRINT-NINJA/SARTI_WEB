@@ -158,12 +158,25 @@ export default defineComponent({
       await this.getAllProducts();
     },
     changeSelectTopRated(){
-      if(this.recentlyProduct)
+      if(this.recentlyProduct){
+        this.pagination.direction = "ASC";
+        this.getAllProducts();
         this.topRated=false;
+      }else{
+        this.pagination.direction = "DESC";
+        this.getAllProducts();
+      }
     },
     changeRecently(){
-      if(this.topRated)
+      if(this.topRated){
+        this.pagination.sort = "rating";
+        this.pagination.direction = "ASC";
+        this.getAllProducts();
         this.recentlyProduct=false;
+      }else{
+        this.pagination.direction = "DESC";
+        this.getAllProducts();
+      }
     }
   },
 });
