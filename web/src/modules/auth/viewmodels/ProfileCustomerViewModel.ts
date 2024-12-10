@@ -1,36 +1,55 @@
 import { defineComponent } from "vue";
+import AuthService from "../services/AuthService";
+import { ICustomerProfile } from "../models/CustomerModel";
 
 export default defineComponent({
-    data(){
-        return{
-            profile:{
-                name:"Juan",
-                firstLastName: "Carlos",
-                secondName: "Bodoque",
-                email:"juan123@gmail.com",
-                address:{
-                    city:"México",
-                    colony:"Las rosas",
-                    externalNumber:"8",
-                    internalNumber:"N/A",
-                    locality:"Emiliano Zapata",
-                    referenceNear:"Casa verde",
-                    state:"Morelos",
-                    street:"las rosas 2",
-                    zipCode:"63902",
-                    addressType:"Local"
-                },      
-            },
-            profileEdit:false
+  data() {
+    return {
+      profile: {
+        id: 0,
+        name: "",
+        firstLastName: "",
+        secondLastName: "",
+        address: {
+          country: "",
+          state: "",
+          city: "",
+          locality: "",
+          colony: "",
+          street: "",
+          zipCode: 0,
+          externalNumber: "",
+          internalNumber: "",
+          referenceNear: "",
+          addressType: "",
+        },
+        user:{
+            email:"",
+            role:""
         }
+      } as any,
+      profileEdit: false,
+      isLoading: false
+    };
+  },
+  methods: {
+    async getProfile() {
+      try {
+        this.isLoading = true;
+        const resp = await AuthService.getProfileCustomer();
+        if (!resp.error) {
+          this.profile = resp;
+          this.isLoading = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
-    methods:{
-        editProfile(){
-            if(this.profileEdit){
-                this.profileEdit = false;
-            }else{
-                this.profileEdit = true;
-            }
-        }
-    }
-})
+    editProfile() {
+      this.profileEdit =  !this.profileEdit;
+    },
+  },
+  mounted() {
+    this.getProfile();
+  },
+});

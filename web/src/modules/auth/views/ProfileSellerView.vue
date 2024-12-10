@@ -17,8 +17,8 @@
         <div>
           <div class="my-5 mx-2" >
             <section v-show="!profileEdit">
-              <h1>{{ profile.name }} {{ profile.firstLastName }} {{ profile.secondName ?  profile.secondName : ''}}</h1>
-              <h5>{{ profile.email }}</h5>
+              <h1>{{ profile.name }} {{ profile.fistLastName }} {{ profile.secondLastName ?  profile.secondLastName : ''}}</h1>
+              <h5>{{ profile.user.email }}</h5>
             </section>
         </div>
         <b-row>
@@ -31,12 +31,18 @@
                 <b-card-title> Información de Tienda</b-card-title>
                 <hr />
                 <h2 class="text-center">
-                  {{ profile.store.name }}
+                  {{ profile.bussinessName }}
                   <b-icon icon="check2-circle" variant="success"></b-icon>
                 </h2>
                 <b-card-body>
                   <p>
-                    {{ profile.store.description }}              
+                    <img src="../../../assets/paypal.png" class="img-paypal" >
+                    <b>
+                    {{ profile.wallet }}
+                    </b>
+                  </p>
+                  <p>
+                    {{ profile.description }}              
                   </p>
                 </b-card-body>
               </b-card>
@@ -61,7 +67,7 @@
           </b-col>
           <b-col cols="12" md="4">
             
-            <EditAccount v-show="profileEdit" :email="profile.email"/>
+            <EditAccount v-show="profileEdit" :email="profile.user.email"/>
   
                 <div
                   class="d-flex justify-content-center align-items-center my-2"
@@ -77,8 +83,6 @@
                     
                   </b-button>
                 </div>
-   
-           
           </b-col>
         </b-row>
         </div>
@@ -88,19 +92,18 @@
 </template>
 
 <script lang="ts">
-import BannerComponent from "../../public/components/BannerComponent.vue";
-import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileSellerViewModel from "../viewmodels/ProfileSellerViewModel";
-import EditSellerAccount from "@/components/EditSellerAccount.vue";
-import EditAccount from "@/components/EditAccount.vue";
+
 
 export default {
   name: "ProfileSeller",
   components: {
-    BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay,
-    EditSellerAccount,
-    EditAccount
+    BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
+    BannerOverlay: ()=> import("@/modules/public/components/BannerOverlay.vue"),
+    EditSellerAccount: ()=> import("@/modules/auth/views/EditSellerAccount.vue"),
+    EditAccount: ()=> import("@/modules/auth/components/EditAccount.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins:[ProfileSellerViewModel]
 };
@@ -116,5 +119,9 @@ export default {
   top: 110px; /* Ajusta según lo necesario */
   left: 60px; /* Ajusta según lo necesario */
   z-index: 1; /* Asegura que el avatar esté por encima del banner */
+}
+
+.img-paypal{
+  width: 70px;
 }
 </style>

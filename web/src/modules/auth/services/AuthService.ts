@@ -79,6 +79,132 @@ export default class AuthService {
       }
     }
   }
+
+
+  static async getProfileSeller():Promise<any>{
+    try {
+      const response = await axios.doGet('/seller');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+
+  static async getProfileCustomer():Promise<any>{
+    try {
+      const response = await axios.doGet('/customer');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async getProfileDeliveryMan():Promise<any>{
+    try {
+      const response = await axios.doGet('/delivery-man');
+      return response.data.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async senCode(email:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/send-code',email);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async confirmAccount(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/confirm',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async changePassword(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPost('/auth/change-password',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  static async updateProfileCustomer(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPut('/customer',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+  
+  static async updateProfileSeller(payload:any):Promise<any>{
+    try {
+      const response = await axios.doPut('/seller',payload);
+      return response.data;
+    } catch (e:any) {
+      return {
+        code: e.data?.code,
+        error:true,
+        message: e.data?.message
+      } 
+    }
+  }
+
+
+  static async updateProfileDeliveryMan(payload: any): Promise<CustomResponse<any>> {
+    const formData = new FormData();
+  
+    formData.append('id', payload.id);
+    formData.append('name', payload.name );
+    formData.append('firstLastName', payload.fistLastName );
+    formData.append('secondLastName', payload.secondLastName );
+    if(payload.facePhoto !== undefined && payload.facePhoto !== null) formData.append('profilePicture',payload.facePhoto);    
+    if(payload.frontIdentificationPhoto !== undefined && payload.frontIdentificationPhoto !== null) formData.append('frontIdentification',payload.frontIdentificationPhoto);    
+    if(payload.backIdentificationPhoto !== undefined && payload.backIdentificationPhoto !== null) formData.append('backIdentification',payload.backIdentificationPhoto);    
+    return await RequestHandler.handleRequest(axios.doPutFile('/delivery-man', formData));
+  }
+  
+
+
+  
+
   
 
 }

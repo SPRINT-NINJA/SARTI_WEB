@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div>
     <div class="navigation">
       <ul>
         <li>
@@ -16,7 +16,7 @@
           :class="{ active: activeIndex === index }"
           @click="setActiveIndex(index)"
         >
-          <a :href="item.link">
+          <a :href="item.link" @click.prevent="handleMenuClick(item, index)">
             <span class="icon">
               <b-icon font-scale="1" :icon="item.icon"></b-icon>
             </span>
@@ -31,18 +31,29 @@
         <div class="toggle" @click="toggleMenu">
           <b-icon icon="justify"></b-icon>
         </div>
-        <div class="search">
+        <!-- Condicional para mostrar la barra de búsqueda solo para ciertos roles -->
+        <div class="search" v-if="showSearchAndCart">
           <label>
             <b-input type="text" placeholder="Buscar productos..." />
           </label>
         </div>
 
-        <div class="user color-cart n">
+        <!-- Condicional para mostrar el carrito solo para ciertos roles -->
+        <div class="user color-cart n" v-if="showSearchAndCart">
           <a href="/customer/cart">
             <b-icon font-scale="2" icon="cart4"></b-icon>
           </a>
         </div>
+
+        <!-- Elementos para EMPRENDEDOR o REPARTIDOR -->
+        <div class="role-specific mx-2" v-else>
+          <h5 v-if="userRole === 'EMPRENDEDOR' || userRole === 'REPARTIDOR' ">
+            <b-icon variant="orange-primary" font-scale="2" icon="person-circle"></b-icon>
+            Bienvenido
+          </h5>
+        </div>
       </div>
+
       <div>
         <router-view></router-view>
       </div>
@@ -50,142 +61,146 @@
   </div>
 </template>
 
+
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import { jwtDecode } from "jwt-decode";
+
+type Role = "EMPRENDEDOR" | "COMPRADOR" | "REPARTIDOR";
 
 export default defineComponent({
   name: "PublicView",
-  setup() {
-    // Reactive references
-    const hoveredIndex = ref<number | null>(null);
-    const isActive = ref(false);
-
-    // Definir menús
-    const menuItemsSeller = [
-      { title: "Mi perfil", icon: "person", link: "/seller/profile-seller" },
-      { title: "Mis Productos", icon: "inboxes", link: "/seller/" },
-      { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
-      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
-    ];
-
-    const menuItemsCustomer = [
-      { title: "Mi perfil", icon: "person", link: "/customer/profile-customer" },
-      {
-        title: "Mis Compras",
-        icon: "bag",
-        link: "/customer/order-list-customer",
-      },
-      { title: "Mejores calificados", icon: "star", link: "/sarti/top-rated" },
-      { title: "Emprendedores", icon: "shop", link: "/sarti/seller-list" },
-      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
-    ];
-
-    const menuItemsDelivery = [
-      {
-        title: "Mi perfil",
-        icon: "person",
-        link: "/delivery/profile-delivery",
-      },
-      {
-        title: "En Recolección",
-        icon: "geo-fill",
-        link: "/delivery/order-list-delivery",
-      },
-      {
-        title: "Mis Pedidos",
-        icon: "mailbox",
-        link: "/delivery/order-assigned",
-      },
-      { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
-    ];
-
-    const menuItemsWithoutAccount = [
-      {
-        title: "Crear tu cuenta",
-        icon: "file-earmark-person",
-        link: "/create-account",
-      },
-      { title: "Iniciar Sesión", icon: "box-arrow-in-right", link: "/login" },
-    ];
-
-    // Menú dinámico inicial
-    const menuItems = ref([
-      { title: "Inicio", icon: "house", link: "/sarti/home-page" },
-      ...menuItemsWithoutAccount,
-    ]);
-
-    // Actualizar menú según el rol
-    const updateMenu = () => {
+  data() {
+    return {
+      menuItems: [] as Array<{ title: string; icon: string; link: string }>,
+      activeIndex: null as number | null,
+      isActive: false,
+      userRole: null as Role | null, // Guardar el rol del usuario
+    };
+  },
+  computed: {
+    defaultMenuItems() {
+      return [
+        { title: "Inicio", icon: "house", link: "/sarti/home-page" },
+        {
+          title: "Crear tu cuenta",
+          icon: "file-earmark-person",
+          link: "/create-account",
+        },
+        { title: "Iniciar Sesión", icon: "box-arrow-in-right", link: "/login" },
+      ];
+    },
+    menuRoles() {
+      return {
+        EMPRENDEDOR: [
+          {
+            title: "Mi perfil",
+            icon: "person",
+            link: "/seller/profile-seller",
+          },
+          {
+            title: "Mis Productos",
+            icon: "inboxes",
+            link: "/seller/product-list",
+          },
+          { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
+          { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
+        ],
+        COMPRADOR: [
+          {
+            title: "Mi perfil",
+            icon: "person",
+            link: "/customer/profile-customer",
+          },
+          {
+            title: "Mis Compras",
+            icon: "bag",
+            link: "/customer/order-list-customer",
+          },
+          {
+            title: "Mejores calificados",
+            icon: "star",
+            link: "/sarti/top-rated",
+          },
+          { title: "Emprendedores", icon: "shop", link: "/sarti/seller-list" },
+          { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
+        ],
+        REPARTIDOR: [
+          {
+            title: "Mi perfil",
+            icon: "person",
+            link: "/delivery/profile-delivery",
+          },
+          {
+            title: "En Recolección",
+            icon: "geo-fill",
+            link: "/delivery/order-list-delivery",
+          },
+          {
+            title: "Mis Pedidos",
+            icon: "mailbox",
+            link: "/delivery/order-assigned",
+          },
+          { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
+        ],
+      };
+    },
+    showSearchAndCart() {
+      // Mostrar la barra de búsqueda y el carrito solo para roles específicos
+      return this.userRole === "COMPRADOR" || this.userRole === null;
+    },
+  },
+  methods: {
+    updateMenu() {
       const token = localStorage.getItem("token");
       if (token) {
         try {
           const decoded: any = jwtDecode(token);
-          const role = decoded?.role?.[0]?.authority;
-
-          if (role === "EMPRENDEDOR") {
-            menuItems.value = menuItemsSeller;
-          } else if (role === "COMPRADOR") {
-            menuItems.value = menuItemsCustomer;
-          } else if (role === "REPARTIDOR") {
-            menuItems.value = menuItemsDelivery;
-          } else {
-            menuItems.value = [
-              { title: "Inicio", icon: "house", link: "/sarti/home-page" },
-              ...menuItemsWithoutAccount,
-            ];
-          }
+          this.userRole = decoded?.role?.[0]?.authority as Role;
+          this.menuItems = this.menuRoles[this.userRole] || this.defaultMenuItems;
         } catch (error) {
           console.error("Error al decodificar el token:", error);
-          menuItems.value = [
-            { title: "Inicio", icon: "house", link: "/sarti/home-page" },
-            ...menuItemsWithoutAccount,
-          ];
+          this.userRole = null;
+          this.menuItems = this.defaultMenuItems;
         }
       } else {
-        menuItems.value = [
-          { title: "Inicio", icon: "house", link: "/sarti/home-page" },
-          ...menuItemsWithoutAccount,
-        ];
+        this.userRole = null;
+        this.menuItems = this.defaultMenuItems;
       }
-    };
-
-    // Llamar a `updateMenu` al cargar la aplicación
-    updateMenu();
-
-    const toggleMenu = () => {
-      isActive.value = !isActive.value;
-      const navigation = document.querySelector(".navigation") as HTMLElement;
-      const main = document.querySelector(".main") as HTMLElement;
-
-      if (navigation && main) {
-        navigation.classList.toggle("active", isActive.value);
-        main.classList.toggle("active", isActive.value);
-        console.log("Menu toggled", isActive.value); // Para verificar si el método se ejecuta
-      }
-    };
-
-    const activeIndex = ref<number | null>(null); // Estado para el elemento activo
-
-    // Restaurar índice activo al cargar la página
-    const storedIndex = localStorage.getItem("activeIndex");
-    if (storedIndex) {
-      activeIndex.value = parseInt(storedIndex, 10);
-    }
-
-    // Guardar índice activo en localStorage
-    const setActiveIndex = (index: number) => {
-      activeIndex.value = index;
+    },
+    toggleMenu() {
+      this.isActive = !this.isActive;
+      document
+        .querySelector(".navigation")
+        ?.classList.toggle("active", this.isActive);
+      document
+        .querySelector(".main")
+        ?.classList.toggle("active", this.isActive);
+    },
+    setActiveIndex(index: number) {
+      this.activeIndex = index;
       localStorage.setItem("activeIndex", index.toString());
-    };
-
-    return {
-      hoveredIndex,
-      activeIndex,
-      setActiveIndex,
-      menuItems,
-      toggleMenu,
-    };
+    },
+    handleMenuClick(item: { title: string; link: string }, index: number) {
+      if (item.title === "Cerrar sesión") {
+        this.logout();
+      } else {
+        this.setActiveIndex(index);
+        if (item.link) {
+          window.location.href = item.link;
+        }
+      }
+    },
+    logout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("activeIndex");
+    },
+  },
+  mounted() {
+    const storedIndex = localStorage.getItem("activeIndex");
+    this.activeIndex = storedIndex ? parseInt(storedIndex, 10) : null;
+    this.updateMenu();
   },
 });
 </script>
+

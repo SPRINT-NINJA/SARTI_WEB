@@ -20,16 +20,16 @@
           <div class="my-5 mx-2">
             <section v-show="!profileEdit">
               <h1>
-                {{ profile.name }} {{ profile.firstLastName }}
-                {{ profile.secondName ? profile.secondName : "" }}
+                {{ profile.name }} {{ profile.fistLastName }}
+                {{ profile.secondLastName ? profile.secondLastName : "" }}
               </h1>
-              <h5>{{ profile.email }}</h5>
+              <h5>{{ profile.user.email }}</h5>
             </section>
           </div>
           <b-row>
             <b-col cols="12" md="8" >
             <Transition  name="bounce">
-              <EditDeliveryMan v-if="profileEdit" :profile="profile"/>
+              <EditDeliveryMan v-if="profileEdit"/>
             </Transition>
             <Transition  name="slide-fade">
               <section v-if="!profileEdit">
@@ -54,7 +54,7 @@
             </b-col>
             <b-col cols="12" md="4">
               <Transition  name="bounce">
-                <EditAccount v-if="profileEdit" :email="profile.email" />
+                <EditAccount v-if="profileEdit" :email="profile.user.email" />
               </Transition>
 
               <div
@@ -83,7 +83,7 @@
 <script lang="ts">
 // import BannerOverlay from "../../public/components/BannerOverlay.vue";
 import ProfileDeliveryManViewModel from "../viewmodels/ProfileDeliveryManViewModel";
-// import EditAccount from "@/components/EditAccount.vue";
+// import EditAccount from "@/modules/auth/components/EditAccount.vue";
 // import EditDeliveryMan from "@/components/EditDeliveryMan.vue";
 
 export default {
@@ -91,8 +91,8 @@ export default {
   components: {
     BannerComponent: () => import("@/modules/public/components/BannerComponent.vue"),
     BannerOverlay: () =>  import("@/modules/public/components/BannerOverlay.vue"),
-    EditAccount: () => import("@/components/EditAccount.vue"), 
-    EditDeliveryMan: () => import("@/components/EditDeliveryMan.vue"),
+    EditAccount: () => import("@/modules/auth/components/EditAccount.vue"), 
+    EditDeliveryMan: () => import("@/modules/auth/views/EditDeliveryMan.vue"),
   },
   mixins: [ProfileDeliveryManViewModel],
 };

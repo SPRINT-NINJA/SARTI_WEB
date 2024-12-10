@@ -65,7 +65,6 @@ export default {
     components: {
         Navbar: () => import("@/modules/public/components/Navbar.vue"),
     },
-
 }
 </script>
 

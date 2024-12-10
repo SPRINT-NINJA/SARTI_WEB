@@ -1,5 +1,6 @@
 <template>
   <div>
+    <custom-overlay :isLoading="isLoading" />
     <b-container fluid class="mt-4 mb-4 vh-100">
       <div class="shadow">
         <b-row no-gutters class="w-100 mt-2">
@@ -7,9 +8,9 @@
           <b-col cols="12" md="6">
             <section class="m-2 p-4">
               <simple-gallery
-                :images="productSelected.photos"
+                :images="productSelected.productImages"
                 galleryID="my-test-gallery"
-                :mainImage="productSelected.image"
+                :mainImage="productSelected.mainImage"
               ></simple-gallery>
             </section>
           </b-col>
@@ -19,7 +20,12 @@
               <b-card class="shadow">
                 <div class="d-flex justify-content-end">
                   <h5>
-                    <b-badge variant="success">Disponible</b-badge>
+                    <b-badge
+                      :variant="productSelected.status ? 'success' : 'danger'"
+                      >{{
+                        productSelected.status ? "Disponible" : "Agotado"
+                      }}</b-badge
+                    >
                   </h5>
                 </div>
                 <div>
@@ -104,18 +110,31 @@
           </b-col>
         </b-row>
         <b-row no-gutters class="w-100 mt-2">
-          <b-col cols="12" md="6">
+          <b-col cols="12" md="12">
+          <section v-if="resumeRating.rating === 0 && ratingList.length === 0 ">
+            <div class="mb-2 text-center">
+              <img src="@/assets/NoRate.svg" class="w-70 sold-out-image" />
+              <br />
+              <h5>
+                Sé el primero en calificar este producto y agrégalo a tu carrito.
+              </h5>
+            </div>
+          </section>
+          </b-col>
+          <b-col  v-if="resumeRating.rating != 0 && ratingList.length != 0 " cols="12" md="6">
             <section class="py-3 px-5">
               <h3>Opiniones del producto</h3>
               <rating-resume
-                :rating="productSelected.ratingResume"
+                :rating="resumeRating"
               ></rating-resume>
             </section>
           </b-col>
-          <b-col cols="12" md="6">
-            <section class="py-3 px-5 overflow-auto" style="max-height: 400px;">
+          <b-col  v-if="resumeRating.rating != 0 && ratingList.length != 0 " cols="12" md="6">
+            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
               <h3>Opiniones con fotos</h3>
-              <opinion-comment :comments="productSelected.comments"></opinion-comment>
+              <opinion-comment
+                :comments="ratingList"
+              ></opinion-comment>
             </section>
           </b-col>
         </b-row>
@@ -130,13 +149,17 @@ import ProductDetailsViewModel from "../viewmodels/ProductDetailsViewModel";
 export default {
   name: "ProductDetailsView",
   components: {
-    RatingResume: defineAsyncComponent(() =>
-      import("../components/RatingResume.vue")
+    RatingResume: defineAsyncComponent(
+      () => import("../components/RatingResume.vue")
     ),
-    SimpleGallery: defineAsyncComponent(() =>
-      import("../components/SimpleGallery.vue")
+    SimpleGallery: defineAsyncComponent(
+      () => import("../components/SimpleGallery.vue")
     ),
-    OpinionComment: defineAsyncComponent(() => import("../components/OpinionComment.vue")),
+    OpinionComment: defineAsyncComponent(
+      () => import("../components/OpinionComment.vue")
+    ),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [ProductDetailsViewModel],
 };
@@ -145,5 +168,9 @@ export default {
 <style scoped>
 .quantity-selector {
   max-width: 90px;
+}
+
+.sold-out-image{
+  height: 100px;
 }
 </style>
