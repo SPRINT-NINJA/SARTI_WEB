@@ -114,9 +114,9 @@
                 <b-row>
                   <b-col
                     cols="12"
-                    v-for="product in takenOrderDelivery.sartiOrder
+                    v-for="orderProduct in takenOrderDelivery.sartiOrder
                       ?.orderProducts"
-                    :key="product.id"
+                    :key="orderProduct.id"
                     class="mt-1"
                   >
                     <b-card no-body shadow w-100 class="py-2 px-2 mb-2">
@@ -124,21 +124,21 @@
                         <b-col cols="auto">
                           <div>
                             <b-avatar
-                              :src="product.product.mainImage"
+                              :src="orderProduct.productInfo.mainImage"
                               size="100px"
                               rounded
                             ></b-avatar>
                           </div>
                         </b-col>
                         <b-col cols="12" md="8" class="pl-3 my-3">
-                          <div><b>Producto:</b> {{ product.product.name }}</div>
+                          <div><b>Producto:</b> {{ orderProduct.productInfo.name }}</div>
                           <div>
                             <b>Descripción:</b>
-                            {{ product.product.description }}
+                            {{ orderProduct.productInfo.description }}
                           </div>
-                          <div><b>Precio:</b> ${{ product.product.price }}</div>
-                          <div><b>Cantidad:</b> {{ product.amount }}</div>
-                          <div><b>Total:</b> ${{ product.total }}</div>
+                          <div><b>Precio:</b> ${{ orderProduct.productInfo.price }}</div>
+                          <div><b>Cantidad:</b> {{ orderProduct.amount }}</div>
+                          <div><b>Total:</b> ${{ orderProduct.total }}</div>
                         </b-col>
                       </b-row>
                     </b-card>

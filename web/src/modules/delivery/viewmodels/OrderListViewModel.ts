@@ -28,8 +28,19 @@ export default defineComponent({
       try {
         this.isLoading = true;
         const response = await OrderDeliveryService.getOrderDeliveriesToTake(this.pagination as GetOrderDeliveriesDto);
-        console.log(response);
         this.ordersToTake = response.data.content as Array<any>;
+
+        this.ordersToTake = this.ordersToTake.map((el: any) => ({
+          ...el,
+          sartiOrder: {
+            ...el.sartiOrder,
+            orderProducts: el.sartiOrder.orderProducts.map((orderProduct: any) => ({
+              ...orderProduct,
+              productInfo: JSON.parse(orderProduct.productInfo),
+            })),
+          },
+        }));
+
         this.totalRows = response.data.totalElements;
       } catch (e: any) {
         console.error(e);

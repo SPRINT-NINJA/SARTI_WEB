@@ -42,8 +42,6 @@ export default defineComponent({
           },
         }));
 
-        console.log(this.orderDeliveries);
-
         this.totalRows = response.data.totalElements;
       } catch (error) {
         console.error(error);
