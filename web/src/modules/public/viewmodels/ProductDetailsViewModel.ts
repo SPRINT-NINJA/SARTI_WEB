@@ -4,6 +4,9 @@ import ProductService from "@/modules/products/services/ProductService";
 import { defineComponent, defineAsyncComponent } from "vue";
 import PublicService from "./../service/PublicService";
 import { ICart } from "../models/AddCartModel";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+
+
 
 export default defineComponent({
   data() {
@@ -107,7 +110,12 @@ export default defineComponent({
         console.log(this.addCart)
         const resp = await PublicService.addProductIntoCart(this.addCart);
         console.log(resp, "agregando producto a carrito");
-        this.ratingList = resp.data.content;
+        if(!resp.error){
+          SweetAlertCustom.successMessage(
+            "¡Producto añadido al carrito!",
+            "Revisa tu carrito para confirmar tu pedido."
+          );
+        }
       } catch (error) {
         console.log(error);
       } finally {

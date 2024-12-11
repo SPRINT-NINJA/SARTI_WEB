@@ -97,11 +97,13 @@ function handle400Error(error: any) {
       break;
     case "PASSWORDS_ARE_THE_SAME":
       titleAlert = "Contraseña sin cambios";
-      messageAlert = "La nueva contraseña no puede ser igual a la anterior. Por favor, ingresa una contraseña diferente.";
+      messageAlert =
+        "La nueva contraseña no puede ser igual a la anterior. Por favor, ingresa una contraseña diferente.";
       break;
     case "OLD_PASSWORDS_INCORRECT":
       titleAlert = "Contraseña incorrecta";
-      messageAlert = "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
+      messageAlert =
+        "La contraseña actual ingresada es incorrecta. Por favor, verifica e intenta nuevamente.";
       break;
     case "RECORD_NOT_REGISTERED":
       titleAlert = "Registro no guardado";
@@ -196,6 +198,10 @@ function handle400Error(error: any) {
     case "DELIVERY_MAN_IS_BUSY":
       titleAlert = "Repartidor ocupado";
       messageAlert = "Ya cuentas con pedido activo";
+      break;
+    case "USER_NOT_VERIFIED":
+      titleAlert = "Cuenta no verificada";
+      messageAlert = "Por favor ve a editar perfil para verificar tu cuenta";
       break;
   }
   if (message !== "Review request")
@@ -325,8 +331,14 @@ export default {
   doPost(endPoint: any, object: any, config?: any) {
     return AxiosClient.post(endPoint, object, config);
   },
+  doPostAnyObject(endPoint: any, config?: any) {
+    return AxiosClient.post(endPoint, config);
+  },
   doPut(endPoint: any, object: any, config?: any) {
     return AxiosClient.put(endPoint, object, config);
+  },
+  doPutAnyObject(endPoint: any, config?: any) {
+    return AxiosClient.put(endPoint, config);
   },
   doPatch(endPoint: any, object: any, config?: any) {
     return AxiosClient.patch(endPoint, object, config);

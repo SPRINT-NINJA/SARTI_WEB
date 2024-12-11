@@ -18,20 +18,23 @@
             >
               <!-- Producto vista -->
               <b-card
-                v-for="value in cartCustomerProductList"
-                :key="value.name"
+                v-for="value in productList"
+                :key="value.id"
                 class="card-preview-product my-2"
-                :class="{ 'disabled-card': value.status === 'No disponible' }"
+                :class="{ 'disabled-card': !value.status }"
               >
                 <b-row>
                   <b-col cols="12" md="2">
-                    <img class="img-main-product" :src="value.mainImage" />
+                    <img
+                      class="img-main-product"
+                      :src="value.product.mainImage"
+                    />
                   </b-col>
                   <b-col cols="12" md="9" class="my-2">
                     <b-row>
                       <b-col cols="12" md="10" class="my-1">
                         <b>
-                          {{ value.name }}
+                          {{ value.product.name }}
                         </b>
                       </b-col>
                       <b-col
@@ -40,10 +43,10 @@
                         class="d-flex justify-content-end align-items-center my-2"
                       >
                         <b-badge
-                          :variant="
-                            value.status === 'Disponible' ? 'success' : 'danger'
-                          "
-                          >{{ value.status }}</b-badge
+                          :variant="value.status ? 'success' : 'danger'"
+                          >{{
+                            value.status ? "Disponible" : "AGOTADO"
+                          }}</b-badge
                         >
                       </b-col>
                     </b-row>
@@ -66,7 +69,8 @@
                               type="text"
                               class="text-center"
                               v-model="value.amount"
-                              @change="CountTotal"
+                              @change="checkAmount(value)"
+                              disabled
                             ></b-form-input>
 
                             <b-input-group-append>
@@ -86,7 +90,7 @@
                         class="d-flex justify-content-start"
                       >
                         <span class="available-stock"
-                          >(+ {{ value.stock }} disponibles)</span
+                          >(+ {{ value.product.stock }} disponibles)</span
                         >
                       </b-col>
                     </b-row>
@@ -95,7 +99,7 @@
                     >
                       <b-col cols="12" md="3" class="text-right">
                         <b-card-text class="text-price"
-                          ><b> ${{ value.price }}</b></b-card-text
+                          ><b> ${{ value.product.price }}</b></b-card-text
                         >
                       </b-col>
                     </b-row>
@@ -105,6 +109,7 @@
             </b-row>
 
             <b-row
+              v-if="productList.length > 0"
               class="d-flex flex-column align-items-start justify-content-start"
               style="width: 100%; margin: 0 auto"
             >
@@ -114,33 +119,49 @@
               >
                 <b-col cols="auto" class="text-left text-by-price">
                   <p>Productos</p>
-                  <p>Costo de Envío</p>
+
                   <p>Total</p>
                 </b-col>
                 <b-col cols="auto" class="text-right text-by-price">
+                  <p>{{ productList.length }}</p>
                   <p>${{ total }}</p>
-                  <p>${{ sendByAddress ? "30" : "0" }}</p>
-                  <p> 
-                    <b>${{ totalFinal }}</b>
-                  </p>
-                </b-col>  
+                </b-col>
               </b-row>
             </b-row>
           </b-col>
+          <b-col cols="12" md="12">
+            <section v-if="productList.length === 0">
+              <div class="mb-2 text-center">
+                <img src="@/assets/buyOrder.svg" class="w-70 sold-out-image" />
+                <br />
+                <h5>
+                  Vaya, no has seleccionado productos. ¿Qué te parece si
+                  exploramos nuestras deliciosas opciones y encuentras algo que
+                  te encante?
+                </h5>
+                <a href="/sarti/home-page" class="btn btn-red-palete">
+                  Ir de compras
+                </a>
+              </div>
+            </section>
+          </b-col>
         </b-row>
-        <div class="d-flex align-items-end justify-content-end" >
-          <b-button variant="orange-secundary" class="mx-3">Vaciar carrito</b-button>
+        <div
+          v-if="productList.length > 0"
+          class="d-flex align-items-end justify-content-end"
+        >
+          <b-button variant="orange-secundary" @click="cleanCart" class="mx-3"
+            >Vaciar carrito</b-button
+          >
           <b-button variant="orange-primary">Realizar compra</b-button>
         </div>
       </b-card>
     </div>
- 
-
   </div>
 </template>
 
 <script lang="ts">
-import CartCustomerProductListViewModel from '../viewmodel/CartCustomerProductListViewModel';
+import CartCustomerProductListViewModel from "../viewmodel/CartCustomerProductListViewModel";
 export default {
   name: "CustomerOrderBuy",
   mixins: [CartCustomerProductListViewModel],
@@ -192,6 +213,10 @@ hr {
   width: 100%;
   height: 0.3px;
   background-color: rgb(0, 0, 0);
+}
+
+.sold-out-image {
+  height: 300px;
 }
 
 .total {

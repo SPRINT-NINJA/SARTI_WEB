@@ -27,7 +27,7 @@ export default class PublicService {
 
     
     static async addProductIntoCart(payload: ICart): Promise<CustomResponse<any>> {
-        return await RequestHandler.handleRequest(axios.doPost('/cart',payload));
+        return await RequestHandler.handleRequest(axios.doPostAnyObject(`/cart?productId=${payload.productId}&quantity=${payload.quantity}`));
     }
 
     
