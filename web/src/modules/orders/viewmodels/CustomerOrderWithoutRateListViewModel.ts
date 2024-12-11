@@ -1,13 +1,17 @@
 import { defineComponent } from "vue";
 import { encryptParamsId } from "@/kernel/utils/cryptojs";
+import { MissingRateOrderProduct } from "../models/MissingRateOrderProduct";
+import CustomerOrderProductService from "../services/CustomerOrderProductService";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { GetMissingRateOrderProductDto } from "../models/GetMissingRateOrderProductDto";
 
 const testCustomerOrderList = [
   {
     order: {
-      id:1,
+      id: 1,
       status: "Entregado",
       amount: "1",
-      dateForArrive:"2024-09-11",
+      dateForArrive: "2024-09-11",
       product: {
         name: "Paquete de Stitch peluche edición especial",
         price: 150.0,
@@ -18,10 +22,10 @@ const testCustomerOrderList = [
   },
   {
     order: {
-      id:2,
+      id: 2,
       status: "Pendiente de Envío",
       amount: "8",
-      dateForArrive:"2024-09-10",
+      dateForArrive: "2024-09-10",
       product: {
         name: "Taza personalizada de Stitch",
         price: 80.0,
@@ -32,10 +36,10 @@ const testCustomerOrderList = [
   },
   {
     order: {
-      id:3,
+      id: 3,
       status: "Recolección",
       amount: "12",
-      dateForArrive:"2024-09-12",
+      dateForArrive: "2024-09-12",
       product: {
         name: "Cojín Stitch edición limitada",
         price: 120.0,
@@ -49,65 +53,64 @@ const testCustomerOrderList = [
 export default defineComponent({
   data() {
     return {
-      ordersList: [] as any,
-      viewOrder: false,
-      shopAgain: false,
-      pageable:{
-        page:1,
-        size:1,
-        sort:[
-
-        ]
+      orderProducts: [] as Array<MissingRateOrderProduct>,
+      isLoading: false,
+      pagination: {
+        page: 1,
+        size: 5,
+        sort: "id",
+        direction: "DESC",
+        searchValue: ""
       },
-      currentPage: 1, // Página actual
-      pageSize: 1, // Número de elementos por página
-      totalRows: testCustomerOrderList.length, // Total de elementos
-      paginatedOrders: [] as any, // Pedidos a mostrar en la página actual
+      totalRows: 0,
     };
   },
   methods: {
-    getlistOrder() {
-      this.ordersList = testCustomerOrderList;
+    async fetchOrderProductsMissingRates() {
+      try {
+        this.isLoading = true;
+        const response = await CustomerOrderProductService.getOrderProductMissingRate(this.pagination as GetMissingRateOrderProductDto);
+        this.orderProducts = response.data.content as Array<MissingRateOrderProduct>;
+        this.totalRows = response.data.totalElements;
+      } catch (error) {
+        console.error(error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al obtener los productos sin reseña"
+        );
+      } finally {
+        this.isLoading = false
+      }
     },
-    updatePaginatedOrders() {
-      const start = (this.currentPage - 1) * this.pageSize;
-      const end = start + this.pageSize;
-      this.paginatedOrders = this.ordersList.slice(start, end);
+    parseDateByRead(dateString: string) {
+      const months = [
+        "enero", "febrero", "marzo", "abril", "mayo", "junio",
+        "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+      ];
+
+      const [year, month, day] = dateString.split("-").map(Number);
+      return `${day} de ${months[month - 1]} del ${year}`;
     },
-    parseDateByRead(dateString:string){
-        const months = [
-            "enero", "febrero", "marzo", "abril", "mayo", "junio",
-            "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-          ];
-        
-          const [year, month, day] = dateString.split("-").map(Number);
-          return `${day} de ${months[month - 1]} del ${year}`;
-    },
-    assignColorBystatus(status:string){
-        switch(status){
-            case 'Entregado':
-                return 'success';
-            case 'Pendiente de Envío':
-                return 'warning';
-            case 'Recolección':
-                return 'warning';
-            default:
-                return 'brown-chocolate';
-        }
-    },
-    async goToOrderCreateRate(item:string){
+    async goToOrderCreateRate(item: any) {
       try {
         console.log(item)
         const encryptParam = encryptParamsId(item.toString());
-        await this.$router.push({ name: "create-rate", params: { id: encryptParam} });
+        await this.$router.push({ name: "create-rate", params: { id: encryptParam } });
       } catch (error) {
         console.error(error);
       }
-    }
+    },
+    async handlePageChange(page: number) {
+      this.pagination.page = page;
+      await this.fetchOrderProductsMissingRates();
+    },
 
+    async handleResetPage() {
+      this.pagination.page = 1;
+      await this.fetchOrderProductsMissingRates();
+    },
   },
-  mounted(){
-    this.getlistOrder();
-    this.updatePaginatedOrders();
+  mounted() {
+    this.fetchOrderProductsMissingRates();
   }
 });
