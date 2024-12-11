@@ -101,7 +101,7 @@ export default defineComponent({
           sellerId: "",
           page: 1,
           size: 10, // Cambia si necesitas otro tamaño de página
-          sort: "DESC",
+          sort: "DESC", // Puedes ajustar si tu servidor admite ordenar por campos específicos
         };
     
         const response = await PublicService.getAllProducts(payload);
@@ -109,14 +109,16 @@ export default defineComponent({
     
         if (response && response.data && response.data.content) {
           // Mapear los productos para que coincidan con el template
-          this.productos = response.data.content.map((product) => ({
-            id: product.id,
-            name: product.name,
-            description: product.description,
-            image: product.mainImage,
-            price: product.price,
-            rating: product.rating,
-          }));
+          this.productos = response.data.content
+            .map((product) => ({
+              id: product.id,
+              name: product.name,
+              description: product.description,
+              image: product.mainImage,
+              price: product.price,
+              rating: product.rating,
+            }))
+            .sort((a, b) => b.rating - a.rating); // Ordenar por rating descendente
           this.getProdcutRated(); // Divide los productos según la lógica
         } else {
           console.error("No se encontraron productos.");
@@ -127,16 +129,17 @@ export default defineComponent({
         this.isLoading = false;
       }
     },
+        
     getProdcutRated(){
       if(this.products.length === 10){
-        this.productPart1 =  this.products.slice(0, 4);
+        this.productPart1 =  this.productos.slice(0, 4);
         this.productPart2 = this.products.slice(4,6);
         this.productPart3 = this.products.slice(6,10);
       }
     }
-   
   },
   mounted() {
     this.getProdcutRated();
+    this.getAllProducts();
   },
 });
