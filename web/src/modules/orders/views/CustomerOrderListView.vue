@@ -1,6 +1,7 @@
 <template>
   <!-- Agregar componente de cristian -->
   <div>
+    <custom-overlay :isLoading="isLoading" />
     <banner-overlay
       :imgSrc="require('@/assets/banner-pedido.svg')"
       :content="'MIS PEDIDOS'"
@@ -60,12 +61,14 @@
       </b-card>
     </div>
     <!-- Listado de pedidos -->
-    <order-deliveries-list
-      :orderDeliveriesProp="orderDeliveries"
-      :initialToggleStateProp="true"
-      :isCustomerHistoryProp="true"
-      :isDeliveryManToTakeListProp="false"
-    />
+    <b-container>
+      <order-deliveries-list
+        :orderDeliveriesProp="orderDeliveries"
+        :initialToggleStateProp="true"
+        :isCustomerHistoryProp="true"
+        :isDeliveryManToTakeListProp="false"
+      />
+    </b-container>
     <!-- Paginador -->
     <b-row class="justify-content-center mt-4">
       <b-col cols="12">
@@ -95,6 +98,8 @@ export default {
     BannerOverlay: BannerOverlay,
     OrderDeliveriesList: () =>
       import("@/modules/delivery/views/components/OrderDeliveriesList.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [CustomerOrderListViewModel],
 };
