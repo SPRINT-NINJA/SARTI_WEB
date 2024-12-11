@@ -30,7 +30,7 @@ const router = new VueRouter({
           name: "recovery-pass",
           component: () => import("../modules/auth/views/RecoveryPassword.vue"),
           meta: {
-            title: "Iniciar sesión",
+            title: "Recuperar contraseña",
             requireAuth: false,
           },
         },
@@ -113,10 +113,10 @@ router.beforeEach((to, from, next) => {
     )
       next("/seller");
     if (
-      (role === ERoles.CUSTOMER &&
-        to.matched.some((route) => route.path === "/sarti")) ||
-      (role === ERoles.CUSTOMER &&
-        to.matched.some((route) => route.path === "/home-page")) ||
+      // (role === ERoles.CUSTOMER &&
+      //   to.matched.some((route) => route.path === "/sarti")) ||
+      // (role === ERoles.CUSTOMER &&
+      //   to.matched.some((route) => route.path === "/home-page")) ||
       (role === ERoles.CUSTOMER &&
         to.matched.some((route) => route.path === "/login"))
     )
