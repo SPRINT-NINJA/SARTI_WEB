@@ -112,6 +112,7 @@ export default defineComponent({
             icon: "person",
             link: "/customer/profile-customer",
           },
+          { title: "Inicio", icon: "house", link: "/sarti/home-page" },
           {
             title: "Mis Compras",
             icon: "bag",
