@@ -11,9 +11,9 @@ class SweetAlertCustom {
       text: text,
       showCancelButton: true,
       confirmButtonText: "Aceptar",
-      confirmButtonColor: "#10B981",
+      confirmButtonColor: "#ffa446",
       cancelButtonText: "Cancelar",
-      cancelButtonColor: "#dc2626",
+      cancelButtonColor: "#e35b5d",
       reverseButtons: true,
       customClass: {
         actions: "custom-swal-buttons", // Esta es la clase personalizada que añadimos
