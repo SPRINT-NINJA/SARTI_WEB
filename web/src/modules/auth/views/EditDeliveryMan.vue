@@ -6,10 +6,8 @@
         <h5>Información personal</h5>
         <b-row>
           <b-col>
-            <b-form-group  label-for="input-name">
-              <label>
-                    Nombre <span style="color: red">*</span>
-                  </label>
+            <b-form-group label-for="input-name">
+              <label> Nombre <span style="color: red">*</span> </label>
               <b-form-input
                 id="input-name"
                 type="text"
@@ -31,12 +29,10 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group
-              label-for="input-firstLastName"
-            >
-            <label>
-                   Apellido Materno <span style="color: red">*</span>
-                  </label>
+            <b-form-group label-for="input-firstLastName">
+              <label>
+                Apellido Materno <span style="color: red">*</span>
+              </label>
               <b-form-input
                 id="input-firstLastName"
                 type="text"
@@ -58,10 +54,8 @@
             </b-form-group>
           </b-col>
           <b-col>
-            <b-form-group  label-for="input-secondName">
-              <label>
-                    Apellido paterno
-                  </label>
+            <b-form-group label-for="input-secondName">
+              <label> Apellido paterno </label>
               <b-form-input
                 id="input-secondName"
                 type="text"
