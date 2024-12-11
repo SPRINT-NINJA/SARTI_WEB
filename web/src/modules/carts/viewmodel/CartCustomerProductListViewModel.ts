@@ -113,6 +113,7 @@ export default defineComponent({
             "El carrito se vacío",
             "Tu carrito  ha sido vaciado"
           );
+          location.reload(); 
         }
         this.CountTotal(); // Actualiza el total después de obtener los productos
       } catch (error) {

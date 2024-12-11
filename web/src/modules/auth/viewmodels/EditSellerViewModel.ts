@@ -10,9 +10,6 @@ import {
   helpers,
 } from "@vuelidate/validators";
 
-
-
-
 export default defineComponent({
   setup() {
     const v$ = useVuelidate();
@@ -20,29 +17,29 @@ export default defineComponent({
   },
   data() {
     return {
-        editedProfile: {
-            id: 0,
-            name: "",
-            firstLastName: "",
-            fistLastName:"",
-            secondLastName: "",
-            bussinessName: "",
-            description: "",
-            wallet: "",
-            address: {
-              country: "",
-              state: "",
-              city: "",
-              locality: "",
-              colony: "",
-              street: "",
-              zipCode: 0,
-              externalNumber: "",
-              internalNumber: "",
-              referenceNear: "",
-              addressType: "",
-            },
-    } as IUpdateSeller,          
+      editedProfile: {
+        id: 0,
+        name: "",
+        firstLastName: "",
+        fistLastName: "",
+        secondLastName: "",
+        bussinessName: "",
+        description: "",
+        wallet: "",
+        address: {
+          country: "",
+          state: "",
+          city: "",
+          locality: "",
+          colony: "",
+          street: "",
+          zipCode: 0,
+          externalNumber: "",
+          internalNumber: "",
+          referenceNear: "",
+          addressType: "",
+        },
+      } as IUpdateSeller,
       options: [
         { value: null, text: "--Seleccione--" },
         { value: "DOMICILIO", text: "Domicilio" },
@@ -86,7 +83,7 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
-      }finally{
+      } finally {
         this.isLoading = false;
       }
     },
@@ -104,17 +101,32 @@ export default defineComponent({
         }
       } catch (error) {
         console.log(error);
-      }finally{
+      } finally {
         this.isLoading = false;
       }
     },
     touchAllFields() {
-      this.v$.editedProfile.$touch();
-    },
+      const touchFields = (fields:any) => {
+        if (!fields || typeof fields !== "object") return;
+        Object.keys(fields).forEach((key) => {
+          if (fields[key]?.$touch) {
+            fields[key].$touch();
+          } else if (typeof fields[key] === "object") {
+            touchFields(fields[key]); // Llamada recursiva para manejar anidaciones
+          }
+        });
+      };
+    
+      touchFields(this.v$?.editedProfile);
+    }
+    
   },
   mounted() {
-    this.getUpdateSeller();
-    this.touchAllFields();
+    this.getUpdateSeller().then(() => {
+      if (this.v$) {
+        this.touchAllFields();
+      }
+    });
   },
   computed: {
     isStepValid() {
@@ -135,11 +147,13 @@ export default defineComponent({
         this.v$.editedProfile.address.addressType,
         this.v$.editedProfile.address.referenceNear,
       ] as any;
-    
+
       // Validar que todos los campos estén "tocados" y sin errores
-      return fieldsToValidate.every((field: { $dirty: boolean; $error: boolean }) => field.$dirty && !field.$error);
+      return fieldsToValidate.every(
+        (field: { $dirty: boolean; $error: boolean }) =>
+          field.$dirty && !field.$error
+      );
     },
-    
   },
   validations() {
     return {
@@ -195,51 +209,51 @@ export default defineComponent({
           ),
         } as any,
         description: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(
-              this.errorMessagges.maxLengthTextarea,
-              maxLength(255)
-            ),
-            minLength: helpers.withMessage(
-              this.errorMessagges.minLengthTextarea,
-              minLength(45)
-            ),
-            valid: helpers.withMessage(
-              this.errorMessagges.invalidTextWithNumber,
-              (value: string) => {
-                return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9.,:\-\(\)\s]+$/.test(value);
-              }
-            ),
-          } as any,
-          bussinessName: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(
-              this.errorMessagges.maxLength,
-              maxLength(45)
-            ),
-            minLength: helpers.withMessage(
-              this.errorMessagges.minLength,
-              minLength(4)
-            ),
-            valid: helpers.withMessage(
-              this.errorMessagges.invalidText,
-              (value: string) => {
-                return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
-              }
-            ),
-          } as any,
-          wallet: {
-            required: helpers.withMessage(this.errorMessagges.required, required),
-            maxLength: helpers.withMessage(
-              this.errorMessagges.maxLength,
-              maxLength(45)
-            ),
-            minLength: helpers.withMessage(
-              this.errorMessagges.minLength,
-              minLength(4)
-            ),
-            email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
-          } as any,
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLengthTextarea,
+            maxLength(255)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLengthTextarea,
+            minLength(45)
+          ),
+          valid: helpers.withMessage(
+            this.errorMessagges.invalidTextWithNumber,
+            (value: string) => {
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9.,:\-\(\)\s]+$/.test(value);
+            }
+          ),
+        } as any,
+        bussinessName: {
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
+          valid: helpers.withMessage(
+            this.errorMessagges.invalidText,
+            (value: string) => {
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
+            }
+          ),
+        } as any,
+        wallet: {
+          required: helpers.withMessage(this.errorMessagges.required, required),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLength,
+            maxLength(45)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLength,
+            minLength(4)
+          ),
+          email: helpers.withMessage(this.errorMessagges.invalidEmail, email),
+        } as any,
         address: {
           country: {
             required: helpers.withMessage(

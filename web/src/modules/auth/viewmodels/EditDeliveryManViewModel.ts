@@ -113,12 +113,23 @@ export default defineComponent({
         }
       },
       touchAllFields() {
-        this.v$.editedProfile.$touch();
+        const touchIfNotEmpty = (field:any) => {
+          if (field.$model !== null && field.$model !== "") {
+            field.$touch();
+          }
+        };
+      
+        touchIfNotEmpty(this.v$.editedProfile.name);
+        touchIfNotEmpty(this.v$.editedProfile.fistLastName);
+        touchIfNotEmpty(this.v$.editedProfile.secondLastName);
+      
+
       },
     },
     mounted() {
-      this.getProfileSeller();
-      this.touchAllFields();
+      this.getProfileSeller().then(()=>{
+        this.touchAllFields();
+      })
     },
     validations() {
         return {
