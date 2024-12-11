@@ -98,8 +98,8 @@
                 </div>
                 <div class="mt-5">
                   <b-row>
-                    <b-col cols="12" md="6">
-                      <b-button block variant="orange-primary"
+                    <b-col cols="12" md="12">
+                      <b-button block variant="orange-primary" @click="addToProductIntoCart"
                         >Agregar al carrito</b-button
                       >
                     </b-col>
