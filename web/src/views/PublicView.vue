@@ -103,7 +103,7 @@ export default defineComponent({
             icon: "inboxes",
             link: "/seller/product-list",
           },
-          { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
+          { title: "Mis Pedidos", icon: "box-seam", link: "/seller/seller-order-list" },
           { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
         ],
         COMPRADOR: [
