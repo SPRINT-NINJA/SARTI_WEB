@@ -27,7 +27,6 @@ export default defineComponent({
   methods: {
     async fetchOrderDeliveries() {
       try {
-        this.isLoading = true;
         const response = await OrderDeliveryService.getOrderDeliveriesHistory(this.pagination as GetOrderDeliveriesDto);
         this.orderDeliveries = response.data.content as Array<any>;
         
@@ -51,14 +50,11 @@ export default defineComponent({
         );
         this.orderDeliveries = [];
         this.pagination.page = 1;
-      } finally {
-        this.isLoading = false
       }
     },
 
     async fetchOrderProductsMissingRatesCount() {
       try {
-        this.isLoading = true;
         const response = await CustomerOrderProductService.getOrderProductMissingRate(this.pagination as GetMissingRateOrderProductDto);
         this.totalMissingRate = String(response.data.totalElements);
       } catch (error) {
@@ -67,8 +63,6 @@ export default defineComponent({
           "Error",
           "Ocurrió un error al obtener los pedidos"
         );
-      } finally {
-        this.isLoading = false
       }
     },
 
@@ -87,8 +81,10 @@ export default defineComponent({
     },
 
     async initView() {
+      this.isLoading = true
       await this.fetchOrderDeliveries();
       await this.fetchOrderProductsMissingRatesCount();
+      this.isLoading = false
     },
 
     async handlePageChange(page: number) {
