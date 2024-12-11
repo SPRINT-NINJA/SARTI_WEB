@@ -92,6 +92,12 @@
                         <span class="available-stock"
                           >(+ {{ value.product.stock }} disponibles)</span
                         >
+                        <span
+                          class="mx-4 available-stock"
+                          @click="RemoveProductByCart(value)"
+                        >
+                          <b>Eliminar</b>
+                        </span>
                       </b-col>
                     </b-row>
                     <b-row
@@ -169,6 +175,18 @@ export default {
 </script>
 
 <style scoped>
+.available-stock {
+  cursor: pointer;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.available-stock:hover {
+  text-decoration: underline;
+}
+
 .text-by-price {
   font-size: smaller;
 }
