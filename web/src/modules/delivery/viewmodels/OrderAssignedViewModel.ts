@@ -27,15 +27,23 @@ export default defineComponent({
     },
 
     methods: {
-        toggleProducts(index: any) {
-            // Alterna el estado del índice específico
-            this.$set(this.isShowProducts, index, !this.isShowProducts[index]);
-        },
         async fetchOrderDeliveriesHistory() {
             try {
                 this.isLoading = true;
                 const response = await OrderDeliveryService.getOrderDeliveriesHistory(this.pagination as GetOrderDeliveriesDto);
                 this.orderDeliveriesHistory = response.data.content as Array<any>;
+
+                this.orderDeliveriesHistory = this.orderDeliveriesHistory.map((el: any) => ({
+                    ...el,
+                    sartiOrder: {
+                        ...el.sartiOrder,
+                        orderProducts: el.sartiOrder.orderProducts.map((orderProduct: any) => ({
+                            ...orderProduct,
+                            productInfo: JSON.parse(orderProduct.productInfo),
+                        })),
+                    },
+                }));
+
                 this.totalRows = response.data.totalElements;
             } catch (error) {
                 console.error(error);
@@ -56,6 +64,13 @@ export default defineComponent({
                 const response = await OrderDeliveryService.getTakenOrderDeliveries();
                 console.log(response);
                 this.takenOrderDelivery = response.data[0]
+                this.takenOrderDelivery.sartiOrder = {
+                    ...this.takenOrderDelivery.sartiOrder,
+                    orderProducts: this.takenOrderDelivery.sartiOrder.orderProducts.map((orderProduct: any) => ({
+                        ...orderProduct,
+                        productInfo: JSON.parse(orderProduct.productInfo),
+                    })),
+                }
             } catch (error) {
                 console.error(error);
                 SweetAlertCustom.errorMessage(

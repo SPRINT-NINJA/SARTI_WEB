@@ -7,8 +7,10 @@ import './assets/main.css'
 import './assets/progressBar.css'
 import './assets/styleSideBar.css'
 // Import Bootstrap and BootstrapVue CSS files (order is important)
-import './assets/bootstrap.css'
+import '@/assets/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import '@/assets/styleSideBar.css'
+import '@/assets/progressBar.css'
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import Vuelidate from 'vuelidate';

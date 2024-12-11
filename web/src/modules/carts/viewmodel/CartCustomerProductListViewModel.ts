@@ -1,107 +1,129 @@
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { defineComponent } from "vue";
-//import {ICartCustomerProductList}  from "../models/CartCustomerProductListModel";
-import VueSweetalert2 from "vue-sweetalert2";
-
-    export  interface ICartCustomerProductList {
-        mainImage: string;
-        name: string;
-        price: number;
-        status: string;
-        stock: number;
-        amount?:number;
-      }
-  
-
-const test_cartProductList: ICartCustomerProductList[] = [
-    {
-      mainImage:"https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-      name: "Chocolate Cake",
-      price: 25.5,
-      status: "Disponible",
-      stock: 10,
-      amount: 2
-    },
-    {
-      mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-      name: "Vanilla Cupcake",
-      price: 590.0,
-      status: "Disponible",
-      stock: 20,
-      amount: 3
-    },
-    {
-      mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-      name: "Strawberry Cheesecake",
-      price: 40.0,
-      status: "No disponible",
-      stock: 0,
-      amount: 0
-    }
-  ];
-  
-  
+import CartService from "../service/CartService";
+import { ICartProduct } from "../models/CartCustomerProductListModel";
 
 export default defineComponent({
-    data(){
-        return{
-            cartCustomerProductList:[] as ICartCustomerProductList[],
-            total:0.0,
-            options: [
-                { value: null, text: 'Please select an option' },
-                { value: 'a', text: 'This is First option' },
-                { value: 'b', text: 'Selected Option' },
-                { value: { C: '3PO' }, text: 'This is an option with object value' },
-                { value: 'd', text: 'This one is disabled', disabled: true }
-              ]
-        }
-    },
-    methods: {
-      CountTotal(): void {
-        this.total = this.cartCustomerProductList.reduce((acc: number, product: ICartCustomerProductList) => {
-          // Verifica si amount es un número y mayor que 0
-          const amount = product.amount || 0;
-          return acc + (amount > 0 ? product.price * amount : 0);
-        }, 0)
-      },
-        quantityOptions(stock: number) {
-          const options = [{ text: "Elegir...", value: 0 }];
-          for (let i = 1; i <= stock; i++) {
-            options.push({ text: `${i} Unidad${i > 1 ? 'es' : ''}`, value: i });
-          }
-          return options;
-        },
-        RemoveProductByCart(productName: string): void {
-          this.$swal.fire({
-            title: "¿Seguro?",
-            text: "Se eliminara el producto de tu carrito.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#ffa446",
-            cancelButtonColor: "#e35b5d",
-            confirmButtonText: "Aceptar",
-            cancelButtonText: "Cancelar",
-            reverseButtons: true
-          }).then((result) => {
+  data() {
+    return {
+      total: 0.0,
+      takeinTheshop: false,
+      sendByAddress: true,
+      quantity: 1,
+      isLoading: false,
+      productList: [] as ICartProduct[], // Lista inicial vacía
+    };
+  },
+  methods: {
+    checkAmount(product: ICartProduct) {
+      console.log(product.amount)
+      if (product.amount === 0) {
+        SweetAlertCustom.questionMessage("¿Está seguro de eliminar el producto?", "Se eliminará del carrito el producto")
+          .then((result) => {
             if (result.isConfirmed) {
-              this.$swal.fire({
-                title: "Se ha eliminado correctamente",
-                text: "Tu artículo ha sido eliminado de tu carrito. Si deseas recuperarlo, vuelve a añadirlo.",
-                icon: "success",
-              });
-              this.cartCustomerProductList = this.cartCustomerProductList.filter(
-                product => product.name !== productName
-              );
+              this.RemoveProductByCart(product); // Llama al método de eliminación
+            } else {
+              // Si el usuario cancela, restauramos la cantidad a 1 (o al valor original si lo prefieres)
+              product.amount = 1;
             }
           });
-          console.log(productName)
-          this.CountTotal(); // Recalcula el total después de eliminar el producto
-        },
-        getCarCustomerProductList(): void {
-          this.cartCustomerProductList = test_cartProductList;
-          this.CountTotal();
-        }
-      },
-      mounted() {
-        this.getCarCustomerProductList();
       }
+      this.CountTotal(); // Aseguramos que el total siempre esté actualizado
+    },
+    CountTotal(): void {
+      this.total = this.productList.reduce(
+        (acc, product) => acc + (product.amount * product.product.price || 0),
+        0
+      );
+    },
+    RemoveProductByCart(product:ICartProduct) {
+      SweetAlertCustom.questionMessage("¿Está seguro de eliminar el producto?","Se eliminará del carrito el producto").then(async (result)=>{
+        console.log(result,"Confirm")
+        if(result.isConfirmed){
+          try {
+            const resp = await CartService.removeProductCart(product);
+            if(!resp.error){
+              product.amount = 1;
+              this.CountTotal();
+              SweetAlertCustom.successMessage("Se ha eliminado correctamente","Tu producto ha sido eliminado del carrito.")
+              location.reload(); 
+            }
+          } catch (error) {
+            console.error(error)
+          }
+        }else{
+          product.amount = 1;
+        }
+      })
+    },
+    async updateCart(product:ICartProduct){
+      try {
+        this.isLoading = true;
+        const resp = await CartService.updateProductCart(product);
+        if (!resp.error) {
+          SweetAlertCustom.successMessage(
+            "Se ha actualizado correctamente"
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    increment(product: ICartProduct) {
+      if (product.amount < product.product.stock) {
+        product.amount++;
+      }
+      this.CountTotal();
+      this.updateCart(product);
+    },
+    decrement(product: ICartProduct) {
+      if (product.amount > 0) {
+        product.amount--;
+        this.CountTotal();
+        this.updateCart(product);
+      }
+      
+      // Si la cantidad es 0, se elimina el producto del carrito
+      if (product.amount === 0) {
+        this.RemoveProductByCart(product);
+      }
+    },    
+    async addToProductIntoCart() {
+      try {
+        this.isLoading = true;
+        const resp = await CartService.getCart();
+        if (!resp.error) {
+          this.productList = resp.data.cartProducts;
+        }
+        this.CountTotal(); // Actualiza el total después de obtener los productos
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async cleanCart() {
+      try {
+        this.isLoading = true;
+        const resp = await CartService.cleanCart();
+        if (!resp.error) {
+          SweetAlertCustom.successMessage(
+            "El carrito se vacío",
+            "Tu carrito  ha sido vaciado"
+          );
+          location.reload(); 
+        }
+        this.CountTotal(); // Actualiza el total después de obtener los productos
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.addToProductIntoCart(); // Obtén los productos al cargar el componente
+  },
 });

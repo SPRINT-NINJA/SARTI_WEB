@@ -3,6 +3,10 @@ import { IProduct } from "@/modules/products/models/ProductModel";
 import ProductService from "@/modules/products/services/ProductService";
 import { defineComponent, defineAsyncComponent } from "vue";
 import PublicService from "./../service/PublicService";
+import { ICart } from "../models/AddCartModel";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+
+
 
 export default defineComponent({
   data() {
@@ -11,8 +15,15 @@ export default defineComponent({
       selectedProduct: {} as { id: "" },
       resumeRating: [] as any,
       ratingList: [] as any,
+      images: [] as Array<{
+        largeURL: string;
+        thumbnailURL: string;
+        width: number;
+        height: number;
+      }>,
       quantity: 1,
       isLoading: false,
+      addCart: {} as ICart
     };
   },
   created() {
@@ -20,7 +31,6 @@ export default defineComponent({
       this.selectedProduct = decryptParamsId(
         this.$route.params.id.toString()
       ) as { id: "" };
-      console.log(this.selectedProduct, "Producto escogido");
     } catch (e) {
       console.log(e);
     }
@@ -31,18 +41,34 @@ export default defineComponent({
     this.getListRating();
   },
   methods: {
+    filterGallery() {
+      if (
+        Array.isArray(this.productSelected.productImages) &&
+        this.productSelected.productImages.length > 0
+      ) {
+        this.images = this.productSelected.productImages.map((img: any) => ({
+          largeURL: img.image,
+          thumbnailURL: img.image,
+          width: 800,
+          height: 600,
+        }));
+      } else {
+        this.images = []; // Limpia las imágenes si no hay datos válidos
+      }
+      console.log(this.images, "Imagenes");
+    },
     async getDeatilproduct() {
       try {
         this.isLoading = true;
         const resp = await ProductService.getDetailProduct(
           this.selectedProduct
         );
-        console.log(resp, "Producto seleccionado");
         this.productSelected = resp.data;
         console.log(this.productSelected, "Producto seleccionado2");
       } catch (error) {
         console.log(error);
       } finally {
+        this.filterGallery();
         this.isLoading = false;
       }
     },
@@ -64,12 +90,32 @@ export default defineComponent({
     async getListRating() {
       try {
         this.isLoading = true;
-        console.log("Rsume id", this.productSelected.id);
+        console.log("list", this.productSelected.id);
         const resp = await PublicService.getRateListByProduct(
           this.selectedProduct
         );
         console.log(resp, "listado Rate");
         this.ratingList = resp.data.content;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async addToProductIntoCart() {
+      try {
+        this.isLoading = true;
+        this.addCart.productId = this.productSelected.id;
+        this.addCart.quantity = this.quantity;
+        console.log(this.addCart)
+        const resp = await PublicService.addProductIntoCart(this.addCart);
+        console.log(resp, "agregando producto a carrito");
+        if(!resp.error){
+          SweetAlertCustom.successMessage(
+            "¡Producto añadido al carrito!",
+            "Revisa tu carrito para confirmar tu pedido."
+          );
+        }
       } catch (error) {
         console.log(error);
       } finally {

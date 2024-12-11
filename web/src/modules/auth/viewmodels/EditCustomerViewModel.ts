@@ -119,12 +119,28 @@ export default defineComponent({
       }
     },
     touchAllFields() {
-      this.v$.editedProfile.$touch();
-    },
+      const touchIfNotEmpty = (field:any) => {
+        if (field.$model !== null && field.$model !== "") {
+          field.$touch();
+        }
+      };
+    
+      const addressFields = this.v$.editedProfile.address;
+    
+      touchIfNotEmpty(this.v$.editedProfile.name);
+      touchIfNotEmpty(this.v$.editedProfile.fistLastName);
+      touchIfNotEmpty(this.v$.editedProfile.secondLastName);
+    
+      Object.keys(addressFields).forEach((key) => {
+        touchIfNotEmpty(addressFields[key]);
+      });
+    }
+    
   },
   mounted() {
-    this.getUpdateCustomer();
-    this.touchAllFields();
+    this.getUpdateCustomer().then(() => {
+      this.touchAllFields();
+    });
   },
   computed: {
     isStepValid() {

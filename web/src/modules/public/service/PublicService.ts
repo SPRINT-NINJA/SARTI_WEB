@@ -2,7 +2,8 @@ import axios from "../../../config/client.gateway";
 import { SellerListDto } from "../models/SellerListDto";
 import { CustomResponse, CustomResponsePageable } from "@/kernel/types";
 import { RequestHandler } from "@/kernel/RequestHandler";
-import { IProduct } from "@/modules/products/models/ProductModel";
+import { ICart } from "../models/AddCartModel";
+
 
 export default class PublicService {
     private static baseUrl = "/seller";
@@ -22,6 +23,11 @@ export default class PublicService {
 
     static async getRateListByProduct(payload: any): Promise<CustomResponse<any>> {
         return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrlRate}/${payload.id}`));
+    }
+
+    
+    static async addProductIntoCart(payload: ICart): Promise<CustomResponse<any>> {
+        return await RequestHandler.handleRequest(axios.doPostAnyObject(`/cart?productId=${payload.productId}&quantity=${payload.quantity}`));
     }
 
     
