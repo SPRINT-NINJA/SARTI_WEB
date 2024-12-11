@@ -39,7 +39,10 @@
     "src/**/*.vue",
     "src/**/*.d.ts", // Include d.ts files in src
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "vite.config.*",
+    "vitest.config.*",
+    "src/router.ts"
   ],
   "exclude": [
     "node_modules"
