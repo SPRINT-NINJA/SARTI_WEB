@@ -3,7 +3,7 @@
     <b-container fluid class="mt-4 mb-4">
       <custom-overlay :isLoading="isLoading" />
       <b-row>
-        <b-col cols="12" md="3">
+        <b-col cols="12" md="4">
           <b-card no-body class="w-100 shadow">
             <img
               src="../../../assets/bienvenida.svg"
@@ -51,7 +51,7 @@
             </b-card>
           </div>
         </b-col>
-        <b-col cols="12" md="9">
+        <b-col cols="12" md="8">
           <section v-if="productsSeller.length === 0">
         <div class="mb-2 text-center ">
           <img src="@/assets/NoProducts.svg" class="w-70 sold-out-image" >
@@ -68,7 +68,6 @@
             cols="12"
             sm="6"
             md="4"
-            lg="3"
             v-for="product in productsSeller"
             :key="product.id"
             class="mt-2 mb-2"
