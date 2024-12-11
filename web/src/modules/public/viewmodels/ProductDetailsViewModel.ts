@@ -3,6 +3,10 @@ import { IProduct } from "@/modules/products/models/ProductModel";
 import ProductService from "@/modules/products/services/ProductService";
 import { defineComponent, defineAsyncComponent } from "vue";
 import PublicService from "./../service/PublicService";
+import { ICart } from "../models/AddCartModel";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+
+
 
 export default defineComponent({
   data() {
@@ -19,6 +23,7 @@ export default defineComponent({
       }>,
       quantity: 1,
       isLoading: false,
+      addCart: {} as ICart
     };
   },
   created() {
@@ -37,7 +42,10 @@ export default defineComponent({
   },
   methods: {
     filterGallery() {
-      if (Array.isArray(this.productSelected.productImages) && this.productSelected.productImages.length > 0) {
+      if (
+        Array.isArray(this.productSelected.productImages) &&
+        this.productSelected.productImages.length > 0
+      ) {
         this.images = this.productSelected.productImages.map((img: any) => ({
           largeURL: img.image,
           thumbnailURL: img.image,
@@ -47,8 +55,8 @@ export default defineComponent({
       } else {
         this.images = []; // Limpia las imágenes si no hay datos válidos
       }
-      console.log(this.images,"Imagenes");
-    },    
+      console.log(this.images, "Imagenes");
+    },
     async getDeatilproduct() {
       try {
         this.isLoading = true;
@@ -88,6 +96,26 @@ export default defineComponent({
         );
         console.log(resp, "listado Rate");
         this.ratingList = resp.data.content;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async addToProductIntoCart() {
+      try {
+        this.isLoading = true;
+        this.addCart.productId = this.productSelected.id;
+        this.addCart.quantity = this.quantity;
+        console.log(this.addCart)
+        const resp = await PublicService.addProductIntoCart(this.addCart);
+        console.log(resp, "agregando producto a carrito");
+        if(!resp.error){
+          SweetAlertCustom.successMessage(
+            "¡Producto añadido al carrito!",
+            "Revisa tu carrito para confirmar tu pedido."
+          );
+        }
       } catch (error) {
         console.log(error);
       } finally {

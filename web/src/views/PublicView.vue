@@ -34,13 +34,13 @@
         <!-- Condicional para mostrar la barra de búsqueda solo para ciertos roles -->
         <div class="search" v-if="showSearchAndCart">
           <label>
-            <b-input type="text" placeholder="Buscar productos..." />
+            <b-input type="text" placeholder="Buscar productos..."  />
           </label>
         </div>
 
         <!-- Condicional para mostrar el carrito solo para ciertos roles -->
         <div class="user color-cart n" v-if="showSearchAndCart">
-          <a href="/customer/cart">
+          <a :href="userRole ? '/customer/cart':'/login'">
             <b-icon font-scale="2" icon="cart4"></b-icon>
           </a>
         </div>
@@ -103,7 +103,7 @@ export default defineComponent({
             icon: "inboxes",
             link: "/seller/product-list",
           },
-          { title: "Mis Pedidos", icon: "box-seam", link: "/seller/" },
+          { title: "Mis Pedidos", icon: "box-seam", link: "/seller/seller-order-list" },
           { title: "Cerrar sesión", icon: "box-arrow-in-left", link: "/login" },
         ],
         COMPRADOR: [
@@ -112,6 +112,7 @@ export default defineComponent({
             icon: "person",
             link: "/customer/profile-customer",
           },
+          { title: "Inicio", icon: "house", link: "/sarti/home-page" },
           {
             title: "Mis Compras",
             icon: "bag",
