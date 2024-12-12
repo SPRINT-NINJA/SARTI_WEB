@@ -1,13 +1,14 @@
 <template>
   <div class="">
+    <custom-overlay :isLoading="isLoading" />
     <b-container>
       <section>
         <b-row>
           <b-col cols="12" md="7">
             <OptionsUploadImage
-              :image="product.images"
-              @update:image="product.images = $event"
-              v-show="timeCharging === false"
+              :image="productImages"
+              @update:image="productImages = $event"
+              v-show="!timeCharging"
               :progress-value="progress1"
               @charge-image-upload="timeCharging = $event"
               :limitImages="4"
@@ -18,10 +19,15 @@
                 <b-col
                   cols="12"
                   md="3"
-                  v-for="(item, index) in product.images"
+                  v-for="(item, index) in productImages"
                   :key="index"
                 >
-                  <img :src="item" class="photo" height="100" />
+                  <img
+                    :src="item.url"
+                    class="photo"
+                    height="100"
+                    :alt="item.name"
+                  />
                 </b-col>
               </b-row>
             </b-card>
@@ -34,17 +40,40 @@
                   <b-col cols="12" md="4" class="text-center">
                     <b-button
                       variant="danger"
-                      @click="decrement"
-                      :disabled="count <= 0"
+                      @click="decreaseStock"
+                      :disabled="product.stock <= 1"
                     >
                       -
                     </b-button>
                   </b-col>
-                  <b-col cols="12" md="4" class="text-center">
-                    <h1>{{ count }}</h1>
+                  <b-col
+                    cols="4"
+                    class="d-flex justify-content-center align-items-center w-100"
+                  >
+                    <!-- Contenedor para centrar el input -->
+                    <b-form-input
+                      id="input-stock"
+                      v-model="v$.product.stock.$model"
+                      min="1"
+                      class="text-center h4 font-weight-bold w-100"
+                      style="
+                        width: 60px;
+                        border: none;
+                        outline: none;
+                        background-color: transparent;
+                        pointer-events: auto;
+                      "
+                      :state="
+                        v$.product.stock.$dirty
+                          ? !v$.product.stock.$error
+                          : null
+                      "
+                      @blur="v$.product.stock.$touch()"
+                      @input="validateStock"
+                    />
                   </b-col>
                   <b-col cols="12" md="4" class="text-center">
-                    <b-button variant="success" @click="increment">
+                    <b-button variant="success" @click="increaseStock">
                       +
                     </b-button>
                   </b-col>
@@ -67,9 +96,19 @@
                   <b-form-input
                     id="input-1"
                     type="text"
-                    v-model="product.name"
+                    v-model="v$.product.name.$model"
                     required
+                    :state="
+                      v$.product.name.$dirty ? !v$.product.name.$error : null
+                    "
+                    @blur="v$.product.name.$touch()"
                   ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.product.name.$errors"
+                    :key="error.$uid"
+                  >
+                    {{ error.$message }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6">
@@ -81,10 +120,22 @@
                   <b-input-group prepend="$" class="mb-2 mr-sm-2 mb-sm-0">
                     <b-form-input
                       id="input-2"
-                      type="number"
-                      v-model="product.price"
+                      v-model="v$.product.price.$model"
                       required
+                      :state="
+                        v$.product.price.$dirty
+                          ? !v$.product.price.$error
+                          : null
+                      "
+                      @blur="v$.product.price.$touch()"
+                      @keydown="enterOnlyDecimalNumbers"
                     ></b-form-input>
+                    <b-form-invalid-feedback
+                      v-for="error in v$.product.price.$errors"
+                      :key="error.$uid"
+                    >
+                      {{ error.$message }}
+                    </b-form-invalid-feedback>
                   </b-input-group>
                 </b-form-group>
               </b-col>
@@ -97,20 +148,36 @@
                   <b-form-textarea
                     id="input-2"
                     type="number"
-                    v-model="product.description"
+                    v-model="v$.product.description.$model"
                     required
+                    :state="
+                      v$.product.description.$dirty
+                        ? !v$.product.description.$error
+                        : null
+                    "
+                    @blur="v$.product.description.$touch()"
                   ></b-form-textarea>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.product.description.$errors"
+                    :key="error.$uid"
+                  >
+                    {{ error.$message }}
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
-              
-              <b-col cols="12" md="12" lg="12" >
-                <div  class="d-flex justify-content-end mt-auto">
-                  <b-button variant="red-palete" >
-                    Rgistrar Producto
+
+              <b-col cols="12" md="12" lg="12">
+                <div class="d-flex justify-content-end mt-auto">
+                  <b-button
+                    variant="red-palete"
+                    @click="saveProduct"
+                    :disabled="
+                      v$.$invalid || productImages.length === 0 || !timeCharging
+                    "
+                  >
+                    Registrar producto
                   </b-button>
-
                 </div>
-
               </b-col>
             </b-row>
           </b-form>
@@ -127,6 +194,8 @@ export default {
   name: "CreateProduct",
   components: {
     OptionsUploadImage,
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [ProductCreateViewModel],
 };
