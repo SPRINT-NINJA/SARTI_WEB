@@ -169,7 +169,7 @@ export default defineComponent({
        
         if (!resp.error) {
           this.createLoading = false;
-          localStorage.setItem('token', JSON.stringify(resp));
+          localStorage.setItem('token', resp);
           if (await this.checkNextRedirect())
           SweetAlertCustom.successMessage();
         }
