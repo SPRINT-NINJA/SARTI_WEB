@@ -45,7 +45,7 @@
 
                     <div class="mt-3" v-else>
                       <b-button
-                        variant="orange-primary"
+                        variant="primary"
                         @click="handleChangeStep(takenOrderDelivery)"
                         >Terminar Pedido</b-button
                       >

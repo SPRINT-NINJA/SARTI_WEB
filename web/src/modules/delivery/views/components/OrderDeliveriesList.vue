@@ -63,33 +63,32 @@
                     </div>
                   </b-col>
                   <b-col cols="12" md="8" class="pl-3 my-3">
-                    <div><b>Producto:</b> {{ orderProduct.productInfo.name }}</div>
+                    <div>
+                      <b>Producto:</b> {{ orderProduct.productInfo.name }}
+                    </div>
                     <div>
                       <b>Descripción:</b>
                       {{ orderProduct.productInfo.description }}
                     </div>
-                    <div><b>Precio:</b> ${{ orderProduct.productInfo.price }}</div>
+                    <div>
+                      <b>Precio:</b> ${{ orderProduct.productInfo.price }}
+                    </div>
                     <div><b>Cantidad:</b> {{ orderProduct.amount }}</div>
                     <div><b>Total:</b> ${{ orderProduct.total }}</div>
                   </b-col>
                 </b-row>
-                <b-row v-if="isCustomerHistory"  class="d-flex justify-content-end">
-                  <b-col cols="12" sm="8" md="6">
+                <b-row
+                  v-if="isCustomerHistory"
+                  class="d-flex justify-content-end"
+                >
+                  <b-col cols="12" sm="6" md="4">
                     <div>
                       <b-row>
-                        <b-col cols="12" sm="6" class="mt-2">
+                        <b-col cols="12" class="mt-2">
                           <b-button
                             variant="orange-primary"
                             block
-                            @click="takeOrder(orderProduct)"
-                            >Ver producto</b-button
-                          >
-                        </b-col>
-                        <b-col cols="12" sm="6" class="mt-2">
-                          <b-button
-                            variant="orange-primary"
-                            block
-                            @click="takeOrder(orderProduct)"
+                            @click="getProductPerDetails(orderProduct)"
                             >Volver a comprar</b-button
                           >
                         </b-col>
@@ -117,7 +116,9 @@
 
 <script lang="ts">
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { encryptParamsId } from "@/kernel/utils/cryptojs";
 import { defineComponent } from "vue";
+import { OrderProduct } from "../../models/OrderDelivery";
 import OrderDeliveryService from "../../services/OrderDeliveryService";
 
 export default defineComponent({
@@ -197,6 +198,26 @@ export default defineComponent({
           "Error",
           "Ocurrió un error al tomar el pedido"
         );
+      }
+    },
+    async getProductPerDetails(item: OrderProduct) {
+      try {
+        if (!item.product || !item.product.id) {
+          SweetAlertCustom.productDeletedOrInactive();
+          return;
+        }
+
+        const {
+          product: { id },
+        } = item;
+
+        const encryptParam = encryptParamsId(id!.toString());
+        await this.$router.push({
+          name: "product-details",
+          params: { id: encryptParam },
+        });
+      } catch (error) {
+        console.error(error);
       }
     },
     toggleProducts(index: number) {
