@@ -1,124 +1,107 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required,maxLength, minLength, email, helpers } from "@vuelidate/validators";
-
-export interface CreateRateCustomer{
-    comment:string,
-    rate:number,
-    image:string,
-}
-
-export interface productRate {
-    name: string;
-    mainImage: string;
-    description: string;
-}
-
-const testProduct: productRate = 
-    {
-        name: "Cupcake de Vainilla",
-        mainImage: "https://images.mrcook.app/recipe-image/01910ce6-c8b7-7aa2-be62-0fc6ad02194b",
-        description: "Delicioso cupcake de vainilla con glaseado de crema de mantequilla, decorado con chispas de colores."
-    }
-;
-
-
-
+import {
+  required,
+  maxLength,
+  minLength,
+  email,
+  helpers,
+} from "@vuelidate/validators";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { decryptParamsId } from "@/kernel/utils/cryptojs";
+import { IcreateRate } from "../models/CustomerCreateRateModel";
+import RateService from "../service/RateService";
 
 export default defineComponent({
-    setup(){
-        const v$ = useVuelidate();
-        return { v$ };
+  setup() {
+    const v$ = useVuelidate();
+    return { v$ };
+  },
+  props: {
+    productId: {
+      type: Number,
+      default: 0,
     },
-    data(){
-        return{
-            getProduct:{} as productRate,
-            review:{
-                comment:"",
-                rate:0,
-                image:""
-            },
-            imagesUpload: {},
-            showConfirmImage: false,
-            errorMessagges:{
-                required:"Por favor llena el formulario",
-                invalidText:"No se aceptan caracteres especiales",
-                minLengthText:"Se aceptan solo el minímo de 10 caracteres",
-                maxLengthText:"Solo máximo 100 caracteres"
-            },
-            fillForm:true
+    orderProductId: {
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    return {
+      isLoading: false,
+      toggle: false,
+      review: {
+        rate: 0,
+        image: "",
+        comment:""
+      } as IcreateRate,
+      imagesUpload: {},
+      showConfirmImage: false,
+      errorMessagges: {
+        required: "Campo obligatorio",
+        minLengthreferenceNear: "Mínimo 10 caracteres",
+        maxLengthreferenceNear: "Máximo 50 caracteres",
+        invalidTextWithNumber: "No se aceptan caracteres especiales",
+      },
+      comment:"",
+      fillForm: true,
+      evidenceImage: [] as any,
+      progressImages: 0,
+      timeChargingImages: false,
+    };
+  },
+  computed:{
+
+  },
+  methods: {
+    openForm() {
+      this.toggle = !this.toggle;
+    },
+    async createRate(){
+      try {
+        this.isLoading = true;
+        this.review.image = this.evidenceImage[0].target;
+        this.review.productId = this.productId;
+        this.review.comment = this.comment;
+        this.review.orderProductId = this.orderProductId;
+        const resp = await RateService.createRate(this.review);
+        if (!resp.error) {
+          SweetAlertCustom.successMessage(
+            "Se ha enviado tu reseña correctamente",
+            "Muchas gracias por realizar la reseña"
+          );
+          location.reload();
         }
-    },
-    methods:{
-        getProductByRate(){
-            this.getProduct = testProduct;
-        },
-        updateImagesUpload(images: { name: string; url: string }[]) {
-            this.imagesUpload = images;
-        },
-        SendReview(){
-            console.log(this.review)
-            this.$swal.fire({
-                title: "¿Estás Seguro?",
-                text: "Se enviara la reseña de este producto, muchas gracias por realizarla",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#ffa446",
-                cancelButtonColor: "#e35b5d",
-                confirmButtonText: "Aceptar",
-                cancelButtonText: "Cancelar",
-                reverseButtons: true
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.$swal.fire({
-                    title: "Se ha enviado correctamente",
-                    text: "Tu reseña ha sido enviada",
-                    icon: "success",
-                  });
-                }
-              });
-        },
-        confirmImages(){
-            this.$swal.fire({
-                title: "¿Estás Seguro?",
-                text: "Se alamacenaran las fotos y no se podrán cambiar",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#ffa446",
-                cancelButtonColor: "#e35b5d",
-                confirmButtonText: "Aceptar",
-                cancelButtonText: "Cancelar",
-                reverseButtons: true
-              }).then((result) => {
-                if (result.isConfirmed) {
-                    // this.review.image = this.imagesUpload;
-                    this.showConfirmImage = true;
-                }
-              });
-        },
-        fillFormAprove(){
-            if(this.review.comment != null  && this.review.image != null  && this.review.rate > 0 ) 
-                return true;
-        }
-    },
-    mounted(){
-        this.getProductByRate();
-    },
-    validations(){
-        return{
-            review:{
-                comment:{
-                    required: helpers.withMessage(this.errorMessagges.required, required),
-                    maxLength: helpers.withMessage(this.errorMessagges.maxLengthText,maxLength(100)),
-                    minLength: helpers.withMessage(this.errorMessagges.minLengthText,minLength(10)),
-                    valid: helpers.withMessage(
-                      this.errorMessagges.invalidText,
-                      (value:string)=>{
-                        return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/g.test(value);
-                      }
-                    )
-                } as any
-            }
-        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
     }
+  },
+  validations() {
+    return {
+        comment: {
+          required: helpers.withMessage(
+            this.errorMessagges.required,
+            required
+          ),
+          maxLength: helpers.withMessage(
+            this.errorMessagges.maxLengthreferenceNear,
+            maxLength(50)
+          ),
+          minLength: helpers.withMessage(
+            this.errorMessagges.minLengthreferenceNear,
+            minLength(10)
+          ),
+          valid: helpers.withMessage(
+            this.errorMessagges.invalidTextWithNumber,
+            (value: string) => {
+              return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9.,:\-\(\)\s]+$/.test(value);
+            }
+          ),
+        } as any,
+    };
+  },
 });

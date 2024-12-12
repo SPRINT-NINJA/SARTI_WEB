@@ -2,7 +2,7 @@
   <div>
     <section>
       <div class="d-flex align-items-center mb-3">
-        <div class="rating-score">{{ rating.rate }}</div>
+        <div class="rating-score">{{ rating.rating }}</div>
         <div>
           <b-form-rating
             value="8.8"
@@ -13,16 +13,18 @@
             variant="warning"
           >
           </b-form-rating>
-          <span class="total-qualifications ml-3">{{ rating.totalQualifications }} calificaciones</span>
+          <span class="total-qualifications ml-3"
+            >{{ rating.ratingCount }} calificaciones</span
+          >
         </div>
       </div>
     </section>
     <section>
       <b-progress
-        v-for="(rate, index) in rating.stars"
+        v-for="(rate, index) in rating.starsCount"
         :key="index"
-        :value="rating.stars[index]"
-        :max="rating.totalQualifications"
+        :value="rate.count"
+        :max="rating.ratingCount"
         variant="warning"
         class="mb-3"
       ></b-progress>

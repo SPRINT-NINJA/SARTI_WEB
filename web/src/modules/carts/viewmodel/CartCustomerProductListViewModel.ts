@@ -41,9 +41,9 @@ export default defineComponent({
         console.log(result,"Confirm")
         if(result.isConfirmed){
           try {
-            const resp = await CartService.removeProductCart(product);
+            console.log(product.id,"elimna solo este")
+            const resp = await CartService.removeProductCart(product.id);
             if(!resp.error){
-              product.amount = 1;
               this.CountTotal();
               SweetAlertCustom.successMessage("Se ha eliminado correctamente","Tu producto ha sido eliminado del carrito.")
               location.reload(); 
@@ -79,16 +79,16 @@ export default defineComponent({
       this.updateCart(product);
     },
     decrement(product: ICartProduct) {
-      if (product.amount > 0) {
-        product.amount--;
-        this.CountTotal();
-        this.updateCart(product);
-      }
-      
-      // Si la cantidad es 0, se elimina el producto del carrito
+      product.amount--;
       if (product.amount === 0) {
         this.RemoveProductByCart(product);
       }
+
+      if (product.amount > 0) {
+        this.CountTotal();
+        this.updateCart(product);
+      }
+    
     },    
     async addToProductIntoCart() {
       try {
