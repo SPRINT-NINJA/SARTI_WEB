@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import charge from "../assets/loading.gif";
+import productoDeletedImage from "@/assets/producto_deleted_or_inactive.png";
 
 class SweetAlertCustom {
   static questionMessage(
@@ -31,7 +32,7 @@ class SweetAlertCustom {
     });
   }
 
-  static warningMessage(title: string, text:string){
+  static warningMessage(title: string, text: string) {
     Swal.fire({
       title: title,
       text: text,
@@ -41,7 +42,7 @@ class SweetAlertCustom {
     });
   }
 
-  static successMessage(title = "Éxito", text = "Acción realizada", timer?: any, ) {
+  static successMessage(title = "Éxito", text = "Acción realizada", timer?: any,) {
     if (!timer) timer = 1500;
     Swal.fire({
       title: title,
@@ -140,7 +141,7 @@ class SweetAlertCustom {
     });
   }
 
-  static loading(title = "Cargando", text = "Espera estamos en proceso de tu información", timer?: any, ) {
+  static loading(title = "Cargando", text = "Espera estamos en proceso de tu información", timer?: any,) {
     if (!timer) timer = 1500;
     Swal.fire({
       title: title,
@@ -151,15 +152,27 @@ class SweetAlertCustom {
       timer: timer,
       showConfirmButton: false,
       allowOutsideClick: false,
-      allowEscapeKey: false,   
+      allowEscapeKey: false,
     });
   }
 
-
-
-
+  static productDeletedOrInactive(
+    title = "¡Ops!, no encontramos lo que estás buscando",
+    text = "El producto que estás buscando parece haber sido borrado o desactivado."
+  ) {
+    Swal.fire({
+      title: title,
+      text: text,
+      imageUrl: productoDeletedImage, // Usamos la importación directa
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: "Producto no encontrado",
+      showConfirmButton: false,
+      allowOutsideClick: true,
+      backdrop: true,
+      timer: 3000
+    });
+  }
 }
-
-
 
 export default SweetAlertCustom;

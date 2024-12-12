@@ -1,115 +1,93 @@
 <template>
   <!-- Agregar componente de cristian -->
   <div>
+    <custom-overlay :isLoading="isLoading" />
     <banner-overlay
-      :imgSrc="require('../../../assets/banner-pedido.svg')"
+      :imgSrc="require('@/assets/banner-pedido.svg')"
       :content="'MIS PEDIDOS'"
     />
     <div class="d-flex align-items-center justify-content-center">
-      <b-card bg-variant="orange-soft" class="card-preview-order my-2">
-        <b-container>
-          <!-- Producto en espera de una opinión -->
-          <b-row>
-            <b-col cols="12" md="9">
-              <b-row>
-                <b-col cols="12" md="3">
-                  <b-avatar
-                    size="60px"
-                    src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-                    badge="3"
-                    variant="warning"
-                    badge-variant="danger"
-                  >
-                  </b-avatar>
-                </b-col>
-                <b-col
-                  cols="12"
-                  md="9"
-                  class="d-flex justify-content-right align-items-center"
-                >
-                  <b-card-text>Un producto espera tu opinión</b-card-text>
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col
-              cols="12"
-              md="3"
-              class="d-flex justify-content-end align-items-center"
-            >
-              <b-button size="sm" variant="red-palete" @click="goToOrderWithoutRate" > Crear reseña </b-button>
-            </b-col>
-          </b-row>
-        </b-container>
-      </b-card>
-    </div>
-    <!-- pedido preview -->
-    <div
-      class="d-flex align-items-center justify-content-center my-2"
-      v-for="order in paginatedOrders"
-      :key="order.order.dateForArrive"
-    >
-      <b-card class="card-preview-order">
-        <b-card-text class="date-text">
-          {{ parseDateByRead(order.order.dateForArrive) }}
-        </b-card-text>
-        <hr />
-        <b-container>
-          <b-row>
-            <b-col cols="12" md="8">
-              <b-row cols="12" md="8">
-                <b-col cols="12" md="3">
-                  <img
-                    :src="order.order.product.mainImage"
-                    alt="producto"
-                    class="img-main-product"
-                  />
-                </b-col>
-                <b-col
-                  cols="12"
-                  md="9"
-                  class="d-stretch justify-content-right align-items-center"
-                >
-                  <b-badge :variant="assignColorBystatus(order.order.status)">{{
-                    order.order.status
-                  }}</b-badge>
-                  <br />
-                  {{ order.order.product.name }}<br />
-                  <p class="date-text">
-                    ${{ order.order.product.price }} | unidades:
-                    {{ order.order.amount }}
-                  </p>
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col cols="12" md="4">
-              <b-button class="my-2 mx-2" size="sm" variant="orange-secundary" @click="goToOrderDetails(order.order.id)" >
-                Ver compra
-              </b-button>
-              <b-button variant="orange-primary" size="sm">
-                Volver a comprar
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-container>
-      </b-card>
-    </div>
+      <b-card
+        class="mt-4"
+        bg-variant="orange-soft"
+        text-variant="dark"
+        border-variant="light"
+      >
+        <!-- Encabezado -->
+        <b-row class="text-center mb-3">
+          <b-col>
+            <h5 class="mb-2"><b>¡Tu opinión importa!</b></h5>
+            <p>Comparte tu experiencia sobre estos productos.</p>
+          </b-col>
+        </b-row>
 
-    <!-- Paginador -->
-    <div class="d-flex align-items-center justify-content-center my-2">
-      <b-pagination
-        v-model="currentPage"
-        :total-rows="totalRows"
-        :per-page="pageSize"
-        size="sm"
-        pills
-        @input="updatePaginatedOrders"
-      ></b-pagination>
+        <!-- Contenido principal -->
+        <b-row class="align-items-center">
+          <!-- Avatar del producto -->
+          <b-col cols="auto">
+            <b-avatar
+              size="70px"
+              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
+              :badge="totalMissingRate"
+              badge-variant="danger"
+            ></b-avatar>
+          </b-col>
+
+          <!-- Texto descriptivo -->
+          <b-col class="ml-3">
+            <p class="mb-1 font-weight-bold">¡Dinos qué piensas!</p>
+            <p class="mb-0">
+              Estos productos esperan tu reseña. Tómate un momento para
+              contarnos tu experiencia.
+            </p>
+          </b-col>
+
+          <!-- Botón de acción -->
+          <b-col
+            cols="auto"
+            class="d-flex justify-content-end align-items-end align-self-end mt-auto"
+          >
+            <b-button
+              variant="light"
+              size="md"
+              pill
+              class="font-weight-bold d-flex align-items-center btn-transition"
+              @click="goToOrderWithoutRate"
+            >
+              <i class="bi bi-pencil mr-2"></i> Comenzar a reseñar
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-card>
     </div>
+    <!-- Listado de pedidos -->
+    <b-container>
+      <order-deliveries-list
+        :orderDeliveriesProp="orderDeliveries"
+        :initialToggleStateProp="true"
+        :isCustomerHistoryProp="true"
+        :isDeliveryManToTakeListProp="false"
+      />
+    </b-container>
+    <!-- Paginador -->
+    <b-row class="justify-content-center mt-4">
+      <b-col cols="12">
+        <div class="d-flex align-items-center justify-content-center my-2">
+          <b-pagination
+            v-model="pagination.page"
+            :total-rows="totalRows"
+            :per-page="pagination.size"
+            size="sm"
+            pills
+            @change="handlePageChange"
+          ></b-pagination>
+        </div>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { defineAsyncComponent } from "vue";
 import CustomerOrderListViewModel from "../viewmodels/CustomerOrderListViewModel";
 import BannerComponent from "@/modules/public/components/BannerComponent.vue";
 import BannerOverlay from "@/modules/public/components/BannerOverlay.vue";
@@ -117,19 +95,17 @@ export default {
   name: "CustomerOrderListView",
   components: {
     BannerComponent: BannerComponent,
-    BannerOverlay: BannerOverlay
+    BannerOverlay: BannerOverlay,
+    OrderDeliveriesList: () =>
+      import("@/modules/delivery/views/components/OrderDeliveriesList.vue"),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
   },
   mixins: [CustomerOrderListViewModel],
 };
 </script>
 
 <style scoped>
-.card-preview-order {
-  width: 70%;
-  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
-  border: none;
-}
-
 .img-main-product {
   display: flex;
   align-items: baseline;

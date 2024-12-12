@@ -45,7 +45,7 @@
 
                     <div class="mt-3" v-else>
                       <b-button
-                        variant="orange-primary"
+                        variant="primary"
                         @click="handleChangeStep(takenOrderDelivery)"
                         >Terminar Pedido</b-button
                       >
@@ -114,9 +114,9 @@
                 <b-row>
                   <b-col
                     cols="12"
-                    v-for="product in takenOrderDelivery.sartiOrder
+                    v-for="orderProduct in takenOrderDelivery.sartiOrder
                       ?.orderProducts"
-                    :key="product.id"
+                    :key="orderProduct.id"
                     class="mt-1"
                   >
                     <b-card no-body shadow w-100 class="py-2 px-2 mb-2">
@@ -124,21 +124,21 @@
                         <b-col cols="auto">
                           <div>
                             <b-avatar
-                              :src="product.product.mainImage"
+                              :src="orderProduct.productInfo.mainImage"
                               size="100px"
                               rounded
                             ></b-avatar>
                           </div>
                         </b-col>
                         <b-col cols="12" md="8" class="pl-3 my-3">
-                          <div><b>Producto:</b> {{ product.product.name }}</div>
+                          <div><b>Producto:</b> {{ orderProduct.productInfo.name }}</div>
                           <div>
                             <b>Descripción:</b>
-                            {{ product.product.description }}
+                            {{ orderProduct.productInfo.description }}
                           </div>
-                          <div><b>Precio:</b> ${{ product.product.price }}</div>
-                          <div><b>Cantidad:</b> {{ product.amount }}</div>
-                          <div><b>Total:</b> ${{ product.total }}</div>
+                          <div><b>Precio:</b> ${{ orderProduct.productInfo.price }}</div>
+                          <div><b>Cantidad:</b> {{ orderProduct.amount }}</div>
+                          <div><b>Total:</b> ${{ orderProduct.total }}</div>
                         </b-col>
                       </b-row>
                     </b-card>
@@ -165,91 +165,13 @@
         <!-- Historial de pedidos -->
         <b-col cols="12" md="6" lg="6" class="mb-4">
           <h2 class="section-title">Historial de Pedidos</h2>
+          <order-deliveries-list
+            :orderDeliveriesProp="orderDeliveriesHistory"
+            :initialToggleStateProp="false"
+            :isCustomerHistoryProp="false"
+            :isDeliveryManToTakeListProp="false"
+          />
           <b-row class="justify-content-center mt-4">
-            <!-- Muestra los pedidos disponibles -->
-            <b-col
-              cols="12"
-              v-for="(orderDeliveryHistory, index) in orderDeliveriesHistory"
-              :key="index"
-            >
-              <b-card>
-                <b-row>
-                  <!-- Información principal del pedido -->
-                  <b-col cols="12" class="px-3 pt-3">
-                    <h5 class="mb-2 order-title">
-                      <span>Pedido:</span>
-                      {{ orderDeliveryHistory.orderNumber }}
-                    </h5>
-                    <p>
-                      <b>Estado:</b>
-                      {{ orderDeliveryHistory.orderDeliveryStep }}
-                    </p>
-                    <p>
-                      <b>Cliente:</b>
-                      {{ orderDeliveryHistory.sartiOrder?.customer?.name }}
-                      {{
-                        orderDeliveryHistory.sartiOrder?.customer?.fistLastName
-                      }}
-                    </p>
-                    <p>
-                      <b>Dirección:</b>
-                      {{ orderDeliveryHistory.address?.city }} -
-                      {{ orderDeliveryHistory.address?.street }},
-                      {{ orderDeliveryHistory.address?.colony }},
-                      {{ orderDeliveryHistory.address?.zipCode }}
-                    </p>
-                    <p>
-                      <b>Total:</b> ${{
-                        orderDeliveryHistory.sartiOrder?.total
-                      }}
-                    </p>
-                  </b-col>
-                  <b-col cols="12" class="d-flex justify-content-end my-2">
-                    <b-button variant="link" @click="toggleProducts(index)">
-                      {{
-                        isShowProducts[index]
-                          ? "Ocultar productos"
-                          : "Mostrar productos"
-                      }}
-                    </b-button>
-                  </b-col>
-                </b-row>
-                <b-row v-if="isShowProducts[index]">
-                  <!-- Productos del pedido -->
-                  <b-col
-                    cols="12"
-                    v-for="product in orderDeliveryHistory.sartiOrder
-                      ?.orderProducts"
-                    :key="product.id"
-                    class="mt-1"
-                  >
-                    <b-card no-body shadow w-100 class="py-2 px-2 mb-2">
-                      <b-row class="align-items-center h-100">
-                        <b-col cols="auto">
-                          <div>
-                            <b-avatar
-                              :src="product.product.mainImage"
-                              size="100px"
-                              rounded
-                            ></b-avatar>
-                          </div>
-                        </b-col>
-                        <b-col cols="12" md="8" class="pl-3 my-3">
-                          <div><b>Producto:</b> {{ product.product.name }}</div>
-                          <div>
-                            <b>Descripción:</b>
-                            {{ product.product.description }}
-                          </div>
-                          <div><b>Precio:</b> ${{ product.product.price }}</div>
-                          <div><b>Cantidad:</b> {{ product.amount }}</div>
-                          <div><b>Total:</b> ${{ product.total }}</div>
-                        </b-col>
-                      </b-row>
-                    </b-card>
-                  </b-col>
-                </b-row>
-              </b-card>
-            </b-col>
             <b-col cols="12">
               <div
                 class="d-flex align-items-center justify-content-center my-2"
@@ -278,6 +200,8 @@ export default {
   components: {
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
+    OrderDeliveriesList: () =>
+      import("@/modules/delivery/views/components/OrderDeliveriesList.vue"),
   },
   mixins: [OrderAssignedViewModel],
 };
@@ -291,12 +215,5 @@ export default {
   text-align: left;
   margin-bottom: 1rem;
   margin-top: 20px;
-}
-
-/* Pedido título con énfasis */
-.order-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #ff6f00;
 }
 </style>
