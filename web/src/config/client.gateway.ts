@@ -82,6 +82,10 @@ function handle400Error(error: any) {
       titleAlert = "Credenciales incorrectas";
       messageAlert = "Usuario y/o contraseña erróneos";
       break;
+    case "DIFFERENT_SELLER": //TODO pedir el ajuste del servicio para que sea 401
+      titleAlert = "¡Ups! No pertenece a la misma tienda";
+      messageAlert = "Recuerda que solo puedes comprar variedad de productos en una sola tienda";
+      break;
     case "USER_IS_BLOCKED":
       titleAlert = "Credenciales incorrectas";
       messageAlert = "Usuario y/o contraseña erróneos";

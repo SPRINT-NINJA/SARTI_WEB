@@ -15,8 +15,9 @@ export default class CartService {
         return await RequestHandler.handleRequest(axios.doDelete(`${this.baseUrl}`));
     }
 
-    static async removeProductCart(payload:ICartProduct): Promise<CustomResponse<any>> {
-        return await RequestHandler.handleRequest(axios.doDelete(`${this.baseUrl}?productId=${payload.product.id}`));
+    static async removeProductCart(payload:any): Promise<CustomResponse<any>> {
+        console.log(payload)
+        return await RequestHandler.handleRequest(axios.doDelete(`${this.baseUrl}/remove?catProductId=${payload}`));
     }
 
     static async updateProductCart(payload:ICartProduct): Promise<CustomResponse<any>> {
