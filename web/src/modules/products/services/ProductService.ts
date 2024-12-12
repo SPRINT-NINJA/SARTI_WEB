@@ -2,6 +2,7 @@ import { CustomResponse, CustomResponsePageable } from "@/kernel/types";
 import { IProduct } from "../models/ProductModel";
 import { RequestHandler } from "@/kernel/RequestHandler";
 import axios from "@/config/client.gateway";
+import { computed } from "vue";
 
 export default class ProductService {
   private static baseUrl = "/product";
@@ -38,5 +39,50 @@ export default class ProductService {
     return await RequestHandler.handleRequest(
       axios.doGet(`${this.baseUrl}/${payload.id}`)
     );
+  }
+  static async saveProduct(payload: any): Promise<any> {
+    try {
+      const formData = new FormData();
+      console.log("payload service", payload);
+      // Agregar las propiedades principales
+      formData.append("name", payload.name);
+      formData.append("description", payload.description);
+      formData.append("price", payload.price);
+      formData.append("stock", payload.stock);
+
+      // Agregar el archivo principal
+      if (payload.mainImage) {
+        formData.append("mainImageFile", payload.mainImage);
+      }
+
+      // Agregar las imágenes del arreglo anidado
+      if (payload.images && Array.isArray(payload.images)) {
+        payload.images.forEach((image: any, index: number) => {
+          if (image.imageFile) {
+            console.log("image entrooooo", image.imageFile);
+            formData.append(
+              `productImages[${index}].imageFile`,
+              image.imageFile
+            );
+          } else {
+            console.log("no entroooo", image);
+          }
+          if (image.position) {
+            formData.append(`productImages[${index}].position`, image.position);
+          }
+        });
+      }
+      console.log("formData service", formData);
+      // Aquí puedes realizar la solicitud HTTP (ejemplo usando Axios)
+      const response = await axios.doPostFile(`${this.baseUrl}`, formData);
+
+      return response.data.data;
+    } catch (e: any) {
+      return {
+        code: e.data?.code,
+        error: true,
+        message: e.data?.message,
+      };
+    }
   }
 }

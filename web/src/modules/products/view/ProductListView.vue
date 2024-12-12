@@ -11,6 +11,7 @@
             variant="orange-primary"
             class="d-flex align-items-center justify-content-between"
             block
+            @click="handleCreateProduct"
             >Crear producto &nbsp;<b-icon icon="plus" font-scale="2"></b-icon
           ></b-button>
         </b-col>
