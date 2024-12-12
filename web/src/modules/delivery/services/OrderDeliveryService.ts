@@ -1,4 +1,4 @@
-import { CustomResponse } from "@/kernel/types";
+import { CustomResponse, CustomResponsePageable } from "@/kernel/types";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import { RequestHandler } from "@/kernel/RequestHandler";
 import axios from "../../../config/client.gateway";
@@ -6,7 +6,7 @@ import axios from "../../../config/client.gateway";
 export default class OrderDeliveryService {
   private static baseUrl = "/order-delivery";
 
-  static async getOrderDeliveriesHistory(payload: GetOrderDeliveriesDto): Promise<CustomResponse<any>> {
+  static async getOrderDeliveriesHistory(payload: GetOrderDeliveriesDto): Promise<CustomResponsePageable<any>> {
     let pathParams = `?page=${payload.page}&size=${payload.size}&sort=${payload.sort},${payload.direction}`;
     if (payload.searchValue)
       pathParams += `&bussinesName=${payload.searchValue}`;
@@ -14,7 +14,7 @@ export default class OrderDeliveryService {
       pathParams += `&step=${payload.step}`;
     if (payload.type)
       pathParams += `&type=${payload.type}`;
-    return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrl}/history${pathParams}`));
+    return await RequestHandler.handleRequest(axios.doGet(`${this.baseUrl}/history${pathParams}`)) as CustomResponsePageable<any>;
   }
 
   static async getOrderDeliveriesToTake(payload: GetOrderDeliveriesDto): Promise<CustomResponse<any>> {
