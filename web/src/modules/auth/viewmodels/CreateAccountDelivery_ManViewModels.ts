@@ -121,7 +121,7 @@ export default defineComponent({
         SweetAlertCustom.loading("Cargando","Espera estamos en proceso de tu información",6000)
         const resp = await AuthService.createAccountDeliveryMan(this.delivery_man)
         if (!resp.error) {
-          localStorage.setItem('token', JSON.stringify(resp));
+          localStorage.setItem('token', resp);
           if (await this.checkNextRedirect())
           SweetAlertCustom.successMessage();
         }
