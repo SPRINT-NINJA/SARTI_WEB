@@ -16,7 +16,6 @@ export default class CartService {
     }
 
     static async removeProductCart(payload:any): Promise<CustomResponse<any>> {
-        console.log(payload)
         return await RequestHandler.handleRequest(axios.doDelete(`${this.baseUrl}/remove?catProductId=${payload}`));
     }
 
