@@ -159,7 +159,7 @@
           <b-button variant="orange-secundary" @click="cleanCart" class="mx-3"
             >Vaciar carrito</b-button
           >
-          <b-button variant="orange-primary">Realizar compra</b-button>
+          <b-button variant="orange-primary" @click="confirmCart(cart)">Realizar compra</b-button>
         </div>
       </b-card>
     </div>

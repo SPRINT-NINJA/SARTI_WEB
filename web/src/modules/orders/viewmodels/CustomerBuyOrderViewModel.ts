@@ -1,147 +1,141 @@
+import { CartBody } from "@/modules/carts/models/CartBody";
+import { PaypalOrderInit } from "@/modules/carts/models/PaypalOrderInit";
+import CartService from "@/modules/carts/service/CartService";
 import { defineComponent } from "vue";
 
-export  interface ICartCustomerProductList {
-    mainImage: string;
-    name: string;
-    price: number;
-    status: string;
-    stock: number;
-    amount:number;
-  }
+export default defineComponent({
+  data() {
+    return {
+      total: 0.0,
+      totalFinal: 0.0,
+      totalFee: 0.0,
 
+      isTakeinTheshop: true,
+      isDelivered: false,
+      isKeepAddress: false,
+      isLoading: false,
 
-const test_cartProductList: ICartCustomerProductList[] = [
-{
-  mainImage:"https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-  name: "Chocolate Cake",
-  price: 25.5,
-  status: "Disponible",
-  stock: 10,
-  amount: 2
-},
-{
-  mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-  name: "Vanilla Cupcake",
-  price: 590.0,
-  status: "Disponible",
-  stock: 20,
-  amount: 3
-},
-{
-  mainImage: "https://http2.mlstatic.com/D_NQ_NP_629338-CBT75289036791_032024-O.webp",
-  name: "Strawberry Cheesecake",
-  price: 40.0,
-  status: "No disponible",
-  stock: 0,
-  amount: 0
-}
-];
-
-export default defineComponent ({
-    data(){
-        return{
-          cartCustomerProductList:[] as ICartCustomerProductList[],
-          total:0.0,
-          totalFinal:0.0,
-          options: [
-              { value: null, text: 'Please select an option' },
-              { value: 'a', text: 'This is First option' },
-              { value: 'b', text: 'Selected Option' },
-              { value: { C: '3PO' }, text: 'This is an option with object value' },
-              { value: 'd', text: 'This one is disabled', disabled: true }
-            ],
-            takeinTheshop:false,
-            sendByAddress:true,
-            quantity:1
-        }
-    },
-    methods:{
-      CountTotal(): void {
-        this.total = this.cartCustomerProductList.reduce((acc: number, product: ICartCustomerProductList) => {
-          // Verifica si amount es un número y mayor que 0
-          const amount = product.amount || 0;
-          return acc + (amount > 0 ? product.price * amount : 0);
-        }, 0)
-        this.CountTotalWithDelivery();
-      },
-      CountTotalWithDelivery():void{
-        if(this.sendByAddress){
-          this.totalFinal = 30 + this.total;
-        }else{
-          this.totalFinal= this.total;
-        }
-      },
-      quantityOptions(stock: number) {
-          const options = [{ text: "Elegir...", value: 0 }];
-          for (let i = 1; i <= stock; i++) {
-            options.push({ text: `${i} Unidad${i > 1 ? 'es' : ''}`, value: i });
-          }
-          return options;
-        },
-        RemoveProductByCart(value:{amount:number,name:string}): void {
-          this.$swal.fire({
-            title: "¿Seguro?",
-            text: "Se eliminara el producto de tu carrito.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#ffa446",
-            cancelButtonColor: "#e35b5d",
-            confirmButtonText: "Aceptar",
-            cancelButtonText: "Cancelar",
-            reverseButtons: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.$swal.fire({
-                title: "Se ha eliminado correctamente",
-                text: "Tu artículo ha sido eliminado de tu carrito. Si deseas recuperarlo, vuelve a añadirlo.",
-                icon: "success",
-              });
-              this.cartCustomerProductList = this.cartCustomerProductList.filter(
-                product => product.name !== value.name
-              );
-              this.CountTotal();
-            } else{
-             value.amount = 1;
-             this.CountTotal();
-            }
-          });
-          
-        },
-        getCarCustomerProductList(): void {
-          this.cartCustomerProductList = test_cartProductList;
-          this.CountTotal();
-        },
-        increment(value:{amount:number,stock:number}) {
-          if (value.amount < value.stock) {
-            value.amount++;
-          }
-          this.CountTotal(); 
-        },
-        decrement(value:{amount:number,stock:number,name:string}) {
-          if (value.amount > 0) {
-            value.amount--;
-            this.CountTotal(); 
-          }
-          if(value.amount === 0){
-            this.RemoveProductByCart(value);
-          }
-        },
-        changeSelectOrder(){
-          if(this.takeinTheshop){
-            this.sendByAddress = false;
-          }
-          this.CountTotalWithDelivery();
-        },
-        changeSelectOrderAddress(){
-          if(this.sendByAddress){
-            this.takeinTheshop = false;
-          }
-          this.CountTotalWithDelivery();
-        }
-
-    },
-    mounted() {
-        this.getCarCustomerProductList();
+      paypalOrderId: "",
+      cartBody: {} as CartBody,
+      paypalOrderInitBody: {} as PaypalOrderInit
+    }
+  },
+  methods: {
+    setIsTakenInShop() {
+      this.isTakeinTheshop = true
+      this.isDelivered = false
+      this.countTotalWithDelivery();
     },
 
+    setIsDelivered() {
+      this.isTakeinTheshop = false
+      this.isDelivered = true
+      this.countTotalWithDelivery();
+    },
+
+    getFormattedAddress(address: any) {
+      return `${address?.street}, ${address?.colony}, ${address?.city}, ${address?.state}, ${address?.country}, C.P. ${address?.zipCode}`;
+    },
+
+    countTotalWithDelivery(): void {
+      if (this.isDelivered) {
+        this.totalFee = 30.0;
+        this.totalFinal = this.totalFee + this.total;
+      } else {
+        this.totalFee = 0.0;
+        this.totalFinal = this.total;
+      }
+    },
+
+    async fetchCart() {
+      try {
+        this.isLoading = true;
+        const resp = await CartService.getCart();
+        if (!resp.error) {
+          this.cartBody = resp.data as CartBody;
+          this.paypalOrderInitBody = this.createPaypalOrderInitBody();
+          console.log(this.paypalOrderInitBody);
+        }
+        this.totalFee = 0.0;
+        this.total = this.cartBody.total
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    createPaypalOrderInitBody() {
+      return {
+        amount: this.cartBody.total,
+        currency: 'USD',
+        paymentMethod: 'paypal',
+        description: 'Compra en aplicación SARTI',
+        intent: 'CAPTURE',
+        sellerWallet: this.cartBody.seller.wallet,
+      } as PaypalOrderInit
+    },
+
+    mapCartToOrder() {
+      // Procesar los productos del carrito
+      const orderProducts = this.cartBody.cartProducts.map((cartProduct) => {
+        return {
+          amount: cartProduct.amount,
+          total: cartProduct.total,
+          product: {
+            id: cartProduct.product.id,
+          },
+        };
+      });
+
+      // Crear el objeto sartiOrder
+      const sartiOrder = {
+        total: this.cartBody.total,
+        seller: {
+          id: this.cartBody.seller.id,
+        },
+        customer: {
+          id: this.cartBody.customer.id,
+        },
+        orderProducts: orderProducts,
+      };
+
+      // Crear el objeto address (si está disponible en el carrito)
+      const address = this.cartBody.seller.address
+        ? {
+          country: this.cartBody.seller.address.country,
+          state: this.cartBody.seller.address.state,
+          city: this.cartBody.seller.address.city,
+          locality: this.cartBody.seller.address.locality,
+          colony: this.cartBody.seller.address.colony,
+          street: this.cartBody.seller.address.street,
+          zipCode: this.cartBody.seller.address.zipCode,
+          externalNumber: this.cartBody.seller.address.externalNumber,
+          internalNumber: this.cartBody.seller.address.internalNumber,
+          referenceNear: this.cartBody.seller.address.referenceNear,
+          addressType: this.cartBody.seller.address.addressType,
+        }
+        : null;
+
+      // Construir el objeto final orderBody
+      const orderBody = {
+        paypalOrderId: this.paypalOrderId, // Valor inicial vacío (puedes asignarlo más tarde si aplica)
+        orderDeliveryType: this.isTakeinTheshop ? "Recolección" : "Envío", // Valor por defecto (puedes modificarlo si es necesario)
+        fee: this.totalFee, // Comisión fija
+        keepAddress: this.isKeepAddress, // Valor por defecto (puedes modificarlo si es necesario)
+        sartiOrder: sartiOrder,
+        address: address,
+      };
+
+      return orderBody;
+    },
+
+    async confirmOrder() {
+      const orderBodyMapped = this.mapCartToOrder();
+      console.log(orderBodyMapped);
+    }
+  },
+  mounted() {
+    this.fetchCart();
+  },
 })
