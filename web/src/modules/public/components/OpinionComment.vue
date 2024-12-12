@@ -9,13 +9,13 @@
     <div v-for="(comment, index) in comments" :key="index">
       <div class="h5 d-flex align-items-center">
         <b-icon icon="person"></b-icon>
-        <span class="ml-2">{{ comment.username }}</span>
+        <span class="ml-2">{{ comment.customerName }}</span>
       </div>
       <div>
         <b-row>
           <b-col cols="6" md="6">
             <b-form-rating
-              v-model="comment.rating"
+              v-model="comment.rate"
               stars="10"
               readonly
               no-border
@@ -33,9 +33,9 @@
           {{ comment.comment }}
         </p>
       </div>
-      <div v-if="comment.images">
+      <div v-if="comment.image">
         <gallery-comments
-          :images="comment.images"
+          :images="comment.image"
           galleryID="my-test-gallery"
         ></gallery-comments>
       </div>
@@ -47,9 +47,9 @@ import { defineAsyncComponent, defineComponent } from "vue";
 export default defineComponent( {
   name: "OpinionComment",
   props: {
-    images: Array,
+    image: Array,
     comments: {
-      type: Array as () => Array<{ username: string; rating: number; comment: string; images?: Array<string> }>,
+      type: Array as () => Array<{ customerName: string; rate: number; comment: string; image?: Array<string> }>,
       required: true,
     },
   },
@@ -64,12 +64,24 @@ export default defineComponent( {
     };
   },
   methods: {
-    mapImages() {
-      this.allImages = this.comments.flatMap((comment) => comment.images);
+    filterGallery() {
+      if (Array.isArray(this.comments) && this.comments.length > 0) {
+        this.allImages = this.comments
+          .flatMap((comment) => comment.image || []) // Asegura que la propiedad `image` exista
+          .map((img) => ({
+            largeURL: img,
+            thumbnailURL: img,
+            width: 800,
+            height: 600,
+          }));
+      } else {
+        this.allImages = []; // Limpia las imágenes si no hay datos válidos
+      }
+      console.log(this.allImages, "Imágenes filtradas Rate");
     },
   },
   mounted() {
-    this.mapImages();
+    this.filterGallery();
     console.log(this.comments);
   },
 });
