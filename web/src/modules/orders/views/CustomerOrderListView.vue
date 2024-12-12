@@ -6,84 +6,97 @@
       :imgSrc="require('@/assets/banner-pedido.svg')"
       :content="'MIS PEDIDOS'"
     />
-    <div class="d-flex align-items-center justify-content-center">
-      <b-card
-        class="mt-4"
-        bg-variant="orange-soft"
-        text-variant="dark"
-        border-variant="light"
-      >
-        <!-- Encabezado -->
-        <b-row class="text-center mb-3">
-          <b-col>
-            <h5 class="mb-2"><b>¡Tu opinión importa!</b></h5>
-            <p>Comparte tu experiencia sobre estos productos.</p>
-          </b-col>
-        </b-row>
 
-        <!-- Contenido principal -->
-        <b-row class="align-items-center">
-          <!-- Avatar del producto -->
-          <b-col cols="auto">
-            <b-avatar
-              size="70px"
-              src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
-              :badge="totalMissingRate"
-              badge-variant="danger"
-            ></b-avatar>
-          </b-col>
+    <div v-if="orderDeliveries.length">
+      <!-- Banner de opinión -->
+      <div class="d-flex align-items-center justify-content-center" v-if="totalMissingRate">
+        <b-card
+          class="mt-4"
+          bg-variant="orange-soft"
+          text-variant="dark"
+          border-variant="light"
+        >
+          <!-- Encabezado -->
+          <b-row class="text-center mb-3">
+            <b-col>
+              <h5 class="mb-2"><b>¡Tu opinión importa!</b></h5>
+              <p>Comparte tu experiencia sobre estos productos.</p>
+            </b-col>
+          </b-row>
 
-          <!-- Texto descriptivo -->
-          <b-col class="ml-3">
-            <p class="mb-1 font-weight-bold">¡Dinos qué piensas!</p>
-            <p class="mb-0">
-              Estos productos esperan tu reseña. Tómate un momento para
-              contarnos tu experiencia.
-            </p>
-          </b-col>
+          <!-- Contenido principal -->
+          <b-row class="align-items-center">
+            <!-- Avatar del producto -->
+            <b-col cols="auto">
+              <b-avatar
+                size="70px"
+                src="https://http2.mlstatic.com/D_NQ_NP_685374-MLM31231435017_062019-O.webp"
+                :badge="totalMissingRate"
+                badge-variant="danger"
+              ></b-avatar>
+            </b-col>
 
-          <!-- Botón de acción -->
-          <b-col
-            cols="auto"
-            class="d-flex justify-content-end align-items-end align-self-end mt-auto"
-          >
-            <b-button
-              variant="light"
-              size="md"
-              pill
-              class="font-weight-bold d-flex align-items-center btn-transition"
-              @click="goToOrderWithoutRate"
+            <!-- Texto descriptivo -->
+            <b-col class="ml-3">
+              <p class="mb-1 font-weight-bold">¡Dinos qué piensas!</p>
+              <p class="mb-0">
+                Estos productos esperan tu reseña. Tómate un momento para
+                contarnos tu experiencia.
+              </p>
+            </b-col>
+
+            <!-- Botón de acción -->
+            <b-col
+              cols="auto"
+              class="d-flex justify-content-end align-items-end align-self-end mt-auto"
             >
-              <i class="bi bi-pencil mr-2"></i> Comenzar a reseñar
-            </b-button>
-          </b-col>
-        </b-row>
-      </b-card>
+              <b-button
+                variant="light"
+                size="md"
+                pill
+                class="font-weight-bold d-flex align-items-center btn-transition"
+                @click="goToOrderWithoutRate"
+              >
+                <i class="bi bi-pencil mr-2"></i> Comenzar a reseñar
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-card>
+      </div>
+      <!-- Listado de pedidos -->
+      <b-container>
+        <order-deliveries-list
+          :orderDeliveriesProp="orderDeliveries"
+          :initialToggleStateProp="true"
+          :isCustomerHistoryProp="true"
+          :isDeliveryManToTakeListProp="false"
+        />
+      </b-container>
+      <!-- Paginador -->
+      <b-row class="justify-content-center mt-4">
+        <b-col cols="12">
+          <div class="d-flex align-items-center justify-content-center my-2">
+            <b-pagination
+              v-model="pagination.page"
+              :total-rows="totalRows"
+              :per-page="pagination.size"
+              size="sm"
+              pills
+              @change="handlePageChange"
+            ></b-pagination>
+          </div>
+        </b-col>
+      </b-row>
     </div>
-    <!-- Listado de pedidos -->
-    <b-container>
-      <order-deliveries-list
-        :orderDeliveriesProp="orderDeliveries"
-        :initialToggleStateProp="true"
-        :isCustomerHistoryProp="true"
-        :isDeliveryManToTakeListProp="false"
+
+    <b-container v-else class="mt-4">
+      <empty-list-banner
+        :imageProp="require('@/assets/empty_list.svg')"
+        titleProp="Aún no has hecho ningún pedido"
+        subtitleProp="¡Comienza a comprar y cuéntanos tu experiencia!"
+        class="h-100"
       />
     </b-container>
-    <!-- Paginador -->
-    <b-row class="justify-content-center mt-4">
-      <b-col cols="12">
-        <div class="d-flex align-items-center justify-content-center my-2">
-          <b-pagination
-            v-model="pagination.page"
-            :total-rows="totalRows"
-            :per-page="pagination.size"
-            size="sm"
-            pills
-            @change="handlePageChange"
-          ></b-pagination>
-        </div>
-      </b-col>
-    </b-row>
   </div>
 </template>
 
@@ -100,6 +113,7 @@ export default {
       import("@/modules/delivery/views/components/OrderDeliveriesList.vue"),
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
+    EmptyListBanner: () => import("@/views/components/EmptyListBanner.vue"),
   },
   mixins: [CustomerOrderListViewModel],
 };

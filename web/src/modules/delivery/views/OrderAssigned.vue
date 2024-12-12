@@ -6,23 +6,17 @@
         <!-- Pedido asignado -->
         <b-col cols="12" md="6" lg="6" class="mb-4">
           <h2 class="section-title">Pedido Asignado</h2>
+
+          <!-- Pedido lleno -->
           <b-row class="justify-content-center mt-4" v-if="takenOrderDelivery">
             <b-col cols="12">
               <b-card>
                 <b-row>
-                  <b-col
-                    cols="6"
-                    class="d-flex align-items-center justify-content-center"
-                  >
-                    <img
-                      class="logo"
-                      src="@/assets/motoEntrega.svg"
-                      alt="Icono repartidor"
-                      fluid
-                      rounded
-                      width="150px"
-                      height="150px"
-                    />
+                  <b-col cols="6">
+                    <h5 class="mb-2 order-title">
+                      <span>Pedido:</span>
+                      {{ takenOrderDelivery.orderNumber }}
+                    </h5>
                   </b-col>
                   <b-col
                     cols="6"
@@ -30,7 +24,6 @@
                   >
                     <!-- Botones de acción alineados a la derecha -->
                     <div
-                      class="mt-3"
                       v-if="
                         takenOrderDelivery.orderDeliveryStep ===
                         'Pendiente de envío'
@@ -42,14 +35,27 @@
                         >Comenzar Envío</b-button
                       >
                     </div>
-
-                    <div class="mt-3" v-else>
+                    <div v-else>
                       <b-button
-                        variant="primary"
+                        variant="orange-secundary"
                         @click="handleChangeStep(takenOrderDelivery)"
                         >Terminar Pedido</b-button
                       >
                     </div>
+                  </b-col>
+                  <b-col
+                    cols="12"
+                    class="d-flex align-items-center justify-content-center"
+                  >
+                    <img
+                      class="logo"
+                      src="@/assets/motoEntrega.svg"
+                      alt="Icono repartidor"
+                      fluid
+                      rounded
+                      width="300px"
+                      height="auto"
+                    />
                   </b-col>
                 </b-row>
                 <hr />
@@ -131,12 +137,16 @@
                           </div>
                         </b-col>
                         <b-col cols="12" md="8" class="pl-3 my-3">
-                          <div><b>Producto:</b> {{ orderProduct.productInfo.name }}</div>
+                          <div>
+                            <b>Producto:</b> {{ orderProduct.productInfo.name }}
+                          </div>
                           <div>
                             <b>Descripción:</b>
                             {{ orderProduct.productInfo.description }}
                           </div>
-                          <div><b>Precio:</b> ${{ orderProduct.productInfo.price }}</div>
+                          <div>
+                            <b>Precio:</b> ${{ orderProduct.productInfo.price }}
+                          </div>
                           <div><b>Cantidad:</b> {{ orderProduct.amount }}</div>
                           <div><b>Total:</b> ${{ orderProduct.total }}</div>
                         </b-col>
@@ -147,46 +157,54 @@
               </b-card>
             </b-col>
           </b-row>
-          <b-row class="justify-content-center mt-4" v-else>
-            <b-col cols="12">
-              <b-card>
-                <h5 class="mb-3">No hay pedido asignado</h5>
-                <img
-                  class="logo"
-                  src="@/assets/motoSinPedidos.svg"
-                  alt="Icono repartidor"
-                  fluid
-                  rounded
-                />
-              </b-card>
-            </b-col>
-          </b-row>
+
+          <!-- Pedido vacío -->
+          <empty-list-banner
+            v-else
+            :imageProp="require('@/assets/motoSinPedidos.svg')"
+            titleProp="Sin pedido en curso"
+            subtitleProp="¡No esperes más y toma un pedido disponible!"
+            class="h-100"
+          />
         </b-col>
         <!-- Historial de pedidos -->
         <b-col cols="12" md="6" lg="6" class="mb-4">
           <h2 class="section-title">Historial de Pedidos</h2>
-          <order-deliveries-list
-            :orderDeliveriesProp="orderDeliveriesHistory"
-            :initialToggleStateProp="false"
-            :isCustomerHistoryProp="false"
-            :isDeliveryManToTakeListProp="false"
+
+          <!-- Listado lleno -->
+          <b-container v-if="orderDeliveriesHistory.length">
+            <order-deliveries-list
+              :orderDeliveriesProp="orderDeliveriesHistory"
+              :initialToggleStateProp="false"
+              :isCustomerHistoryProp="false"
+              :isDeliveryManToTakeListProp="false"
+            />
+            <b-row class="justify-content-center mt-4">
+              <b-col cols="12">
+                <div
+                  class="d-flex align-items-center justify-content-center my-2"
+                >
+                  <b-pagination
+                    v-model="pagination.page"
+                    :total-rows="totalRows"
+                    :per-page="pagination.size"
+                    size="sm"
+                    pills
+                    @change="handlePageChange"
+                  ></b-pagination>
+                </div>
+              </b-col>
+            </b-row>
+          </b-container>
+
+          <!-- Listado vacío -->
+          <empty-list-banner
+            v-else
+            :imageProp="require('@/assets/empty_list.svg')"
+            titleProp="Aún no has generado un historial"
+            subtitleProp="¡Explora y toma tu primer pedido ahora!"
+            class="h-100"
           />
-          <b-row class="justify-content-center mt-4">
-            <b-col cols="12">
-              <div
-                class="d-flex align-items-center justify-content-center my-2"
-              >
-                <b-pagination
-                  v-model="pagination.page"
-                  :total-rows="totalRows"
-                  :per-page="pagination.size"
-                  size="sm"
-                  pills
-                  @change="handlePageChange"
-                ></b-pagination>
-              </div>
-            </b-col>
-          </b-row>
         </b-col>
       </b-row>
     </div>
@@ -202,6 +220,7 @@ export default {
       import("@/modules/public/components/CustomOverlay.vue"),
     OrderDeliveriesList: () =>
       import("@/modules/delivery/views/components/OrderDeliveriesList.vue"),
+    EmptyListBanner: () => import("@/views/components/EmptyListBanner.vue"),
   },
   mixins: [OrderAssignedViewModel],
 };
@@ -215,5 +234,11 @@ export default {
   text-align: left;
   margin-bottom: 1rem;
   margin-top: 20px;
+}
+
+.order-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff6f00;
 }
 </style>
