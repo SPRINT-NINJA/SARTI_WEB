@@ -112,7 +112,8 @@ export default defineComponent({
           if (offlineData) {
             this.orderDeliveriesHistory = offlineData.orderDeliveriesHistory;
             this.totalRows = offlineData.totalRows;
-            alert("Mostrando datos offline.");
+            SweetAlertCustom.showToast(false, "Mostrando datos offline")
+            //alert("Mostrando datos offline.");
           }
         } else {
           SweetAlertCustom.errorMessage(
@@ -191,9 +192,8 @@ export default defineComponent({
                 payload,
                 controllerFunction: "changeOrderDeliveryStep",
               });
-              alert(
-                "No hay conexión a internet. La petición se guardara para ser ejecutada después"
-              );
+              SweetAlertCustom.showToast(true, "No hay conexión a internet. La petición se guardara para ser ejecutada después")
+              // alert("No hay conexión a internet. La petición se guardara para ser ejecutada después");
             }
           }
         });
@@ -207,7 +207,8 @@ export default defineComponent({
         const allDocs = await dbPetitions.allDocs({ include_docs: true });
 
         if (allDocs.total_rows !== 0) {
-          alert("Sincronizando peticiones");
+          SweetAlertCustom.showToast(false, "Sincronizando peticiones")
+          // alert("Sincronizando peticiones");
         }
         for (const doc of allDocs.rows) {
           if (!doc.doc) {
