@@ -52,10 +52,10 @@ export default defineConfig({
         description: 'SARTI DELIVERY - Aplicación Progresiva SARTI ',
         theme_color: '#ffa446',
         background_color: '#ffa446',
-        display: 'standalone',
+        display: 'fullscreen',
         icons: [
           {
-            src: '/assets/producto_deleted_or_incative.png',
+            src: '/producto_deleted_or_incative.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: "any",
