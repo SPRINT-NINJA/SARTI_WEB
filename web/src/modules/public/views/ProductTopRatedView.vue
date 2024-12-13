@@ -31,10 +31,11 @@
                 <b-row
                   class="d-flex flex-column flex-md-row align-items-center"
                 >
-                  <b-col cols="11" md="11">
+                  <b-col cols="12" md="12">
                     <b-form-rating
                       v-model="product.rating"
                       stars="10"
+                      size="sm"
                       readonly
                       no-border
                       no-focus
@@ -96,11 +97,12 @@
             >
               <template #footer>
                 <h3>{{ productPart2[1].name }}</h3>
-                <div class="d-flex flex-column flex-md-row align-items-center">
+                <div>
                   <b-form-rating
                     v-model="productPart2[1].rating"
                     stars="10"
                     readonly
+                    size="sm"
                     no-border
                     no-focus
                     variant="warning"
@@ -142,6 +144,7 @@
                     <b-form-rating
                       v-model="product.rating"
                       stars="10"
+                      size="sm"
                       readonly
                       no-border
                       no-focus
@@ -228,6 +231,9 @@ export default {
 </script>
 
 <style scoped>
+.star-tam{
+  width: 10px;
+}
 .custom-card {
   overflow: hidden;
   transition: transform 0.3s ease; /* Añade una transición suave */

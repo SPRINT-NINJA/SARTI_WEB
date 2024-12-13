@@ -89,6 +89,7 @@
                     <b-form-rating
                       v-model="product.rating"
                       stars="10"
+                      size="sm"
                       readonly
                       no-border
                       no-focus
