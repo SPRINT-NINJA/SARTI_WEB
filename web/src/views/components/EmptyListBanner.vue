@@ -2,7 +2,7 @@
   <div>
     <b-card
       no-body
-      class="d-flex flex-column align-items-center justify-content-center h-100 shadow-sm px-4"
+      class="d-flex flex-column align-items-center justify-content-center h-100 shadow-sm px-4 my-2"
     >
       <!-- Imagen decorativa -->
       <img
