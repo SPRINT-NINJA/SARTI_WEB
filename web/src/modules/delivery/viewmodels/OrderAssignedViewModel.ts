@@ -67,18 +67,7 @@ export default defineComponent({
           // Crear un nuevo doc
           _id: "delivery-orders",
           _rev: existingDb._rev,
-          orderDeliveriesHistory: response.data.content.map((el: any) => ({
-            ...el,
-            sartiOrder: {
-              ...el.sartiOrder,
-              orderProducts: el.sartiOrder.orderProducts.map(
-                (orderProduct: any) => ({
-                  ...orderProduct,
-                  productInfo: JSON.parse(orderProduct.productInfo),
-                })
-              ),
-            },
-          })),
+          orderDeliveriesHistory: response.data.content,
           totalRows: response.data.totalElements,
         });
       } catch (error) {
@@ -86,7 +75,20 @@ export default defineComponent({
           console.log("entro al cath y no hay internet");
           const response = await db.get<DeliveryDb>("delivery-orders");
           this.totalRows = response.totalRows;
-          this.orderDeliveriesHistory = response.orderDeliveriesHistory;
+          this.orderDeliveriesHistory = response.orderDeliveriesHistory.map(
+            (el: any) => ({
+              ...el,
+              sartiOrder: {
+                ...el.sartiOrder,
+                orderProducts: el.sartiOrder.orderProducts.map(
+                  (orderProduct: any) => ({
+                    ...orderProduct,
+                    productInfo: JSON.parse(orderProduct.productInfo),
+                  })
+                ),
+              },
+            })
+          );
           alert("No hay conexión a internet. Mostrando datos offline.");
         }
         console.error(error);
