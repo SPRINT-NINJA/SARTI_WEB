@@ -101,6 +101,7 @@
                         <b-form-input
                           id="input-1"
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.city.$model"
                           :state="
                             v$.address.city.$dirty
@@ -125,6 +126,7 @@
                         </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.colony.$model"
                           :state="
                             v$.address.colony.$dirty
@@ -147,6 +149,7 @@
                         <label> Calle <span style="color: red">*</span> </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.street.$model"
                           :state="
                             v$.address.street.$dirty
@@ -171,6 +174,7 @@
                         </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.state.$model"
                           :state="
                             v$.address.state.$dirty
@@ -193,6 +197,7 @@
                         <label> País <span style="color: red">*</span> </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.country.$model"
                           :state="
                             v$.address.country.$dirty
@@ -217,6 +222,7 @@
                         </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.locality.$model"
                           :state="
                             v$.address.locality.$dirty
@@ -242,6 +248,7 @@
                         </label>
                         <b-form-input
                           type="number"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.externalNumber.$model"
                           :state="
                             v$.address.externalNumber.$dirty
@@ -264,6 +271,7 @@
                         <label> N.Interior </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.internalNumber.$model"
                           :state="
                             v$.address.internalNumber.$dirty
@@ -288,6 +296,7 @@
                         </label>
                         <b-form-input
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.zipCode.$model"
                           :state="
                             v$.address.zipCode.$dirty
@@ -312,6 +321,7 @@
                         </label>
                         <b-form-select
                           :options="options"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.addressType.$model"
                           :state="
                             v$.address.addressType.$dirty
@@ -336,6 +346,7 @@
                         </label>
                         <b-form-textarea
                           type="text"
+                          :disabled="isTakenInShop"
                           v-model="v$.address.referenceNear.$model"
                           :state="
                             v$.address.referenceNear.$dirty

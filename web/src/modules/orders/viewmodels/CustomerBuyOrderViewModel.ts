@@ -87,6 +87,20 @@ export default defineComponent({
       this.$router.go(-1);
     },
 
+    touchAllFields() {
+      const touchIfNotEmpty = (field:any) => {
+        if (field.$model !== null && field.$model !== "") {
+          field.$touch();
+        }
+      };
+    
+      const addressFields = this.v$.address;
+    
+      Object.keys(addressFields).forEach((key) => {
+        touchIfNotEmpty(addressFields[key]);
+      });
+    },
+
     cloneAddress(address: any) {
       return {
         country: address.country,
@@ -212,7 +226,6 @@ export default defineComponent({
           return null;
         }
 
-        console.log(verification);
         return verification;
       } catch (error) {
         console.error(error);
@@ -235,7 +248,6 @@ export default defineComponent({
           this.address = this.cartBody.seller.address
             ? this.cloneAddress(this.cartBody.seller.address)
             : this.getEmptyAddress();
-          console.log(this.address);
         }
         this.formattedAddress = this.getFormattedAddress();
         this.totalFee = 0.0;
@@ -380,7 +392,6 @@ export default defineComponent({
     async getOrderApi() {
       try {
         const orderDelivery = this.createPaypalOrderInitBody();
-        console.log(orderDelivery);
         const response = await CustomerDeliveryOrderService.createDeliveryOrder(orderDelivery);
         return response;
       } catch (error) {
@@ -417,10 +428,15 @@ export default defineComponent({
   },
 
   mounted() {
-    this.fetchCart();
+    this.fetchCart().then(()=>{
+      this.touchAllFields();
+    })
   },
   computed: {
     isStepValid() {
+      if(this.isTakenInShop){
+        return true;
+      }
       const fieldsToValidate = [
         this.v$.address.city,
         this.v$.address.colony,
