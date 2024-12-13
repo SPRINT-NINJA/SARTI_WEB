@@ -49,8 +49,8 @@ export default [
         },
       },
       {
-        path: "detail-product",
-        name: "detail-product",
+        path: "detail-product-seller/:id",
+        name: "detail-product-seller",
         component: () =>
           import("../modules/products/view/ProductDetailView.vue"),
         meta: {

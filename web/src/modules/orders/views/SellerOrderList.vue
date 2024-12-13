@@ -29,6 +29,12 @@
 
                 <template #empty>
                   <h4 class="pt-2 text-center">Sin registros</h4>
+                  <empty-list-banner
+                    :imageProp="require('@/assets/empty_list.svg')"
+                    titleProp="Aún no  han hecho un pedido"
+                    subtitleProp="¡Esperemos que pronto recibas una!"
+                    class="h-100"
+                  />
                 </template>
 
                 <template #cell(id)="row">
@@ -135,6 +141,9 @@ import { defineComponent } from "vue";
 import SellerOrderListViewModel from "../viewmodels/SellerOrderListViewModel";
 export default defineComponent({
   name: "SellerOrderList",
+  components: {
+    EmptyListBanner: () => import("@/views/components/EmptyListBanner.vue"),
+  },
   mixins: [SellerOrderListViewModel],
 });
 </script>

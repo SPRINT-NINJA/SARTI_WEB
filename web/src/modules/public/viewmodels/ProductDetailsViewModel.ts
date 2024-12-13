@@ -7,8 +7,6 @@ import { ICart } from "../models/AddCartModel";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { CustomerReview, RatingObject } from "../models/RateModel";
 
-
-
 export default defineComponent({
   data() {
     return {
@@ -24,7 +22,7 @@ export default defineComponent({
       }>,
       quantity: 1,
       isLoading: false,
-      addCart: {} as ICart
+      addCart: {} as ICart,
     };
   },
   created() {
@@ -56,7 +54,6 @@ export default defineComponent({
       } else {
         this.images = []; // Limpia las imágenes si no hay datos válidos
       }
-      console.log(this.images, "Imagenes");
     },
     async getDeatilproduct() {
       try {
@@ -65,7 +62,6 @@ export default defineComponent({
           this.selectedProduct
         );
         this.productSelected = resp.data;
-        console.log(this.productSelected, "Producto seleccionado2");
       } catch (error) {
         console.log(error);
       } finally {
@@ -76,11 +72,9 @@ export default defineComponent({
     async getResumeRating() {
       try {
         this.isLoading = true;
-        console.log("Rsume id", this.productSelected.id);
         const resp = await PublicService.getResumeRateByProduct(
           this.selectedProduct
         );
-        console.log(resp, "Producto rate");
         this.resumeRating = resp.data;
       } catch (error) {
         console.log(error);
@@ -91,11 +85,9 @@ export default defineComponent({
     async getListRating() {
       try {
         this.isLoading = true;
-        console.log("list", this.productSelected.id);
         const resp = await PublicService.getRateListByProduct(
           this.selectedProduct
         );
-        console.log(resp, "listado Rate");
         this.ratingList = resp.data.content;
       } catch (error) {
         console.log(error);
@@ -108,10 +100,8 @@ export default defineComponent({
         this.isLoading = true;
         this.addCart.productId = this.productSelected.id;
         this.addCart.quantity = this.quantity;
-        console.log(this.addCart)
         const resp = await PublicService.addProductIntoCart(this.addCart);
-        console.log(resp, "agregando producto a carrito");
-        if(!resp.error){
+        if (!resp.error) {
           SweetAlertCustom.successMessage(
             "¡Producto añadido al carrito!",
             "Revisa tu carrito para confirmar tu pedido."
