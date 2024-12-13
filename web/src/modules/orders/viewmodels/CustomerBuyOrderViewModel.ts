@@ -608,7 +608,6 @@ export default defineComponent({
             (value: string) => /^\d+$/.test(value) && parseInt(value, 10) >= 0
           ),
         } as any,
-
         referenceNear: {
           required: helpers.withMessage(
             this.errorMessagges.required,

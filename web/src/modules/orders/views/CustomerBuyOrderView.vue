@@ -13,7 +13,74 @@
           <h3 class="title">Pedido</h3>
         </b-row>
 
-        <b-row>
+        <b-row  >
+          <b-col cols="12" md="4">
+            <b-card>
+              <b-icon icon="box-seam" class="mx-2"></b-icon>
+              <b>Forma de Entrega</b>
+              <b-form-checkbox
+                button-variant="orange-primary"
+                name="check-button"
+                v-model="isTakenInShop"
+                @change="setIsTakenInShop"
+                switch
+              >
+                Recolección
+              </b-form-checkbox>
+              <b-form-checkbox
+                button-variant="orange-primary"
+                name="check-button"
+                v-model="isDelivered"
+                @change="setIsDelivered"
+                switch
+              >
+                Envío domicilio
+              </b-form-checkbox>
+            </b-card>
+            <b-card v-if="isDelivered" class="mt-2">
+              <b-icon icon="pin-map" class="mx-2"></b-icon>
+              <b>Dirección</b>
+              <b-form-checkbox
+                button-variant="orange-primary"
+                name="check-button"
+                v-model="isKeepAddress"
+                switch
+              >
+                {{
+                  cartBody.customer.address
+                    ? "Reemplazar dirección actual"
+                    : "Guardar dirección para próximos pedidos"
+                }}
+              </b-form-checkbox>
+            </b-card>
+            <b-card class="my-2">
+              <b-icon class="mx-2" icon="pin-map"></b-icon>
+              <b>Dirección de Entrega</b>
+              <br />
+              <p>
+                <b>{{
+                  isTakenInShop ? "Retirar en Tienda" : "Dirección de Entrega"
+                }}</b>
+                <br />
+                {{ formattedAddress }}
+              </p>
+            </b-card>
+            <b-alert show variant="warning" class="mt-2">
+              <b-icon class="mx-2" icon="exclamation-triangle"></b-icon>
+              <b>Advertencia</b> <br />
+              Si eliges la opción de recolección,
+              <b class="title">
+                recuerda que deberás venir personalmente a nuestra tienda para
+                recoger tu producto.
+              </b>
+              Si prefieres que te lo enviemos a domicilio,
+              <b class="title">
+                te informamos que el costo de envío es de $30.00 pesos
+              </b>
+              . Por favor, asegúrate de seleccionar la opción que mejor se
+              ajuste a tus necesidades antes de completar tu compra.
+            </b-alert>
+          </b-col>
           <b-col cols="12" md="8">
             <b-row>
               <b-col cols="12">
@@ -275,6 +342,7 @@
                               ? !v$.address.referenceNear.$error
                               : null
                           "
+                          @blur="v$.address.referenceNear.$touch()"
                         >
                         </b-form-textarea>
                         <b-form-invalid-feedback
@@ -389,73 +457,7 @@
               </b-col>
             </b-row>
           </b-col>
-          <b-col cols="12" md="4">
-            <b-card>
-              <b-icon icon="box-seam" class="mx-2"></b-icon>
-              <b>Forma de Entrega</b>
-              <b-form-checkbox
-                button-variant="orange-primary"
-                name="check-button"
-                v-model="isTakenInShop"
-                @change="setIsTakenInShop"
-                switch
-              >
-                Recolección
-              </b-form-checkbox>
-              <b-form-checkbox
-                button-variant="orange-primary"
-                name="check-button"
-                v-model="isDelivered"
-                @change="setIsDelivered"
-                switch
-              >
-                Envío domicilio
-              </b-form-checkbox>
-            </b-card>
-            <b-card v-if="isDelivered" class="mt-2">
-              <b-icon icon="pin-map" class="mx-2"></b-icon>
-              <b>Dirección</b>
-              <b-form-checkbox
-                button-variant="orange-primary"
-                name="check-button"
-                v-model="isKeepAddress"
-                switch
-              >
-                {{
-                  cartBody.customer.address
-                    ? "Reemplazar dirección actual"
-                    : "Guardar dirección para próximos pedidos"
-                }}
-              </b-form-checkbox>
-            </b-card>
-            <b-card class="my-2">
-              <b-icon class="mx-2" icon="pin-map"></b-icon>
-              <b>Dirección de Entrega</b>
-              <br />
-              <p>
-                <b>{{
-                  isTakenInShop ? "Retirar en Tienda" : "Dirección de Entrega"
-                }}</b>
-                <br />
-                {{ formattedAddress }}
-              </p>
-            </b-card>
-            <b-alert show variant="warning" class="mt-2">
-              <b-icon class="mx-2" icon="exclamation-triangle"></b-icon>
-              <b>Advertencia</b> <br />
-              Si eliges la opción de recolección,
-              <b class="title">
-                recuerda que deberás venir personalmente a nuestra tienda para
-                recoger tu producto.
-              </b>
-              Si prefieres que te lo enviemos a domicilio,
-              <b class="title">
-                te informamos que el costo de envío es de $30.00 pesos
-              </b>
-              . Por favor, asegúrate de seleccionar la opción que mejor se
-              ajuste a tus necesidades antes de completar tu compra.
-            </b-alert>
-          </b-col>
+        
         </b-row>
 
         <!-- Contenedor del botón de PayPal -->
