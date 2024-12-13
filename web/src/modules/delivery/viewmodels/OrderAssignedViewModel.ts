@@ -8,13 +8,13 @@ import PouchDB from "pouchdb";
 
 // PouchDB.plugin(PouchDBFind);
 
-try {
-  const db = new PouchDB("delivery");
-  console.log("PouchDB initialized:", db);
-  console.log("entro al try")
-} catch (error) {
-  console.log("error",error);
-}
+// try {
+//   const db = new PouchDB("delivery");
+//   console.log("PouchDB initialized:", db);
+//   console.log("entro al try")
+// } catch (error) {
+//   console.log("error",error);
+// }
 
 export default defineComponent({
   setup() {
