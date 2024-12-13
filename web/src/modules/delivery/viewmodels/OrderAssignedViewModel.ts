@@ -6,6 +6,7 @@ import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
 
 const db = new PouchDB("delivery-orders");
+console.log("incialización de pouch", db);
 interface DeliveryDb {
   _id: string;
   orderDeliveriesHistory: Array<any>;
@@ -61,43 +62,49 @@ export default defineComponent({
 
         this.totalRows = response.data.totalElements;
 
-        const existingDb = await db.get("delivery-orders");
+        const existingDb = await db.get("delivery-orders").catch(() => null);
+
+        if (existingDb) {
+          await db.put({
+            _id: "delivery-orders",
+            _rev: existingDb._rev,
+            orderDeliveriesHistory: response.data.content,
+            totalRows: response.data.totalElements,
+          });
+        } else {
+          await db.put({
+            _id: "delivery-orders",
+            orderDeliveriesHistory: response.data.content,
+            totalRows: response.data.totalElements,
+          });
+        }
 
         await db.put({
           // Crear un nuevo doc
           _id: "delivery-orders",
-          _rev: existingDb._rev,
+          _rev: existingDb!._rev,
           orderDeliveriesHistory: response.data.content,
           totalRows: response.data.totalElements,
         });
       } catch (error) {
-        if (!navigator.onLine) {
-          console.log("entro al cath y no hay internet");
-          const response = await db.get<DeliveryDb>("delivery-orders");
-          this.totalRows = response.totalRows;
-          this.orderDeliveriesHistory = response.orderDeliveriesHistory.map(
-            (el: any) => ({
-              ...el,
-              sartiOrder: {
-                ...el.sartiOrder,
-                orderProducts: el.sartiOrder.orderProducts.map(
-                  (orderProduct: any) => ({
-                    ...orderProduct,
-                    productInfo: JSON.parse(orderProduct.productInfo),
-                  })
-                ),
-              },
-            })
-          );
-          alert("No hay conexión a internet. Mostrando datos offline.");
-        }
         console.error(error);
-        SweetAlertCustom.errorMessage(
-          "Error",
-          "Ocurrió un error al obtener los pedidos"
-        );
-        this.orderDeliveriesHistory = [];
-        this.pagination.page = 1;
+
+        if (!navigator.onLine) {
+          console.log("No hay conexión a internet.");
+          const offlineData = await db
+            .get<DeliveryDb>("delivery-orders")
+            .catch(() => null);
+          if (offlineData) {
+            this.orderDeliveriesHistory = offlineData.orderDeliveriesHistory;
+            this.totalRows = offlineData.totalRows;
+            alert("Mostrando datos offline.");
+          }
+        } else {
+          SweetAlertCustom.errorMessage(
+            "Error",
+            "Ocurrió un error al obtener los pedidos"
+          );
+        }
       }
     },
 
