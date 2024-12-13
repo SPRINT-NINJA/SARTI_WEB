@@ -17,7 +17,8 @@
       "node",
       "vue-sweetalert2",
       "vite/client",
-      "@types/workbox-window"
+      "@types/workbox-window",
+      "pouchdb"
     ],
     "paths": {
       "@/*": [

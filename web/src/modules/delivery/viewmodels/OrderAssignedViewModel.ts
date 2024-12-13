@@ -6,6 +6,8 @@ import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
 
 const db = new PouchDB("delivery-orders");
+const dbPetitions = new PouchDB("delivery-orders-petitions");
+console.log("incialización de pouch", db, "Petitions", dbPetitions);
 interface DeliveryDb {
   _id: string;
   orderDeliveriesHistory: Array<any>;
@@ -61,22 +63,13 @@ export default defineComponent({
 
         this.totalRows = response.data.totalElements;
 
-        const existingDb = await db.get("delivery-orders");
-
-        await db.put({
-          // Crear un nuevo doc
-          _id: "delivery-orders",
-          _rev: existingDb._rev,
-          orderDeliveriesHistory: response.data.content,
-          totalRows: response.data.totalElements,
-        });
-      } catch (error) {
-        if (!navigator.onLine) {
-          console.log("entro al cath y no hay internet");
-          const response = await db.get<DeliveryDb>("delivery-orders");
-          this.totalRows = response.totalRows;
-          this.orderDeliveriesHistory = response.orderDeliveriesHistory.map(
-            (el: any) => ({
+        const existingDb = await db.get("delivery-orders").catch(() => null);
+        console.log("existing", existingDb);
+        if (existingDb) {
+          await db.put({
+            _id: "delivery-orders",
+            _rev: existingDb._rev,
+            orderDeliveriesHistory: response.data.content.map((el: any) => ({
               ...el,
               sartiOrder: {
                 ...el.sartiOrder,
@@ -87,17 +80,47 @@ export default defineComponent({
                   })
                 ),
               },
-            })
-          );
-          alert("No hay conexión a internet. Mostrando datos offline.");
+            })),
+            totalRows: response.data.totalElements,
+          });
+        } else {
+          await db.put({
+            _id: "delivery-orders",
+            orderDeliveriesHistory: response.data.content.map((el: any) => ({
+              ...el,
+              sartiOrder: {
+                ...el.sartiOrder,
+                orderProducts: el.sartiOrder.orderProducts.map(
+                  (orderProduct: any) => ({
+                    ...orderProduct,
+                    productInfo: JSON.parse(orderProduct.productInfo),
+                  })
+                ),
+              },
+            })),
+            totalRows: response.data.totalElements,
+          });
         }
+      } catch (error) {
         console.error(error);
-        SweetAlertCustom.errorMessage(
-          "Error",
-          "Ocurrió un error al obtener los pedidos"
-        );
-        this.orderDeliveriesHistory = [];
-        this.pagination.page = 1;
+
+        if (!navigator.onLine) {
+          console.log("No hay conexión a internet.");
+          const offlineData = await db
+            .get<DeliveryDb>("delivery-orders")
+            .catch(() => null);
+          if (offlineData) {
+            this.orderDeliveriesHistory = offlineData.orderDeliveriesHistory;
+            this.totalRows = offlineData.totalRows;
+            SweetAlertCustom.showToast(false, "Mostrando datos offline")
+            //alert("Mostrando datos offline.");
+          }
+        } else {
+          SweetAlertCustom.errorMessage(
+            "Error",
+            "Ocurrió un error al obtener los pedidos"
+          );
+        }
       }
     },
 
@@ -147,19 +170,67 @@ export default defineComponent({
           `Cambiar el estado a ${newStatus}`
         ).then(async (result: any) => {
           if (result.isConfirmed) {
-            const resp = await OrderDeliveryService.changeOrderDeliveryStep({
-              orderId: order.id,
-              step: newStatus,
-            });
-            const { error } = resp;
-            if (!error) {
-              SweetAlertCustom.successMessage();
-              await this.initView();
+            if (navigator.onLine) {
+              console.log("online");
+              const resp = await OrderDeliveryService.changeOrderDeliveryStep({
+                orderId: order.id,
+                step: newStatus,
+              });
+              const { error } = resp;
+              if (!error) {
+                SweetAlertCustom.successMessage();
+                await this.initView();
+              }
+            } else {
+              console.log("offline");
+              const payload = {
+                orderId: order.id,
+                step: newStatus,
+              };
+              await dbPetitions.put({
+                _id: new Date().toISOString(),
+                payload,
+                controllerFunction: "changeOrderDeliveryStep",
+              });
+              SweetAlertCustom.showToast(true, "No hay conexión a internet. La petición se guardara para ser ejecutada después")
+              // alert("No hay conexión a internet. La petición se guardara para ser ejecutada después");
             }
           }
         });
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    async syncOfflineRequest() {
+      try {
+        const allDocs = await dbPetitions.allDocs({ include_docs: true });
+
+        if (allDocs.total_rows !== 0) {
+          SweetAlertCustom.showToast(false, "Sincronizando peticiones")
+          // alert("Sincronizando peticiones");
+        }
+        for (const doc of allDocs.rows) {
+          if (!doc.doc) {
+            continue;
+          }
+
+          const { controllerFunction } = doc.doc as unknown as any;
+          if (controllerFunction === "changeOrderDeliveryStep") {
+            const { payload } = doc.doc as unknown as any;
+            const response = await OrderDeliveryService.changeOrderDeliveryStep(
+              payload
+            );
+            const { error } = response;
+            if (!error) {
+              SweetAlertCustom.successMessage("Peticiones sincronizadas");
+              await dbPetitions.remove(doc.doc._id, doc.doc._rev);
+            }
+          }
+        }
+        await this.initView();
+      } catch (error) {
+        console.log("Error al sincronizar peticiones", error);
       }
     },
 
@@ -174,6 +245,17 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.initView();
+    // this.initView();
+    window.addEventListener("online", this.syncOfflineRequest);
+    this.syncOfflineRequest();
+  },
+  beforeDestroy() {
+    // Elimina el evento al destruir el componente
+    window.removeEventListener("online", this.syncOfflineRequest);
+  },
+  watch: {
+    online() {
+      this.syncOfflineRequest();
+    },
   },
 });

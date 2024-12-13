@@ -82,6 +82,7 @@
 import { defineComponent } from "vue";
 import Camera from "@/components/Camera.vue";
 import Captured from "@/components/Captured.vue";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
 export default defineComponent({
   name: "DropZone",
@@ -247,7 +248,8 @@ export default defineComponent({
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         if (file.type.split("/")[0] !== "image") {
-          alert("Solo se permiten archivos de imagen.");
+          SweetAlertCustom.showToast(true, "Solo se permiten archivos de imagen")
+          // alert("Solo se permiten archivos de imagen.");
           continue;
         }
 
