@@ -32,7 +32,7 @@ export interface Customer {
   name:           string;
   fistLastName:   string;
   secondLastName: string;
-  address:        null;
+  address?:        Address;
 }
 
 export interface Seller {
