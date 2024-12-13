@@ -88,18 +88,7 @@ export default defineComponent({
     },
 
     touchAllFields() {
-      const touchFields = (fields:any) => {
-        if (!fields || typeof fields !== "object") return;
-        Object.keys(fields).forEach((key) => {
-          if (fields[key]?.$touch) {
-            fields[key].$touch();
-          } else if (typeof fields[key] === "object") {
-            touchFields(fields[key]); // Llamada recursiva para manejar anidaciones
-          }
-        });
-      };
-    
-      touchFields(this.v$?.address);
+      this.v$?.address.$touch()
     },
 
     cloneAddress(address: any) {
