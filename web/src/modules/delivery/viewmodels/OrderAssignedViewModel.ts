@@ -3,18 +3,21 @@ import { useVuelidate } from "@vuelidate/core";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
-import PouchDB from "pouchdb";
+// import PouchDB from "pouchdb";
+
+var PouchDB = require("pouchdb");
 import PouchDBFind from "pouchdb-find";
 
 PouchDB.plugin(PouchDBFind);
 
 try {
   console.log("entro al try");
-  const db = new PouchDB("test-db");
+  // const db = new PouchDB("test-db") as any;
+  var db = new PouchDB("my_db");
 
   db.info()
-    .then((info) => console.log("PouchDB está funcionando:", info))
-    .catch((error) => console.error("Error al probar PouchDB:", error));
+    .then((info: any) => console.log("PouchDB está funcionando:", info))
+    .catch((error: any) => console.error("Error al probar PouchDB:", error));
 } catch (error: any) {
   console.log("esta mamando");
   console.log("error", error);
