@@ -31,12 +31,7 @@
         <div class="toggle" @click="toggleMenu">
           <b-icon icon="justify"></b-icon>
         </div>
-        <!-- Condicional para mostrar la barra de búsqueda solo para ciertos roles -->
-        <div class="search" v-if="showSearchAndCart">
-          <label>
-            <b-input type="text" placeholder="Buscar productos..."  />
-          </label>
-        </div>
+        
 
         <!-- Condicional para mostrar el carrito solo para ciertos roles -->
         <div class="user color-cart n" v-if="showSearchAndCart">
