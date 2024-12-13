@@ -31,10 +31,10 @@
                 <div>
                   <h1>{{ productSelected.name }}</h1>
                 </div>
-                <div>
-                  <label for="rating-inline"
-                    ><strong>{{ productSelected.rating }}</strong></label
-                  >
+                <div class="d-flex flex-column flex-md-row align-items-center">
+                  <label for="rating-inline" class="me-2 mb-2 mb-md-0">
+                    <strong>{{ productSelected.rating }}</strong>
+                  </label>
                   <b-form-rating
                     v-model="productSelected.rating"
                     inline
@@ -45,6 +45,7 @@
                     variant="warning"
                   ></b-form-rating>
                 </div>
+
                 <div>
                   <p class="details-price">${{ productSelected.price }}</p>
                 </div>
@@ -99,7 +100,10 @@
                 <div class="mt-5">
                   <b-row>
                     <b-col cols="12" md="12">
-                      <b-button block variant="orange-primary" @click="addToProductIntoCart"
+                      <b-button
+                        block
+                        variant="orange-primary"
+                        @click="addToProductIntoCart"
                         >Agregar al carrito</b-button
                       >
                     </b-col>
@@ -111,30 +115,37 @@
         </b-row>
         <b-row no-gutters class="w-100 mt-2">
           <b-col cols="12" md="12">
-          <section v-if="resumeRating.rating === 0 && ratingList.length === 0 ">
-            <div class="mb-2 text-center">
-              <img src="@/assets/NoRate.svg" class="w-70 sold-out-image" />
-              <br />
-              <h5>
-                Sé el primero en calificar este producto y agrégalo a tu carrito.
-              </h5>
-            </div>
-          </section>
-          </b-col>
-          <b-col  v-if="resumeRating.rating != 0 && ratingList.length != 0 " cols="12" md="6">
-            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
-              <h3>Opiniones del producto</h3>
-              <rating-resume
-                :rating="resumeRating"
-              ></rating-resume>
+            <section
+              v-if="resumeRating.rating === 0 && ratingList.length === 0"
+            >
+              <div class="mb-2 text-center">
+                <img src="@/assets/NoRate.svg" class="w-70 sold-out-image" />
+                <br />
+                <h5>
+                  Sé el primero en calificar este producto y agrégalo a tu
+                  carrito.
+                </h5>
+              </div>
             </section>
           </b-col>
-          <b-col  v-if="resumeRating.rating != 0 && ratingList.length != 0 " cols="12" md="6">
+          <b-col
+            v-if="resumeRating.rating != 0 && ratingList.length != 0"
+            cols="12"
+            md="6"
+          >
+            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
+              <h3>Opiniones del producto</h3>
+              <rating-resume :rating="resumeRating"></rating-resume>
+            </section>
+          </b-col>
+          <b-col
+            v-if="resumeRating.rating != 0 && ratingList.length != 0"
+            cols="12"
+            md="6"
+          >
             <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
               <h3>Opiniones con fotos</h3>
-              <opinion-comment
-                :comments="ratingList"
-              ></opinion-comment>
+              <opinion-comment :comments="ratingList"></opinion-comment>
             </section>
           </b-col>
         </b-row>
@@ -170,7 +181,7 @@ export default {
   max-width: 90px;
 }
 
-.sold-out-image{
+.sold-out-image {
   height: 100px;
 }
 </style>
