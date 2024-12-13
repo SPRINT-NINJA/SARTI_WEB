@@ -63,7 +63,7 @@ export default defineComponent({
         this.totalRows = response.data.totalElements;
 
         const existingDb = await db.get("delivery-orders").catch(() => null);
-
+        console.log("existing", existingDb)
         if (existingDb) {
           await db.put({
             _id: "delivery-orders",
