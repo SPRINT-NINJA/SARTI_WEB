@@ -85,7 +85,5 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1600,
   },
-  server: {
-    https: true, // Habilita HTTPS en el servidor local
-  },
+
 });
