@@ -7,6 +7,9 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    include: ['pouchdb'], // Incluye pouchdb en la optimización de dependencias
+  },
   plugins: [
     vue2(),
     // Configuración del plugin PWA
@@ -54,7 +57,7 @@ export default defineConfig({
         background_color: "#ffa446",
         icons: [
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any",
@@ -62,13 +65,13 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             form_factor: "wide",
           },
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             form_factor: "narrow",
@@ -77,6 +80,9 @@ export default defineConfig({
       },
     }),
   ],
+  define:{
+    global: "window"
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

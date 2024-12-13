@@ -58,6 +58,7 @@
                           <b-input-group class="quantity-selector">
                             <b-input-group-prepend>
                               <b-button
+                                :disabled="!value.status"
                                 variant="outline-info"
                                 size="sm"
                                 @click="decrement(value)"
@@ -75,6 +76,7 @@
                             ></b-form-input>
                             <b-input-group-append>
                               <b-button
+                              :disabled="!value.status"
                                 variant="outline-secondary"
                                 size="sm"
                                 @click="increment(value)"
@@ -95,6 +97,7 @@
                         <span
                           class="mx-4 available-stock"
                           @click="RemoveProductByCart(value)"
+                          v-show="value.status"
                         >
                           <b>Eliminar</b>
                         </span>

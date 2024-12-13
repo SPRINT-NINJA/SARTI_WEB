@@ -34,18 +34,21 @@ export default defineComponent({
       this.CountTotal(); // Aseguramos que el total siempre esté actualizado
     },
     CountTotal(): void {
-      this.total = this.productList.reduce(
-        (acc, product) => acc + (product.amount * product.product.price || 0),
-        0
-      );
-    },
+      this.total = this.productList.reduce((acc, product) => {
+        // Validar que el producto esté en status true antes de sumar
+        if (product.status !== false) {
+          return acc + (product.amount * product.product.price || 0);
+        }
+        return acc;
+      }, 0);
+    },    
     RemoveProductByCart(product: ICartProduct) {
       SweetAlertCustom.questionMessage("¿Está seguro de eliminar el producto?", "Se eliminará del carrito el producto").then(async (result) => {
         console.log(result, "Confirm")
         if (result.isConfirmed) {
           try {
             console.log(product.id, "elimna solo este")
-            const resp = await CartService.removeProductCart(product);
+            const resp = await CartService.removeProductCart(product.id);
             if (!resp.error) {
               this.CountTotal();
               SweetAlertCustom.successMessage("Se ha eliminado correctamente", "Tu producto ha sido eliminado del carrito.")
