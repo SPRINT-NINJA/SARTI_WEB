@@ -238,6 +238,7 @@ export default defineComponent({
             const { error } = response;
             if (!error) {
               SweetAlertCustom.successMessage("Peticiones sincronizadas");
+              this.$emit("reload");
               await dbPetitions.remove(doc.doc._id, doc.doc._rev);
             }
           }
