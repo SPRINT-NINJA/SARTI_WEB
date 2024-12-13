@@ -49,7 +49,7 @@
                   <p class="details-price">${{ productSelected.price }}</p>
                 </div>
                 <div>
-                  <b-row class="w-100">
+                  <b-row>
                     <b-col cols="12" lg="5" class="d-flex align-items-center">
                       <span class="mr-3"> Cantidad: </span>
                       <div>
@@ -122,7 +122,7 @@
           </section>
           </b-col>
           <b-col  v-if="resumeRating.rating != 0 && ratingList.length != 0 " cols="12" md="6">
-            <section class="py-3 px-5">
+            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
               <h3>Opiniones del producto</h3>
               <rating-resume
                 :rating="resumeRating"

@@ -1,34 +1,42 @@
 <template>
-  
-  <div class="">
+  <div>
+    <custom-overlay :isLoading="isLoading" />
     <b-container fluid class="mt-4 mb-4 vh-100">
+      <div class="shadow">
         <b-row no-gutters class="w-100 mt-2">
-            <b-col cols="12" md="6">
+          <!-- Imagenes del producto -->
+          <b-col cols="12" md="6">
             <section class="m-2 p-4">
               <simple-gallery
-                :images="product.images"
+                :images="images"
                 galleryID="my-test-gallery"
-                :mainImage="product.mainImage"
+                :mainImage="productSelected.mainImage"
               ></simple-gallery>
             </section>
           </b-col>
+          <!-- Detalles del producto -->
           <b-col cols="12" md="6">
             <section class="m-2 p-4">
               <b-card class="shadow">
                 <div class="d-flex justify-content-end">
                   <h5>
-                    <b-badge variant="success">Disponible</b-badge>
+                    <b-badge
+                      :variant="productSelected.status ? 'success' : 'danger'"
+                      >{{
+                        productSelected.status ? "Disponible" : "Agotado"
+                      }}</b-badge
+                    >
                   </h5>
                 </div>
                 <div>
-                  <h1>{{ product.name }}</h1>
+                  <h1>{{ productSelected.name }}</h1>
                 </div>
                 <div>
                   <label for="rating-inline"
-                    ><strong>{{ product.rating }}</strong></label
+                    ><strong>{{ productSelected.rating }}</strong></label
                   >
                   <b-form-rating
-                    v-model="product.rating"
+                    v-model="productSelected.rating"
                     inline
                     stars="10"
                     readonly
@@ -38,36 +46,32 @@
                   ></b-form-rating>
                 </div>
                 <div>
-                  <p class="details-price">${{ product.price }}</p>
+                  <p class="details-price">${{ productSelected.price }}</p>
                 </div>
                 <div>
-                  <b-row class="w-100">
-                   
+                  <b-row >
                     <b-col
                       cols="12"
                       lg="7"
                       class="d-flex justify-content-start"
                     >
-                      <span class="available-stock"
-                        >({{ product.stock }} disponibles)</span
+                      <h5 >cantidad {{ productSelected.stock }} disponibles</h5
                       >
                     </b-col>
                   </b-row>
                 </div>
                 <div class="mt-3 mb-5">
                   <h4>Lo que tienes que saber del producto:</h4>
-                  <p class="mt-3">{{ product.description }}</p>
+                  <p class="mt-3">{{ productSelected.description }}</p>
                 </div>
                 <div class="mt-5">
                   <b-row>
-                    <b-col cols="12" md="6">
-                      <b-button block variant="red-palete" @click="getUpdateProduct(product.id)"
-                        >Editar</b-button
-                      >
-                    </b-col>
-                    <b-col cols="12" md="6">
-                      <b-button block variant="orange-primary" @click="listRateProduct(product.id)"
-                        >Ver reseñas</b-button
+                    <b-col cols="12" md="12">
+                      <b-button
+                        block
+                        variant="orange-primary"
+                        @click="goBack"
+                        >Regresar</b-button
                       >
                     </b-col>
                   </b-row>
@@ -76,26 +80,76 @@
             </section>
           </b-col>
         </b-row>
+        <b-row no-gutters class="w-100 mt-2">
+          <b-col cols="12" md="12">
+            <section
+              v-if="resumeRating.rating === 0 && ratingList.length === 0"
+            >
+              <div class="mb-2 text-center">
+                <empty-list-banner
+                  :imageProp="require('@/assets/NoRate.svg')"
+                  titleProp="Aún no han calificado este producto"
+                  subtitleProp="Sin reseñas"
+                  class="h-100"
+                />
+              </div>
+            </section>
+          </b-col>
+          <b-col
+            v-if="resumeRating.rating != 0 && ratingList.length != 0"
+            cols="12"
+            md="6"
+          >
+            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
+              <h3>Opiniones del producto</h3>
+              <rating-resume :rating="resumeRating"></rating-resume>
+            </section>
+          </b-col>
+          <b-col
+            v-if="resumeRating.rating != 0 && ratingList.length != 0"
+            cols="12"
+            md="6"
+          >
+            <section class="py-3 px-5 overflow-auto" style="max-height: 400px">
+              <h3>Opiniones con fotos</h3>
+              <opinion-comment :comments="ratingList"></opinion-comment>
+            </section>
+          </b-col>
+        </b-row>
+      </div>
     </b-container>
   </div>
-
 </template>
-
 <script lang="ts">
+import ProductDetailViewModel from "../viewmodel/ProductDetailViewModel";
 import { defineAsyncComponent } from "vue";
-import ProductDetailViewModel from '../viewmodel/ProductDetailViewModel';
-export default {
-    name:"DetailProduct",
-    components:{
-        SimpleGallery: defineAsyncComponent(() =>
-        import("../../public/components/SimpleGallery.vue")
-    )
-    },
-    mixins:[ProductDetailViewModel]
 
-}
+export default {
+  name: "ProductDetailsView",
+  components: {
+    RatingResume: defineAsyncComponent(
+      () => import("@/modules/public/components/RatingResume.vue")
+    ),
+    SimpleGallery: defineAsyncComponent(
+      () => import("@/modules/public/components/SimpleGallery.vue")
+    ),
+    OpinionComment: defineAsyncComponent(
+      () => import("@/modules/public/components/OpinionComment.vue")
+    ),
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
+    EmptyListBanner: () => import("@/views/components/EmptyListBanner.vue"),
+  },
+  mixins: [ProductDetailViewModel],
+};
 </script>
 
-<style>
+<style scoped>
+.quantity-selector {
+  max-width: 90px;
+}
 
+.sold-out-image {
+  height: 100px;
+}
 </style>
