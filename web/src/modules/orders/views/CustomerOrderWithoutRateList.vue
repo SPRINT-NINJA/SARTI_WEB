@@ -48,22 +48,9 @@
                     <small>Total: ${{ orderProduct.total }}</small>
                   </p>
                 </b-col>
-                <!-- Botón de acción -->
-                <b-col
-                  cols="12"
-                  md="2"
-                  class="d-flex align-items-end justify-content-end"
-                >
-                  <b-button
-                    variant="orange-primary"
-                    size="sm"
-                    block
-                    @click="goToOrderCreateRate(orderProduct.id)"
-                  >
-                    Crear reseña
-                  </b-button>
-                </b-col>
               </b-row>
+              <!-- Reseña -->
+              <CustomerCreateRate :orderProductId="orderProduct.id" :productId="orderProduct.product.id" />
             </b-container>
           </b-card>
         </b-col>
@@ -98,6 +85,8 @@ export default {
     BannerOverlay: BannerOverlay,
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
+    CustomerCreateRate: () =>
+      import("@/modules/rates/views/CustomerCreateRateView.vue"),
   },
   mixins: [CustomerOrderWithoutRateListViewModel],
 };

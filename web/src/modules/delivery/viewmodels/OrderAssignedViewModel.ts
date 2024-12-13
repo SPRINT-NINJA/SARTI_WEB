@@ -1,6 +1,5 @@
 import { defineComponent } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required, minLength, email, helpers } from "@vuelidate/validators";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
@@ -29,8 +28,9 @@ export default defineComponent({
     methods: {
         async fetchOrderDeliveriesHistory() {
             try {
-                this.isLoading = true;
                 const response = await OrderDeliveryService.getOrderDeliveriesHistory(this.pagination as GetOrderDeliveriesDto);
+                console.log(response);
+
                 this.orderDeliveriesHistory = response.data.content as Array<any>;
 
                 this.orderDeliveriesHistory = this.orderDeliveriesHistory.map((el: any) => ({
@@ -53,16 +53,19 @@ export default defineComponent({
                 );
                 this.orderDeliveriesHistory = [];
                 this.pagination.page = 1;
-            } finally {
-                this.isLoading = false
             }
         },
 
         async fetchTakenOrderDelivery() {
             try {
-                this.isLoading = true
                 const response = await OrderDeliveryService.getTakenOrderDeliveries();
                 console.log(response);
+
+                if (!response.data[0]) {
+                    this.takenOrderDelivery = null;
+                    return;
+                }
+
                 this.takenOrderDelivery = response.data[0]
                 this.takenOrderDelivery.sartiOrder = {
                     ...this.takenOrderDelivery.sartiOrder,
@@ -77,14 +80,14 @@ export default defineComponent({
                     "Error",
                     "Ocurrió un error al obtener el pedido asignado"
                 );
-            } finally {
-                this.isLoading = false
             }
         },
 
         async initView() {
-            this.fetchOrderDeliveriesHistory();
-            this.fetchTakenOrderDelivery();
+            this.isLoading = true;
+            await this.fetchOrderDeliveriesHistory();
+            await this.fetchTakenOrderDelivery();
+            this.isLoading = false;
         },
 
         async handleChangeStep(order: any) {
@@ -107,7 +110,7 @@ export default defineComponent({
                         const { error } = resp;
                         if (!error) {
                             SweetAlertCustom.successMessage();
-                            this.initView();
+                            await this.initView();
                         }
                     }
                 });

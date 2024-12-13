@@ -38,6 +38,16 @@ export default defineComponent({
     };
   },
   methods: {
+    handleCreateProduct() {
+      try {
+        this.isLoading = true;
+        this.$router.push({ name: "create-product" });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async getAllProducts() {
       try {
         this.isLoading = true;
