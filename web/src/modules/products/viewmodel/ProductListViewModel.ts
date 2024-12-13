@@ -1,8 +1,9 @@
 import CustomOverlay from "@/modules/public/components/CustomOverlay.vue";
 import { defineComponent } from "vue";
-import { IProduct } from "../models/ProductModel";
+import { IProduct } from "@/modules/products/models/ProductModel";
 import ProductService from "../services/ProductService";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { decryptParamsId, encryptParamsId } from "@/kernel/utils/cryptojs";
 
 export default defineComponent({
   data() {
@@ -46,6 +47,18 @@ export default defineComponent({
         console.log(error);
       } finally {
         this.isLoading = false;
+      }
+    },
+    async updateDetails(item: any) {
+      try {
+        const { id } = item;
+        const encryptParam = encryptParamsId(id.toString());
+        await this.$router.push({
+          name: "update-product",
+          params: { id: encryptParam },
+        });
+      } catch (error) {
+        console.error(error);
       }
     },
     async getAllProducts() {
@@ -108,7 +121,7 @@ export default defineComponent({
       } catch (error) {
         console.log(error);
       }
-    },
+    }
   },
   created() {
     this.getAllProducts();

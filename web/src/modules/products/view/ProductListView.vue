@@ -66,6 +66,7 @@
                           class="mr-2"
                           v-b-tooltip.hover
                           title="Editar"
+                          @click="updateDetails(product)"
                         >
                           <b-icon icon="pencil"></b-icon>
                         </b-button>
