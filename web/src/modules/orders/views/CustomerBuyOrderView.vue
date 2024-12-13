@@ -481,7 +481,7 @@
           </b-button>
           <b-button
             variant="orange-secundary"
-            :disabled="!isStepValid"
+            :disabled="v$.address.$invalid"
             @click="procedToPayment"
           >
             Proceder con la compra

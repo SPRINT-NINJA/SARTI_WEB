@@ -3,6 +3,20 @@ import charge from "../assets/loading.gif";
 import productoDeletedImage from "@/assets/producto_deleted_or_inactive.png";
 
 class SweetAlertCustom {
+  static showToast(error = false, message = "Operación realizada", timer = 1500) {
+    Swal.fire({
+      toast: true,
+      position: 'top-end', // Puedes cambiar la posición del toast
+      icon: error ? 'error' : 'success', // Ícono según el valor de "error"
+      title: message,
+      timer: timer,
+      showConfirmButton: false,
+      timerProgressBar: true, // Muestra una barra de progreso
+      customClass: {
+        popup: 'custom-toast', // Si necesitas personalizar el estilo aún más
+      },
+    });
+  }
   static questionMessage(
     text?: string,
     title = "¿Está seguro de realizar esta acción?"

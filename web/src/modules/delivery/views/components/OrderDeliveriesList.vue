@@ -207,9 +207,8 @@ export default defineComponent({
                 payload,
                 controllerFunction: "takeOrder",
               });
-              alert(
-                "No hay conexión a internet. La petición se guardara para ser ejecutada después"
-              );
+              SweetAlertCustom.showToast(true, "No hay conexión a internet. La petición se guardara para ser ejecutada después")
+              // alert("No hay conexión a internet. La petición se guardara para ser ejecutada después");
             }
           }
         });
@@ -222,7 +221,8 @@ export default defineComponent({
         const allDocs = await dbPetitions.allDocs({ include_docs: true });
 
         if (allDocs.total_rows !== 0) {
-          alert("Sincronizando peticiones");
+          SweetAlertCustom.showToast(false, "Sincronizando peticiones")
+          // alert("Sincronizando peticiones");
         }
         for (const doc of allDocs.rows) {
           if (!doc.doc) {
