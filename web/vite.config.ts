@@ -80,6 +80,9 @@ export default defineConfig({
       },
     }),
   ],
+  define:{
+    global: "window"
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
