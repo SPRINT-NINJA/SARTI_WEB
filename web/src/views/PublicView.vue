@@ -5,7 +5,7 @@
         <li>
           <a href="/sarti/home-page">
             <span class="icon">
-              <img src="../assets/SARTI-LOGO.svg" alt="SARTI" />
+              <img src="../assets/sarti-side.png" class="icon-side"  alt="SARTI" />
             </span>
             <span class="title">SARTI</span>
           </a>
