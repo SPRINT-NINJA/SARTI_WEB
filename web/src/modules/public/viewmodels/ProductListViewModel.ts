@@ -8,8 +8,8 @@ export default defineComponent({
   data() {
     return {
       optionsFieldToPage: [
-        { text: "5", value: 5 },
-        { text: "10", value: 10 },
+        { text: "4", value: 4 },
+        { text: "8", value: 8 },
         { text: "20", value: 20 },
         { text: "50", value: 50 },
         { text: "100", value: 100 },
@@ -19,14 +19,14 @@ export default defineComponent({
         productName: "",
         sellerId: "",
         page: 1,
-        size: 5,
+        size: 8,
         sort: "DESC",
       },
       isLoading: false,
       pagination: {
         page: 1,
         sort: "id",
-        size: 5,
+        size: 8,
         direction: "DESC",
         totalRows: 0,
         data: {
