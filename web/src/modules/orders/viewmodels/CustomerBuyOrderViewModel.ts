@@ -88,17 +88,18 @@ export default defineComponent({
     },
 
     touchAllFields() {
-      const touchIfNotEmpty = (field:any) => {
-        if (field.$model !== null && field.$model !== "") {
-          field.$touch();
-        }
+      const touchFields = (fields:any) => {
+        if (!fields || typeof fields !== "object") return;
+        Object.keys(fields).forEach((key) => {
+          if (fields[key]?.$touch) {
+            fields[key].$touch();
+          } else if (typeof fields[key] === "object") {
+            touchFields(fields[key]); // Llamada recursiva para manejar anidaciones
+          }
+        });
       };
     
-      const addressFields = this.v$.address;
-    
-      Object.keys(addressFields).forEach((key) => {
-        touchIfNotEmpty(addressFields[key]);
-      });
+      touchFields(this.v$?.address);
     },
 
     cloneAddress(address: any) {
@@ -431,29 +432,6 @@ export default defineComponent({
     this.fetchCart().then(()=>{
       this.touchAllFields();
     })
-  },
-  computed: {
-    isStepValid() {
-      if(this.isTakenInShop){
-        return true;
-      }
-      const fieldsToValidate = [
-        this.v$.address.city,
-        this.v$.address.colony,
-        this.v$.address.street,
-        this.v$.address.state,
-        this.v$.address.country,
-        this.v$.address.locality,
-        this.v$.address.externalNumber,
-        this.v$.address.zipCode,
-        this.v$.address.addressType,
-        this.v$.address.referenceNear,
-      ] as any;
-
-      // Validar que todos los campos estén "tocados" y sin errores
-      return fieldsToValidate.every((field: { $dirty: boolean; $error: boolean }) => field.$dirty && !field.$error);
-    },
-
   },
   validations() {
     return {
