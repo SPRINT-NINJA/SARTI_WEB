@@ -120,7 +120,10 @@ import { encryptParamsId } from "@/kernel/utils/cryptojs";
 import { defineComponent } from "vue";
 import { OrderProduct } from "../../models/OrderDelivery";
 import OrderDeliveryService from "../../services/OrderDeliveryService";
+import PouchDB from "pouchdb";
 
+const dbPetitions = new PouchDB("delivery-orders-petitions");
+console.log("Petitions", dbPetitions);
 export default defineComponent({
   name: "OrderDeliveriesList",
   props: {
@@ -151,6 +154,9 @@ export default defineComponent({
     };
   },
   watch: {
+    online() {
+      this.syncOfflineRequest();
+    },
     // Observa los cambios en todas las props relacionadas
     orderDeliveriesProp: "initializeState",
     initialToggleStateProp: "initializeState",
@@ -162,7 +168,9 @@ export default defineComponent({
     },
   },
   created() {
-    this.initializeState();
+    // this.initializeState();
+    window.addEventListener("online", this.syncOfflineRequest);
+    this.syncOfflineRequest();
   },
   methods: {
     initializeState() {
@@ -182,22 +190,61 @@ export default defineComponent({
           `¿Tomar el pedido ${orderToTake.orderNumber}?`
         ).then(async (result: any) => {
           if (result.isConfirmed) {
-            const resp = await OrderDeliveryService.takeOrderDelivery(
-              orderToTake.id
-            );
-            const { error } = resp;
-            if (!error) {
-              SweetAlertCustom.successMessage();
-              this.$emit("reload");
+            if (navigator.onLine) {
+              const resp = await OrderDeliveryService.takeOrderDelivery(
+                orderToTake.id
+              );
+              const { error } = resp;
+              if (!error) {
+                SweetAlertCustom.successMessage();
+                this.$emit("reload");
+              }
+            } else {
+              console.log("offline");
+              const payload = orderToTake.id;
+              await dbPetitions.put({
+                _id: new Date().toISOString(),
+                payload,
+                controllerFunction: "takeOrder",
+              });
+              alert(
+                "No hay conexión a internet. La petición se guardara para ser ejecutada después"
+              );
             }
           }
         });
       } catch (error) {
         console.error(error);
-        SweetAlertCustom.errorMessage(
-          "Error",
-          "Ocurrió un error al tomar el pedido"
-        );
+      }
+    },
+    async syncOfflineRequest() {
+      try {
+        const allDocs = await dbPetitions.allDocs({ include_docs: true });
+
+        if (allDocs.total_rows !== 0) {
+          alert("Sincronizando peticiones");
+        }
+        for (const doc of allDocs.rows) {
+          if (!doc.doc) {
+            continue;
+          }
+
+          const { controllerFunction } = doc.doc as unknown as any;
+          if (controllerFunction === "takeOrder") {
+            const { payload } = doc.doc as unknown as any;
+            const response = await OrderDeliveryService.takeOrderDelivery(
+              payload
+            );
+            const { error } = response;
+            if (!error) {
+              SweetAlertCustom.successMessage("Peticiones sincronizadas");
+              await dbPetitions.remove(doc.doc._id, doc.doc._rev);
+            }
+          }
+        }
+        await this.initializeState();
+      } catch (error) {
+        console.log("Error al sincronizar peticiones", error);
       }
     },
     async getProductPerDetails(item: OrderProduct) {
@@ -224,6 +271,10 @@ export default defineComponent({
       // Alterna el estado del índice específico
       this.$set(this.isShowProducts, index, !this.isShowProducts[index]);
     },
+  },
+  beforeDestroy() {
+    // Elimina el evento al destruir el componente
+    window.removeEventListener("online", this.syncOfflineRequest);
   },
 });
 </script>
