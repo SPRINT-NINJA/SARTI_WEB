@@ -1,5 +1,6 @@
 <template>
   <div>
+    <custom-overlay :isLoading="isLoading" />
     <div class="d-flex align-items-center justify-content-center">
       <b-card class="background-card-other my-3">
         <b-row class="mx-2">
@@ -16,7 +17,6 @@
             <b-row
               class="d-flex align-items-center justify-content-center scrollable-container"
             >
-              <!-- Vista del producto (sin modificar cantidades) -->
               <b-card
                 v-for="product in cartBody.cartProducts"
                 :key="product.id"
@@ -150,13 +150,10 @@
             </b-alert>
           </b-col>
         </b-row>
+        <!-- Contenedor del botón de PayPal -->
+        <div class="mt-4" id="paypal-button-container"></div>
         <div class="d-flex align-items-end justify-content-end">
-          <b-button variant="orange-secundary" class="mx-3"
-            >Cancelar Pedido</b-button
-          >
-          <b-button variant="orange-primary" @click="confirmOrder"
-            >Confirmar Pedido</b-button
-          >
+          <b-button variant="orange-secundary" @click="goBack">Regresar al carrito</b-button>
         </div>
       </b-card>
     </div>
@@ -168,6 +165,10 @@ import CustomerBuyOrderViewModel from "../viewmodels/CustomerBuyOrderViewModel";
 export default {
   name: "CustomerOrderBuy",
   mixins: [CustomerBuyOrderViewModel],
+  components: {
+    CustomOverlay: () =>
+      import("@/modules/public/components/CustomOverlay.vue"),
+  }
 };
 </script>
 

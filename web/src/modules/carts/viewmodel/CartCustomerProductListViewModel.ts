@@ -44,15 +44,9 @@ export default defineComponent({
         console.log(result, "Confirm")
         if (result.isConfirmed) {
           try {
-<<<<<<< Updated upstream
-            const resp = await CartService.removeProductCart(product);
-            if(!resp.error){
-              product.amount = 1;
-=======
             console.log(product.id, "elimna solo este")
-            const resp = await CartService.removeProductCart(product.id);
+            const resp = await CartService.removeProductCart(product);
             if (!resp.error) {
->>>>>>> Stashed changes
               this.CountTotal();
               SweetAlertCustom.successMessage("Se ha eliminado correctamente", "Tu producto ha sido eliminado del carrito.")
               location.reload();
@@ -93,19 +87,9 @@ export default defineComponent({
         this.CountTotal();
         this.updateCart(product);
       }
-<<<<<<< Updated upstream
-      
-      // Si la cantidad es 0, se elimina el producto del carrito
-      if (product.amount === 0) {
-        this.RemoveProductByCart(product);
-      }
-    },    
-    async addToProductIntoCart() {
-=======
 
     },
     async fetchCart() {
->>>>>>> Stashed changes
       try {
         this.isLoading = true;
         const resp = await CartService.getCart();

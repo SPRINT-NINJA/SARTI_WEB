@@ -2,6 +2,8 @@ import { CartBody } from "@/modules/carts/models/CartBody";
 import { PaypalOrderInit } from "@/modules/carts/models/PaypalOrderInit";
 import CartService from "@/modules/carts/service/CartService";
 import { defineComponent } from "vue";
+import CustomerDeliveryOrderService from "../services/CustomerDeliveryOrderService";
+import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
 export default defineComponent({
   data() {
@@ -21,6 +23,9 @@ export default defineComponent({
     }
   },
   methods: {
+    goBack() {
+      this.$router.go(-1);
+    },
     setIsTakenInShop() {
       this.isTakeinTheshop = true
       this.isDelivered = false
@@ -53,8 +58,6 @@ export default defineComponent({
         const resp = await CartService.getCart();
         if (!resp.error) {
           this.cartBody = resp.data as CartBody;
-          this.paypalOrderInitBody = this.createPaypalOrderInitBody();
-          console.log(this.paypalOrderInitBody);
         }
         this.totalFee = 0.0;
         this.total = this.cartBody.total
@@ -67,7 +70,7 @@ export default defineComponent({
 
     createPaypalOrderInitBody() {
       return {
-        amount: this.cartBody.total,
+        amount: this.cartBody.total + this.totalFee,
         currency: 'USD',
         paymentMethod: 'paypal',
         description: 'Compra en aplicación SARTI',
@@ -130,12 +133,133 @@ export default defineComponent({
       return orderBody;
     },
 
-    async confirmOrder() {
-      const orderBodyMapped = this.mapCartToOrder();
-      console.log(orderBodyMapped);
-    }
+    loadPayPalScript(): Promise<void> {
+      return new Promise((resolve, reject) => {
+        // Verifica si el SDK de PayPal ya está cargado
+        if ((window as any).paypal) {
+          resolve();
+          return;
+        }
+
+        // Crear el elemento de script del SDK de PayPal
+        const script = document.createElement("script");
+        script.src =
+          "https://www.paypal.com/sdk/js?client-id=ASC8dW4mLaFqWkKBWUWtzbXr7cEC0kZuW61MfT4fYz1gxZjC9GD84R-clJH3KkwWfV30BDLtAmbBe4iv&buyer-country=MX&components=buttons&enable-funding=venmo,paylater,card";
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error("No se pudo cargar el SDK de PayPal."));
+        document.head.appendChild(script);
+      });
+    },
+
+    async renderPayPalButton(): Promise<void> {
+      // Verifica si el objeto PayPal existe en la ventana global
+      const paypal = (window as any).paypal;
+      if (paypal) {
+        paypal
+          .Buttons({
+            createOrder: async (): Promise<string> => {
+              const response = await this.getOrderApi() as any;
+              if (!response?.data?.links) {
+                SweetAlertCustom.errorMessage(
+                  "Error",
+                  "Ocurrió un error al obtener los enlaces de la orde."
+                );
+              }
+              // Encuentra el token de aprobación
+              const approveLink = response.data.links.find(
+                (link: { rel: string }) => link.rel === "approve"
+              );
+
+              if (!approveLink?.href) {
+                SweetAlertCustom.errorMessage(
+                  "Error",
+                  "El enlace de aprobación no está disponible"
+                );
+              }
+
+              const approveToken = approveLink.href.split("?token=")[1];
+              if (!approveToken) {
+                SweetAlertCustom.errorMessage(
+                  "Error",
+                  "Ocurrió un error al obtener el token de aprobación"
+                );
+              }
+
+              return approveToken;
+            },
+            onApprove: async (data: { orderID: string }): Promise<void> => {
+              if (!data.orderID) {
+                SweetAlertCustom.errorMessage(
+                  "Error",
+                  "El id de la orden no está disponible"
+                );
+              }
+              this.paypalOrderId = data.orderID;
+              await this.onApproveOrder();
+            },
+            onError: (err: any): void => {
+              console.error("Error con PayPal:", err);
+              SweetAlertCustom.errorMessage(
+                "Error",
+                "Ocurrió un error al momento de procesar el pago."
+              );
+            },
+          })
+          .render("#paypal-button-container");
+      } else {
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al cargar al SDK de postman"
+        );
+      }
+    },
+
+    async getOrderApi() {
+      try {
+        const orderDelivery = this.createPaypalOrderInitBody();
+        console.log(orderDelivery);
+        const response = await CustomerDeliveryOrderService.createDeliveryOrder(orderDelivery);
+        return response;
+      } catch (error) {
+        console.error(error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al iniciar la transacción"
+        );
+      }
+    },
+
+    async onApproveOrder() {
+      try {
+        this.isLoading = true;
+        const deliveryOrder = this.mapCartToOrder();
+        const response = await CustomerDeliveryOrderService.captureDeliveryOrder(deliveryOrder);
+        if (!response.error) {
+          SweetAlertCustom.successMessage(
+            "Pago realizado",
+            "El pago se ha realizado con éxito"
+          )
+        }
+      } catch (error: any) {
+        console.error(error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al completar el pago"
+        );
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
+
   mounted() {
     this.fetchCart();
+    this.loadPayPalScript()
+      .then(() => {
+        this.renderPayPalButton();
+      })
+      .catch((error) => {
+        console.error("Error loading PayPal SDK:", error);
+      });
   },
 })
