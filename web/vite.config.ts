@@ -55,9 +55,10 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: './src/assets/logo.svg',
-            sizes: '192x192',
+            src: '/assets/producto_deleted_or_incative.png',
+            sizes: '512x512',
             type: 'image/png',
+            purpose: "any",
           },
         ],
       },
@@ -70,5 +71,8 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 1600,
+  },
+  server: {
+    https: true, // Habilita HTTPS en el servidor local
   },
 });
