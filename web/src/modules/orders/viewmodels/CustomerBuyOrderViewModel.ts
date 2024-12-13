@@ -115,17 +115,19 @@ export default defineComponent({
         externalNumber: '',
         internalNumber: '',
         referenceNear: '',
-        addressType: '',
+        addressType: null,
       }
     },
 
     setIsTakenInShop() {
       this.isTakenInShop = true
       this.isDelivered = false
+      this.isKeepAddress = false;
       this.countTotalWithDelivery();
       this.address = this.cartBody.seller.address
         ? this.cloneAddress(this.cartBody.seller.address)
         : this.getEmptyAddress();
+      this.$v.address.$reset;
     },
 
     setIsDelivered() {
@@ -135,10 +137,27 @@ export default defineComponent({
       this.address = this.cartBody.customer.address != null
         ? this.cloneAddress(this.cartBody.customer.address)
         : this.getEmptyAddress();
+      this.$v.address.$reset;
+    },
+
+    async cleanCart() {
+      try {
+        this.isLoading = true;
+        const resp = await CartService.cleanCart();
+        if (!resp.error) {
+          await this.$router.push({
+            name: "order-list-customer",
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     getFormattedAddress() {
-      return this.address.country.length ? `${this.address.street}, ${this.address.colony}, ${this.address.city}, ${this.address.state}, ${this.address.country}, C.P. ${this.address.zipCode}` : "Direccion no proporcionada";
+      return this.address.country.length ? `${this.address.street} ${this.address.internalNumber} ${this.address.externalNumber} - ${this.address.colony}, ${this.address.city}, ${this.address.state}, ${this.address.country}, C.P. ${this.address.zipCode}` : "Direccion no proporcionada";
     },
 
     countTotalWithDelivery() {
@@ -383,6 +402,7 @@ export default defineComponent({
             "Pago realizado",
             "El pago se ha realizado con éxito"
           )
+          await this.cleanCart();
         }
       } catch (error: any) {
         console.error(error);
