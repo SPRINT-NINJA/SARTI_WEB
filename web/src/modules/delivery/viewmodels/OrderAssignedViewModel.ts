@@ -69,13 +69,35 @@ export default defineComponent({
           await db.put({
             _id: "delivery-orders",
             _rev: existingDb._rev,
-            orderDeliveriesHistory: response.data.content,
+            orderDeliveriesHistory: response.data.content.map((el: any) => ({
+              ...el,
+              sartiOrder: {
+                ...el.sartiOrder,
+                orderProducts: el.sartiOrder.orderProducts.map(
+                  (orderProduct: any) => ({
+                    ...orderProduct,
+                    productInfo: JSON.parse(orderProduct.productInfo),
+                  })
+                ),
+              },
+            })),
             totalRows: response.data.totalElements,
           });
         } else {
           await db.put({
             _id: "delivery-orders",
-            orderDeliveriesHistory: response.data.content,
+            orderDeliveriesHistory: response.data.content.map((el: any) => ({
+              ...el,
+              sartiOrder: {
+                ...el.sartiOrder,
+                orderProducts: el.sartiOrder.orderProducts.map(
+                  (orderProduct: any) => ({
+                    ...orderProduct,
+                    productInfo: JSON.parse(orderProduct.productInfo),
+                  })
+                ),
+              },
+            })),
             totalRows: response.data.totalElements,
           });
         }
