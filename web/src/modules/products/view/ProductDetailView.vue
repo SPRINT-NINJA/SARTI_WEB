@@ -31,7 +31,7 @@
                 <div>
                   <h1>{{ productSelected.name }}</h1>
                 </div>
-                <div>
+                <div class="d-flex flex-column flex-md-row align-items-center">
                   <label for="rating-inline"
                     ><strong>{{ productSelected.rating }}</strong></label
                   >

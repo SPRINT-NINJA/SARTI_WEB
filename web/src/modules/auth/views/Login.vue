@@ -1,15 +1,14 @@
 <template>
   <div>
-    <!-- <b-overlay :show="isLoading" no-wrap /> -->
     <custom-overlay :isLoading="isLoading" />
     <navbar />
     <b-container fluid class="vh-100">
-      <b-row no-gutters class="w-100 mt-5">
+      <b-row class="mt-5 g-0">
         <!-- Sección Izquierda -->
         <b-col
           cols="12"
           md="4"
-          class="d-flex flex-column align-items-center section-left p-4"
+          class="d-flex flex-column align-items-center section-left p-3 p-md-4"
         >
           <section v-if="!isVerifiedAccount">
             <h1 class="text-center mb-4">
@@ -18,13 +17,12 @@
           </section>
           <section v-else>
             <h1 class="text-center mb-4">Ingresa tu contraseña de SARTI</h1>
-
             <div class="d-flex justify-content-center">
               <b-list-group class="w-100" style="max-width: 300px">
                 <b-list-group-item
                   class="d-flex align-items-center justify-content-start"
                 >
-                  <b-avatar class="mr-3" size="60px"></b-avatar>
+                  <b-avatar class="me-3" size="60px"></b-avatar>
                   <span class="text-white">
                     <b style="color: black">{{
                       userData.customer
@@ -46,11 +44,11 @@
         <b-col
           cols="12"
           md="8"
-          class="d-flex flex-column align-items-center section-right p-4"
+          class="d-flex flex-column align-items-center section-right p-3 p-md-4"
         >
           <b-card class="w-100 h-100 shadow">
             <b-form @submit.prevent>
-              <div class="p-5">
+              <div class="p-3 p-md-5">
                 <section v-if="!isVerifiedAccount">
                   <b-form-group
                     id="input-group-1"
@@ -84,7 +82,6 @@
                   <br />
                   <div class="text-center mb-4">
                     <a
-                      block
                       to="create-account"
                       href="create-account"
                       style="color: black"
@@ -125,7 +122,6 @@
                   <br />
                   <div class="text-center mb-4">
                     <a
-                      block
                       to="login"
                       href="./recovery-pass"
                       style="color: black"

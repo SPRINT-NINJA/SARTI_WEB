@@ -85,7 +85,7 @@
               </div>
               <div>
                 <b-row>
-                  <b-col cols="11" md="11">
+                  <b-col class="d-flex flex-column flex-md-row align-items-center" cols="11" md="11">
                     <b-form-rating
                       v-model="product.rating"
                       stars="10"

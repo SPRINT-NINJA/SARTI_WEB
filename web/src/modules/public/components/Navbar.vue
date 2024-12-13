@@ -9,7 +9,7 @@
         width="40"
         height="50"
       />
-      Software de Artesanías y Registro de Tiendas Independientes
+      SARTI
     </b-navbar-brand>
   </b-navbar>
 </template>
