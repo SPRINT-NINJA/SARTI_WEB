@@ -55,7 +55,7 @@ export default defineConfig({
         display: 'fullscreen',
         icons: [
           {
-            src: '/producto_deleted_or_incative.png',
+            src: '/producto_deleted_or_inactive.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: "any",
