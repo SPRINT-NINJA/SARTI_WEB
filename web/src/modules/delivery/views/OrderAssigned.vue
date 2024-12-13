@@ -219,7 +219,7 @@ try {
   const db = new PouchDB("test-db") as any;
 
   db.info()
-    .then((info: any) => console.log("PouchDB está funcionando:", info))
+    .then((info: any) => console.log("PouchDB está funcionandooo:", info))
     .catch((error: any) => console.error("Error al probar PouchDB:", error));
 } catch (error: any) {
   console.log("esta mamando");
