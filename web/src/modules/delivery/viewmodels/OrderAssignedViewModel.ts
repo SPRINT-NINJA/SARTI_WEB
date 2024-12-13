@@ -78,14 +78,6 @@ export default defineComponent({
             totalRows: response.data.totalElements,
           });
         }
-
-        await db.put({
-          // Crear un nuevo doc
-          _id: "delivery-orders",
-          _rev: existingDb!._rev,
-          orderDeliveriesHistory: response.data.content,
-          totalRows: response.data.totalElements,
-        });
       } catch (error) {
         console.error(error);
 
