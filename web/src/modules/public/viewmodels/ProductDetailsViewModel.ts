@@ -7,8 +7,6 @@ import { ICart } from "../models/AddCartModel";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { CustomerReview, RatingObject } from "../models/RateModel";
 
-
-
 export default defineComponent({
   data() {
     return {
@@ -24,7 +22,7 @@ export default defineComponent({
       }>,
       quantity: 1,
       isLoading: false,
-      addCart: {} as ICart
+      addCart: {} as ICart,
     };
   },
   created() {
@@ -103,7 +101,7 @@ export default defineComponent({
         this.addCart.productId = this.productSelected.id;
         this.addCart.quantity = this.quantity;
         const resp = await PublicService.addProductIntoCart(this.addCart);
-        if(!resp.error){
+        if (!resp.error) {
           SweetAlertCustom.successMessage(
             "¡Producto añadido al carrito!",
             "Revisa tu carrito para confirmar tu pedido."

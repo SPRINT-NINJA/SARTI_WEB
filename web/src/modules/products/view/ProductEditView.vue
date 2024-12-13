@@ -182,7 +182,7 @@
                   <b-button
                     variant="red-palete"
                     @click="updateProduct"
-                    :disabled="v$.$invalid"
+                    :disabled="v$.$invalid || productImages.length === 0 || !timeCharging"
                   >
                     Actualizar producto
                   </b-button>

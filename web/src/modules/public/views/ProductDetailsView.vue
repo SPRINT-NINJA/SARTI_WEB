@@ -49,7 +49,7 @@
                   <p class="details-price">${{ productSelected.price }}</p>
                 </div>
                 <div>
-                  <b-row class="w-100">
+                  <b-row>
                     <b-col cols="12" lg="5" class="d-flex align-items-center">
                       <span class="mr-3"> Cantidad: </span>
                       <div>

@@ -16,9 +16,16 @@
           ></b-button>
         </b-col>
       </b-row>
+      <empty-list-banner
+        :imageProp="require('@/assets/NoProducts.svg')"
+        titleProp="Aún no has hecho ningún registro"
+        subtitleProp="¡Comienza a registrar tus productos!"
+        class="h-100"
+        v-if="products.length <= 0 "
+      />
 
       <!-- Seccion de listado -->
-      <div class="mt-4">
+      <div class="mt-4" v-if="products != null">
         <section class="px-2">
           <div v-for="(product, index) in products" :key="index" class="mb-2">
             <b-card no-body shadow w-100 class="py-2 px-2">
@@ -79,6 +86,16 @@
                           title="Actualizar stock"
                         >
                           <b-icon icon="clipboard-plus"></b-icon>
+                        </b-button>
+                        <b-button
+                          variant="warning"
+                          size="sm"
+                          class="mr-2"
+                          @click="getProductPerDetails(product)"
+                          v-b-tooltip.hover
+                          title="Ver detalles"
+                        >
+                          <b-icon icon="eye"></b-icon>
                         </b-button>
                         <b-button
                           variant="brown-cacao"
@@ -183,6 +200,7 @@ export default defineComponent({
     UpdateStock: defineAsyncComponent(
       () => import("@/modules/products/view/components/UpdateStock.vue")
     ),
+    EmptyListBanner: () => import("@/views/components/EmptyListBanner.vue"),
   },
   setup() {
     return {

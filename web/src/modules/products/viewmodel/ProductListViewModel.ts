@@ -61,6 +61,15 @@ export default defineComponent({
         console.error(error);
       }
     },
+    async getProductPerDetails(item: any) {
+      try {
+        const { id } = item;
+        const encryptParam = encryptParamsId(id.toString());
+        await this.$router.push({ name: "detail-product-seller", params: { id: encryptParam} });
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getAllProducts() {
       try {
         this.isLoading = true;
