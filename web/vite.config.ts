@@ -1,9 +1,9 @@
-import { fileURLToPath, URL } from 'node:url';
+import { fileURLToPath, URL } from "node:url";
 
-import { defineConfig } from 'vite';
-import legacy from '@vitejs/plugin-legacy';
-import vue2 from '@vitejs/plugin-vue2';
-import { VitePWA } from 'vite-plugin-pwa';
+import { defineConfig } from "vite";
+import legacy from "@vitejs/plugin-legacy";
+import vue2 from "@vitejs/plugin-vue2";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,14 +11,14 @@ export default defineConfig({
     vue2(),
     // Configuración del plugin PWA
     VitePWA({
-      registerType: 'autoUpdate', // Autoactualiza el Service Worker cuando detecta cambios
+      registerType: "autoUpdate", // Autoactualiza el Service Worker cuando detecta cambios
       workbox: {
         runtimeCaching: [
           {
             urlPattern: /\.(?:js|css|html|png|jpg|jpeg|svg|gif)$/,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'static-resources',
+              cacheName: "static-resources",
               expiration: {
                 maxEntries: 50, // Máximo de 50 recursos almacenados en caché
                 maxAgeSeconds: 30 * 24 * 60 * 60, // 30 días
@@ -27,9 +27,9 @@ export default defineConfig({
           },
           {
             urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'google-fonts',
+              cacheName: "google-fonts",
               expiration: {
                 maxEntries: 30,
                 maxAgeSeconds: 365 * 24 * 60 * 60, // 1 año
@@ -38,26 +38,40 @@ export default defineConfig({
           },
           {
             urlPattern: /.*/, // Caché de fallback
-            handler: 'NetworkFirst',
+            handler: "NetworkFirst",
             options: {
-              cacheName: 'fallback',
+              cacheName: "fallback",
               networkTimeoutSeconds: 10,
             },
           },
         ],
       },
       manifest: {
-        name: 'SARTI-PWA', // Nombre de tu aplicación
-        short_name: 'SARTI', // Nombre corto para pantallas pequeñas
-        description: 'SARTI DELIVERY - Aplicación Progresiva SARTI ',
-        theme_color: '#ffa446',
-        background_color: '#ffa446',
-        display: 'standalone',
+        name: "SARTI-PWA", // Nombre de tu aplicación
+        short_name: "SARTI", // Nombre corto para pantallas pequeñas
+        description: "SARTI DELIVERY - Aplicación Progresiva SARTI ",
+        theme_color: "#ffa446",
+        background_color: "#ffa446",
         icons: [
           {
-            src: './src/assets/logo.svg',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "/producto_deleted_or_inactive.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+        ],
+        screenshots: [
+          {
+            src: "/producto_deleted_or_inactive.png",
+            sizes: "512x512",
+            type: "image/png",
+            form_factor: "wide",
+          },
+          {
+            src: "/producto_deleted_or_inactive.png",
+            sizes: "512x512",
+            type: "image/png",
+            form_factor: "narrow",
           },
         ],
       },
@@ -65,10 +79,11 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
   build: {
     chunkSizeWarningLimit: 1600,
   },
+
 });
