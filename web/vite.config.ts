@@ -54,7 +54,7 @@ export default defineConfig({
         background_color: "#ffa446",
         icons: [
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any",
@@ -62,13 +62,13 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             form_factor: "wide",
           },
           {
-            src: "/producto_deleted_or_inactive.png",
+            src: "/sarti-side.png",
             sizes: "512x512",
             type: "image/png",
             form_factor: "narrow",
