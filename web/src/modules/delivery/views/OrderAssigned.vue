@@ -213,6 +213,19 @@
 
 <script lang="ts">
 import OrderAssignedViewModel from "../viewmodels/OrderAssignedViewModel";
+import PouchDB from "pouchdb";
+try {
+  console.log("entro al try");
+  const db = new PouchDB("test-db") as any;
+
+  db.info()
+    .then((info: any) => console.log("PouchDB está funcionando:", info))
+    .catch((error: any) => console.error("Error al probar PouchDB:", error));
+} catch (error: any) {
+  console.log("esta mamando");
+  console.log("error", error);
+}
+
 export default {
   name: "DeliveryOrderAssigned",
   components: {

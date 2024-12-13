@@ -3,22 +3,12 @@ import { useVuelidate } from "@vuelidate/core";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
-import PouchDB from "pouchdb";
-import PouchDBFind from "pouchdb-find";
+// import PouchDB from 'pouchdb';
+// import PouchDBFind from "pouchdb-find";
 
-PouchDB.plugin(PouchDBFind);
+// PouchDB.plugin(PouchDBFind);
 
-// try {
-//   console.log("entro al try");
-//   const db = new PouchDB("test-db") as any;
 
-//   db.info()
-//     .then((info: any) => console.log("PouchDB está funcionando:", info))
-//     .catch((error: any ) => console.error("Error al probar PouchDB:", error));
-// } catch (error: any) {
-//   console.log("esta mamando");
-//   console.log("error", error);
-// }
 
 export default defineComponent({
   setup() {
@@ -153,19 +143,5 @@ export default defineComponent({
   },
   mounted() {
     this.initView();
-
-    try {
-      console.log("entro");
-      const db = new PouchDB("delivery");
-      console.log("PouchDB initialized:", db);
-
-      // Prueba básica de operaciones con la base de datos
-      db.put({ _id: "test_doc", data: "Hello, PouchDB!" })
-        .then(() => db.get("test_doc"))
-        .then((doc) => console.log("Document fetched:", doc))
-        .catch((err) => console.error("Error:", err));
-    } catch (error) {
-      console.error("Initialization error:", error);
-    }
   },
 });
