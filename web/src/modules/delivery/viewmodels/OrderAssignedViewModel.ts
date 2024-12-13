@@ -6,7 +6,8 @@ import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
 
 const db = new PouchDB("delivery-orders");
-console.log("incialización de pouch", db);
+const dbPetitions = new PouchDB("delivery-orders-petitions");
+console.log("incialización de pouch", db, "Petitions", dbPetitions);
 interface DeliveryDb {
   _id: string;
   orderDeliveriesHistory: Array<any>;
@@ -63,7 +64,7 @@ export default defineComponent({
         this.totalRows = response.data.totalElements;
 
         const existingDb = await db.get("delivery-orders").catch(() => null);
-        console.log("existing", existingDb)
+        console.log("existing", existingDb);
         if (existingDb) {
           await db.put({
             _id: "delivery-orders",
@@ -146,19 +147,67 @@ export default defineComponent({
           `Cambiar el estado a ${newStatus}`
         ).then(async (result: any) => {
           if (result.isConfirmed) {
-            const resp = await OrderDeliveryService.changeOrderDeliveryStep({
-              orderId: order.id,
-              step: newStatus,
-            });
-            const { error } = resp;
-            if (!error) {
-              SweetAlertCustom.successMessage();
-              await this.initView();
+            if (navigator.onLine) {
+              console.log("online");
+              const resp = await OrderDeliveryService.changeOrderDeliveryStep({
+                orderId: order.id,
+                step: newStatus,
+              });
+              const { error } = resp;
+              if (!error) {
+                SweetAlertCustom.successMessage();
+                await this.initView();
+              }
+            } else {
+              console.log("offline");
+              const payload = {
+                orderId: order.id,
+                step: newStatus,
+              };
+              await dbPetitions.put({
+                _id: new Date().toISOString(),
+                payload,
+                controllerFunction: "changeOrderDeliveryStep",
+              });
+              alert(
+                "No hay conexión a internet. La petición se guardara para ser ejecutada después"
+              );
             }
           }
         });
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    async syncOfflineRequest() {
+      try {
+        const allDocs = await dbPetitions.allDocs({ include_docs: true });
+
+        if (allDocs.total_rows !== 0) {
+          alert("Sincronizando peticiones");
+        }
+        for (const doc of allDocs.rows) {
+          if (!doc.doc) {
+            continue;
+          }
+
+          const { controllerFunction } = doc.doc as unknown as any;
+          if (controllerFunction === "changeOrderDeliveryStep") {
+            const { payload } = doc.doc as unknown as any;
+            const response = await OrderDeliveryService.changeOrderDeliveryStep(
+              payload
+            );
+            const { error } = response;
+            if (!error) {
+              SweetAlertCustom.successMessage("Peticiones sincronizadas");
+              await dbPetitions.remove(doc.doc._id, doc.doc._rev);
+            }
+          }
+        }
+        await this.initView();
+      } catch (error) {
+        console.log("Error al sincronizar peticiones", error);
       }
     },
 
