@@ -25,6 +25,9 @@
   width: 80px;
 }
 
+.icon-side{
+  width: 50px;
+}
 .navigation ul {
   position: absolute;
   top: 0;
