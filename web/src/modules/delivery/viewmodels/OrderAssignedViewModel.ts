@@ -4,14 +4,12 @@ import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
+import PouchDBFind from "pouchdb-find";
+
+PouchDB.plugin(PouchDBFind);
 
 const db = new PouchDB("delivery-orders");
-console.log("incialización de pouch", db);
-interface DeliveryDb {
-  _id: string;
-  orderDeliveriesHistory: Array<any>;
-  totalRows: number;
-}
+console.log("PouchDB initialized:", db);
 
 export default defineComponent({
   setup() {
@@ -61,50 +59,14 @@ export default defineComponent({
         );
 
         this.totalRows = response.data.totalElements;
-
-        const existingDb = await db.get("delivery-orders").catch(() => null);
-
-        if (existingDb) {
-          await db.put({
-            _id: "delivery-orders",
-            _rev: existingDb._rev,
-            orderDeliveriesHistory: response.data.content,
-            totalRows: response.data.totalElements,
-          });
-        } else {
-          await db.put({
-            _id: "delivery-orders",
-            orderDeliveriesHistory: response.data.content,
-            totalRows: response.data.totalElements,
-          });
-        }
-
-        await db.put({
-          // Crear un nuevo doc
-          _id: "delivery-orders",
-          _rev: existingDb!._rev,
-          orderDeliveriesHistory: response.data.content,
-          totalRows: response.data.totalElements,
-        });
       } catch (error) {
         console.error(error);
-
-        if (!navigator.onLine) {
-          console.log("No hay conexión a internet.");
-          const offlineData = await db
-            .get<DeliveryDb>("delivery-orders")
-            .catch(() => null);
-          if (offlineData) {
-            this.orderDeliveriesHistory = offlineData.orderDeliveriesHistory;
-            this.totalRows = offlineData.totalRows;
-            alert("Mostrando datos offline.");
-          }
-        } else {
-          SweetAlertCustom.errorMessage(
-            "Error",
-            "Ocurrió un error al obtener los pedidos"
-          );
-        }
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al obtener los pedidos"
+        );
+        this.orderDeliveriesHistory = [];
+        this.pagination.page = 1;
       }
     },
 
