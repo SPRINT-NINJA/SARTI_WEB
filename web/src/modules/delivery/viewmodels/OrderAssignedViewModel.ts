@@ -222,6 +222,17 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.initView();
+    // this.initView();
+    window.addEventListener("online", this.syncOfflineRequest);
+    this.syncOfflineRequest();
+  },
+  beforeDestroy() {
+    // Elimina el evento al destruir el componente
+    window.removeEventListener("online", this.syncOfflineRequest);
+  },
+  watch: {
+    online() {
+      this.syncOfflineRequest();
+    },
   },
 });
