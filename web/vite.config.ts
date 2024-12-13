@@ -7,6 +7,9 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    include: ['pouchdb'], // Incluye pouchdb en la optimización de dependencias
+  },
   plugins: [
     vue2(),
     // Configuración del plugin PWA

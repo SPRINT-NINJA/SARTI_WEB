@@ -4,17 +4,21 @@ import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
-// import PouchDBFind from "pouchdb-find";
+import PouchDBFind from "pouchdb-find";
 
-// PouchDB.plugin(PouchDBFind);
+PouchDB.plugin(PouchDBFind);
 
-// try {
-//   const db = new PouchDB("delivery");
-//   console.log("PouchDB initialized:", db);
-//   console.log("entro al try")
-// } catch (error) {
-//   console.log("error",error);
-// }
+try {
+  console.log("entro al try");
+  const db = new PouchDB("test-db");
+
+  db.info()
+    .then((info) => console.log("PouchDB está funcionando:", info))
+    .catch((error) => console.error("Error al probar PouchDB:", error));
+} catch (error: any) {
+  console.log("esta mamando");
+  console.log("error", error);
+}
 
 export default defineComponent({
   setup() {
