@@ -11,6 +11,7 @@ import PouchDB from "pouchdb";
 try {
   const db = new PouchDB("delivery");
   console.log("PouchDB initialized:", db);
+  console.log("entro al try")
 } catch (error) {
   console.log("error",error);
 }
