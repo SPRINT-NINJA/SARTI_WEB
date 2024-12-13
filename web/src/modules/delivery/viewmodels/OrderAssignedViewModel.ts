@@ -3,13 +3,17 @@ import { useVuelidate } from "@vuelidate/core";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import OrderDeliveryService from "../services/OrderDeliveryService";
 import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
-// import PouchDB from "pouchdb";
+import PouchDB from "pouchdb";
 // import PouchDBFind from "pouchdb-find";
 
 // PouchDB.plugin(PouchDBFind);
 
-// const db = new PouchDB("delivery-orders");
-console.log("PouchDB initialized:");
+try {
+  const db = new PouchDB("delivery");
+  console.log("PouchDB initialized:", db);
+} catch (error) {
+  console.log(error);
+}
 
 export default defineComponent({
   setup() {
