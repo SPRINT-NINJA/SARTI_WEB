@@ -14,12 +14,10 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      // "webpack-env",
-      // "jest",
       "node",
       "vue-sweetalert2",
       "vite/client",
-      // Remove "vue-quill-editor" from here since we're declaring it manually
+      "@types/workbox-window"
     ],
     "paths": {
       "@/*": [
@@ -30,14 +28,15 @@
       "esnext",
       "dom",
       "dom.iterable",
-      "scripthost"
+      "scripthost",
+      "webworker"
     ]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/**/*.d.ts", // Include d.ts files in src
+    "src/**/*.d.ts",
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "vite.config.*",
@@ -47,9 +46,8 @@
   "exclude": [
     "node_modules"
   ],
-  // Add typeRoots here, outside of compilerOptions
   "typeRoots": [
     "./node_modules/@types",
-    "./src" // Assuming your custom type file is directly in the src folder
+    "./src"
   ]
 }

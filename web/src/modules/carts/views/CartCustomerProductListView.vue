@@ -27,14 +27,14 @@
                   <b-col cols="12" md="2">
                     <img
                       class="img-main-product"
-                      :src="value.product.mainImage"
+                      :src="JSON.parse(value.productInfo).mainImage"
                     />
                   </b-col>
                   <b-col cols="12" md="9" class="my-2">
                     <b-row>
                       <b-col cols="12" md="10" class="my-1">
                         <b>
-                          {{ value.product.name }}
+                          {{ JSON.parse(value.productInfo).name }}
                         </b>
                       </b-col>
                       <b-col
@@ -48,6 +48,7 @@
                             value.status ? "Disponible" : "AGOTADO"
                           }}</b-badge
                         >
+                        
                       </b-col>
                     </b-row>
                     <b-row class="w-100">
@@ -72,7 +73,6 @@
                               @change="checkAmount(value)"
                               disabled
                             ></b-form-input>
-
                             <b-input-group-append>
                               <b-button
                                 variant="outline-secondary"
@@ -90,7 +90,7 @@
                         class="d-flex justify-content-start"
                       >
                         <span class="available-stock"
-                          >(+ {{ value.product.stock }} disponibles)</span
+                          >(+ {{ JSON.parse(value.productInfo).stock }} disponibles)</span
                         >
                         <span
                           class="mx-4 available-stock"
@@ -105,7 +105,7 @@
                     >
                       <b-col cols="12" md="3" class="text-right">
                         <b-card-text class="text-price"
-                          ><b> ${{ value.product.price }}</b></b-card-text
+                          ><b> ${{ JSON.parse(value.productInfo).price }}</b></b-card-text
                         >
                       </b-col>
                     </b-row>

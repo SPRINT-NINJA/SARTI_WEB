@@ -5,6 +5,7 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import PublicService from "./../service/PublicService";
 import { ICart } from "../models/AddCartModel";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { CustomerReview, RatingObject } from "../models/RateModel";
 
 
 
@@ -13,8 +14,8 @@ export default defineComponent({
     return {
       productSelected: {} as IProduct,
       selectedProduct: {} as { id: "" },
-      resumeRating: [] as any,
-      ratingList: [] as any,
+      resumeRating: {} as RatingObject,
+      ratingList: [] as CustomerReview[],
       images: [] as Array<{
         largeURL: string;
         thumbnailURL: string;
