@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@types/crypto-js": "^4.2.2",
-    "@types/pouchdb": "^6.4.2",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.7.7",
@@ -31,6 +30,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/node": "^16.18.121",
+    "@types/pouchdb": "^6.4.2",
     "@types/vuelidate": "^0.7.21",
     "@types/workbox-window": "^4.3.4",
     "@vitejs/plugin-legacy": "^2.0.0",

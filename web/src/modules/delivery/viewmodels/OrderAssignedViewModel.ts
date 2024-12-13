@@ -12,7 +12,7 @@ try {
   const db = new PouchDB("delivery");
   console.log("PouchDB initialized:", db);
 } catch (error) {
-  console.log(error);
+  console.log("error",error);
 }
 
 export default defineComponent({
