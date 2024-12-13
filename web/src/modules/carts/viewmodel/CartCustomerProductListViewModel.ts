@@ -122,14 +122,10 @@ export default defineComponent({
         this.isLoading = false;
       }
     },
-    async confirmCart(item: CartBody) {
+    async confirmCart() {
       try {
-        const { id } = item;
-
-        const encryptParam = encryptParamsId(id!.toString());
         await this.$router.push({
           name: "buy-order",
-          params: { id: encryptParam },
         });
       } catch (error) {
         console.error(error);
