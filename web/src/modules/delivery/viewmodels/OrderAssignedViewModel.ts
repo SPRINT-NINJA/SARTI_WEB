@@ -6,6 +6,11 @@ import { GetOrderDeliveriesDto } from "../models/GetOrderDeliveriesDto";
 import PouchDB from "pouchdb";
 
 const db = new PouchDB("delivery-orders");
+interface DeliveryDb {
+  _id: string;
+  orderDeliveriesHistory: Array<any>;
+  totalRows: number;
+}
 
 export default defineComponent({
   setup() {
@@ -62,28 +67,29 @@ export default defineComponent({
           // Crear un nuevo doc
           _id: "delivery-orders",
           _rev: existingDb._rev,
-          orderDeliveriesHistory: response.data.content.map((el: any) => ({
-            ...el,
-            sartiOrder: {
-              ...el.sartiOrder,
-              orderProducts: el.sartiOrder.orderProducts.map(
-                (orderProduct: any) => ({
-                  ...orderProduct,
-                  productInfo: JSON.parse(orderProduct.productInfo),
-                })
-              ),
-            },
-          })),
+          orderDeliveriesHistory: response.data.content,
           totalRows: response.data.totalElements,
         });
       } catch (error) {
         if (!navigator.onLine) {
           console.log("entro al cath y no hay internet");
-          const response = await db.get<any>("delivery-orders");
+          const response = await db.get<DeliveryDb>("delivery-orders");
           this.totalRows = response.totalRows;
-          this.orderDeliveriesHistory = response.orderDeliveriesHistory.alert(
-            "No hay conexión a internet. Mostrando datos offline."
+          this.orderDeliveriesHistory = response.orderDeliveriesHistory.map(
+            (el: any) => ({
+              ...el,
+              sartiOrder: {
+                ...el.sartiOrder,
+                orderProducts: el.sartiOrder.orderProducts.map(
+                  (orderProduct: any) => ({
+                    ...orderProduct,
+                    productInfo: JSON.parse(orderProduct.productInfo),
+                  })
+                ),
+              },
+            })
           );
+          alert("No hay conexión a internet. Mostrando datos offline.");
         }
         console.error(error);
         SweetAlertCustom.errorMessage(
