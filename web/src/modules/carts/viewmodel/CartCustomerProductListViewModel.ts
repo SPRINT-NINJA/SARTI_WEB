@@ -2,6 +2,8 @@ import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 import { defineComponent } from "vue";
 import CartService from "../service/CartService";
 import { ICartProduct } from "../models/CartCustomerProductListModel";
+import { encryptParamsId } from "@/kernel/utils/cryptojs";
+import { CartBody } from "../models/CartBody";
 
 export default defineComponent({
   data() {
@@ -12,6 +14,7 @@ export default defineComponent({
       quantity: 1,
       isLoading: false,
       productList: [] as ICartProduct[], // Lista inicial vacía
+      cart: null as any,
     };
   },
   methods: {
@@ -36,27 +39,27 @@ export default defineComponent({
         0
       );
     },
-    RemoveProductByCart(product:ICartProduct) {
-      SweetAlertCustom.questionMessage("¿Está seguro de eliminar el producto?","Se eliminará del carrito el producto").then(async (result)=>{
-        console.log(result,"Confirm")
-        if(result.isConfirmed){
+    RemoveProductByCart(product: ICartProduct) {
+      SweetAlertCustom.questionMessage("¿Está seguro de eliminar el producto?", "Se eliminará del carrito el producto").then(async (result) => {
+        console.log(result, "Confirm")
+        if (result.isConfirmed) {
           try {
-            console.log(product.id,"elimna solo este")
-            const resp = await CartService.removeProductCart(product.id);
-            if(!resp.error){
+            console.log(product.id, "elimna solo este")
+            const resp = await CartService.removeProductCart(product);
+            if (!resp.error) {
               this.CountTotal();
-              SweetAlertCustom.successMessage("Se ha eliminado correctamente","Tu producto ha sido eliminado del carrito.")
-              location.reload(); 
+              SweetAlertCustom.successMessage("Se ha eliminado correctamente", "Tu producto ha sido eliminado del carrito.")
+              location.reload();
             }
           } catch (error) {
             console.error(error)
           }
-        }else{
+        } else {
           product.amount = 1;
         }
       })
     },
-    async updateCart(product:ICartProduct){
+    async updateCart(product: ICartProduct) {
       try {
         this.isLoading = true;
         const resp = await CartService.updateProductCart(product);
@@ -79,22 +82,19 @@ export default defineComponent({
       this.updateCart(product);
     },
     decrement(product: ICartProduct) {
-      product.amount--;
-      if (product.amount === 0) {
-        this.RemoveProductByCart(product);
-      }
-
       if (product.amount > 0) {
+        product.amount--;
         this.CountTotal();
         this.updateCart(product);
       }
-    
-    },    
-    async addToProductIntoCart() {
+
+    },
+    async fetchCart() {
       try {
         this.isLoading = true;
         const resp = await CartService.getCart();
         if (!resp.error) {
+          this.cart = resp.data;
           this.productList = resp.data.cartProducts;
         }
         this.CountTotal(); // Actualiza el total después de obtener los productos
@@ -113,7 +113,7 @@ export default defineComponent({
             "El carrito se vacío",
             "Tu carrito  ha sido vaciado"
           );
-          location.reload(); 
+          location.reload();
         }
         this.CountTotal(); // Actualiza el total después de obtener los productos
       } catch (error) {
@@ -122,8 +122,21 @@ export default defineComponent({
         this.isLoading = false;
       }
     },
+    async confirmCart(item: CartBody) {
+      try {
+        const { id } = item;
+
+        const encryptParam = encryptParamsId(id!.toString());
+        await this.$router.push({
+          name: "buy-order",
+          params: { id: encryptParam },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   mounted() {
-    this.addToProductIntoCart(); // Obtén los productos al cargar el componente
+    this.fetchCart(); // Obtén los productos al cargar el componente
   },
 });

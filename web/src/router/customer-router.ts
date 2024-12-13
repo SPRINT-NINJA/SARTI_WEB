@@ -46,7 +46,7 @@ export default [
           role: allowedRoles,
         },
       },{
-        path: "buy-order",
+        path: "buy-order/:id",
         props: true,
         name: "buy-order",
         component: () => import("../modules/orders/views/CustomerBuyOrderView.vue"),
