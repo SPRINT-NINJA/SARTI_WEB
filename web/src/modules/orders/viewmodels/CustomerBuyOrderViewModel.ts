@@ -4,6 +4,8 @@ import CartService from "@/modules/carts/service/CartService";
 import { defineComponent } from "vue";
 import CustomerDeliveryOrderService from "../services/CustomerDeliveryOrderService";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
+import { VerifyAvailabilityDto } from "@/modules/products/models/VerifyAvailabilityDto";
+import ProductService from "@/modules/products/services/ProductService";
 
 export default defineComponent({
   data() {
@@ -19,7 +21,8 @@ export default defineComponent({
 
       paypalOrderId: "",
       cartBody: {} as CartBody,
-      paypalOrderInitBody: {} as PaypalOrderInit
+      paypalOrderInitBody: {} as PaypalOrderInit,
+      address: {} as any
     }
   },
   methods: {
@@ -49,6 +52,62 @@ export default defineComponent({
       } else {
         this.totalFee = 0.0;
         this.totalFinal = this.total;
+      }
+    },
+
+    async procedToPayment() {
+      const res = await this.verifyAvailability();
+
+      if (res) {
+        this.loadPayPalScript()
+          .then(() => {
+            this.renderPayPalButton();
+          })
+          .catch((error) => {
+            console.error("Error loading PayPal SDK:", error);
+          });
+      }
+    },
+
+    async verifyAvailability() {
+      try {
+        this.isLoading = true
+        if (this.cartBody.cartProducts.find((el: any) => el.product == null)) {
+          SweetAlertCustom.errorMessage(
+            "Error",
+            "Uno o varios productos de tu lista dejaron de estar disponibles"
+          );
+          return null;
+        }
+
+        const payload = this.cartBody.cartProducts.map((el: any) => ({
+          productId: el.product.id,
+          quantity: el.amount
+        })) as Array<VerifyAvailabilityDto>;
+
+        const response = await ProductService.verifyAvailability(payload);
+
+        const verification = response.data;
+
+        if (verification!.unavailableProducts.length || verification!.inactiveProducts.length || verification!.notFoundProducts.length) {
+          SweetAlertCustom.errorMessage(
+            "Error",
+            "Uno o varios productos de tu lista dejaron de estar disponibles o no tiene suficiente stock"
+          );
+          return null;
+        }
+
+        console.log(verification);
+        return verification;
+      } catch (error) {
+        console.error(error);
+        SweetAlertCustom.errorMessage(
+          "Error",
+          "Ocurrió un error al verificar la disponibilidad de los productos"
+        );
+        return null;
+      } finally {
+        this.isLoading = false
       }
     },
 
@@ -254,12 +313,5 @@ export default defineComponent({
 
   mounted() {
     this.fetchCart();
-    this.loadPayPalScript()
-      .then(() => {
-        this.renderPayPalButton();
-      })
-      .catch((error) => {
-        console.error("Error loading PayPal SDK:", error);
-      });
   },
 })

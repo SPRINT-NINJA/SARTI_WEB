@@ -33,9 +33,7 @@
                   <b-col cols="12" md="9" class="my-2">
                     <b-row>
                       <b-col cols="12" md="10" class="my-1">
-                        <b>
-                          {{ product.product.name }}
-                        </b>
+                        <b>{{ product.product.name }}</b>
                       </b-col>
                       <b-col
                         cols="12"
@@ -44,10 +42,9 @@
                       >
                         <b-badge
                           :variant="product.status ? 'success' : 'danger'"
-                          >{{
-                            product.status ? "Disponible" : "No disponible"
-                          }}</b-badge
                         >
+                          {{ product.status ? "Disponible" : "No disponible" }}
+                        </b-badge>
                       </b-col>
                     </b-row>
                     <b-row class="w-100">
@@ -64,9 +61,9 @@
                       class="d-flex justify-content-end align-items-center"
                     >
                       <b-col cols="12" md="3" class="text-right">
-                        <b-card-text class="text-price"
-                          ><b> Total: ${{ product.total }}</b></b-card-text
-                        >
+                        <b-card-text class="text-price">
+                          <b> Total: ${{ product.total }}</b>
+                        </b-card-text>
                       </b-col>
                     </b-row>
                   </b-col>
@@ -74,10 +71,7 @@
               </b-card>
             </b-row>
 
-            <b-row
-              class="d-flex flex-column align-items-start justify-content-start"
-              style="width: 100%; margin: 0 auto"
-            >
+            <b-row class="summary-container">
               <hr />
               <b-row
                 class="d-flex justify-content-between align-items-center w-100 mt-2"
@@ -150,10 +144,18 @@
             </b-alert>
           </b-col>
         </b-row>
+
         <!-- Contenedor del botón de PayPal -->
         <div class="mt-4" id="paypal-button-container"></div>
-        <div class="d-flex align-items-end justify-content-end">
-          <b-button variant="orange-secundary" @click="goBack">Regresar al carrito</b-button>
+
+        <!-- Botones de acciones -->
+        <div class="d-flex justify-content-end align-items-center w-100 mt-4">
+          <b-button class="mx-2" variant="orange-primary" @click="goBack">
+            Regresar al carrito
+          </b-button>
+          <b-button variant="orange-secundary" @click="procedToPayment">
+            Proceder con la compra
+          </b-button>
         </div>
       </b-card>
     </div>
@@ -168,11 +170,34 @@ export default {
   components: {
     CustomOverlay: () =>
       import("@/modules/public/components/CustomOverlay.vue"),
-  }
+  },
 };
 </script>
 
 <style scoped>
+.background-card-other {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  width: 95%;
+}
+.title {
+  color: var(--red-palete);
+}
+.scrollable-container {
+  max-height: 500px;
+  overflow-y: auto;
+  width: 100%;
+}
+.summary-container {
+  margin: 0 auto;
+  width: 100%;
+}
+.d-flex {
+  display: flex;
+}
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 .text-by-price {
   font-size: smaller;
 }

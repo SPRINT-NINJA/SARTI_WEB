@@ -2,6 +2,8 @@ import { CustomResponse, CustomResponsePageable } from "@/kernel/types";
 import { IProduct } from "../models/ProductModel";
 import { RequestHandler } from "@/kernel/RequestHandler";
 import axios from "@/config/client.gateway";
+import { VerifyAvailabilityDto } from "../models/VerifyAvailabilityDto";
+import { AvailabilityResponse } from "../models/AvailabilityResponse";
 
 export default class ProductService {
   private static baseUrl = "/product";
@@ -37,6 +39,12 @@ export default class ProductService {
   static async getDetailProduct(payload: any): Promise<CustomResponse<any>> {
     return await RequestHandler.handleRequest(
       axios.doGet(`${this.baseUrl}/${payload.id}`)
+    );
+  }
+
+  static async verifyAvailability(payload: Array<VerifyAvailabilityDto>): Promise<CustomResponse<AvailabilityResponse>> {
+    return await RequestHandler.handleRequest(
+      axios.doPost(`${this.baseUrl}/verify-availability`, payload)
     );
   }
 }
