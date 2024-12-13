@@ -84,7 +84,13 @@ function handle400Error(error: any) {
       break;
     case "DIFFERENT_SELLER": //TODO pedir el ajuste del servicio para que sea 401
       titleAlert = "¡Ups! No pertenece a la misma tienda";
-      messageAlert = "Recuerda que solo puedes comprar variedad de productos en una sola tienda";
+      messageAlert =
+        "Recuerda que solo puedes comprar variedad de productos en una sola tienda";
+      break;
+    case "NO_USER_LOGGED": //TODO pedir el ajuste del servicio para que sea 401
+      titleAlert = "¡Ups! Inicio de sesión requerido";
+      messageAlert =
+        "Por favor, inicia sesión o crea una cuenta para realizar compras.";
       break;
     case "USER_IS_BLOCKED":
       titleAlert = "Credenciales incorrectas";

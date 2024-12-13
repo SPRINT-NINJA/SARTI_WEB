@@ -20,14 +20,14 @@
       </div>
     </section>
     <section>
-      <b-progress
-        v-for="(rate, index) in rating.starsCount"
-        :key="index"
-        :value="rate.count"
-        :max="rating.ratingCount"
-        variant="warning"
-        class="mb-3"
-      ></b-progress>
+      <div v-for="(rate, index) in rating.starsCount" :key="index" class="mb-3">
+        <h5 class="total-qualifications ml-3">{{ index }} estrellas</h5>
+        <b-progress
+          :value="rate.count"
+          :max="rating.ratingCount"
+          variant="warning"
+        ></b-progress>
+      </div>
     </section>
   </div>
 </template>
